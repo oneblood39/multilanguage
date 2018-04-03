@@ -1,0 +1,1 @@
+<?php defined('BASEPATH') OR exit('Bu sayfaya direkt erişim mümkün değil!');

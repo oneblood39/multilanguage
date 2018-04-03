@@ -1,0 +1,167 @@
+<?php defined('BASEPATH') OR exit('Bu bölüme erişim engellenmiştir.');
+
+class Randevu_dt extends Admin_Controller
+{
+
+  function __construct()
+  {
+    parent::__construct();
+  //  $this->load->model('dt/cagri_dt_model');
+  }
+
+  public function index()
+  {
+
+  }
+
+  public function getall(){
+
+    $start = 0;
+    $length = 10;
+
+    if($this->input->get('start')){
+      $start = (int)$this->input->get('start');
+    }
+
+    if($this->input->get('length')){
+      $length = (int)$this->input->get('length');
+    }
+
+    $search = '';
+
+    if($this->input->get('search')['value']){
+      $search = $this->input->get('search')['value'];
+    }
+
+    $draw = 1; //tablonun yenilenme sayısı
+    
+    if($this->input->get('draw')){
+      $draw = (int)$this->input->get('draw') + 1;
+    }
+
+   $data = array();
+
+    // toplam kategori sayısı
+    $query = $this->db->query("SELECT COUNT(danisanID) as total FROM tbldanisan");
+   
+    $total = $query->row()->total;
+
+    if($search){
+      $queryString = "SELECT 
+ tbldanisan.danisanID
+,tbldanisan.danisanAd
+,tbldanisan.danisanSoyad
+,tblofis.ofisAdi
+,tblofis.ofisID
+,tblrandevu.randevuID
+,tblrandevu.randevuBaslangicTarihSaat
+,tblrandevu.randevuBitisTarihSaat
+,tblrandevu.randevuSeansUcret
+
+,users.ID as DanismanUserID
+,users.first_name as DanismanAd
+,users.last_name as DanismanSoyad
+,tnmterapitip.terapiAdi
+,tnmRandevuDurum.RandevuDurumAdi
+FROM tblrandevu 
+INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
+INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
+LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
+LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
+left JOIN users on users.id=ilsdanismanterapi.userID
+left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID 
+WHERE tbldanisan.danisanAd like ".$this->db->escape('%'.$search.'%').
+" or danisanSoyad like ".$this->db->escape('%'.$search.'%').
+" or users.first_name like ".$this->db->escape('%'.$search.'%').
+" or users.last_name like ".$this->db->escape('%'.$search.'%').
+" or tnmterapitip.terapiAdi like ".$this->db->escape('%'.$search.'%').
+" ORDER BY tblrandevu.randevuID desc LIMIT ".$start.",".$length;
+    }else{
+      $queryString = "SELECT 
+ tbldanisan.danisanID
+,tbldanisan.danisanAd
+,tbldanisan.danisanSoyad
+,tblofis.ofisAdi
+,tblofis.ofisID
+,tblrandevu.randevuID
+,tblrandevu.randevuBaslangicTarihSaat
+,tblrandevu.randevuBitisTarihSaat
+,tblrandevu.randevuSeansUcret
+
+,users.ID as DanismanUserID
+,users.first_name as DanismanAd
+,users.last_name as DanismanSoyad
+,tnmterapitip.terapiAdi
+,tnmRandevuDurum.RandevuDurumAdi
+FROM tblrandevu 
+INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
+INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
+LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
+LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
+left JOIN users on users.id=ilsdanismanterapi.userID
+left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID ORDER BY tbldanisan.danisanID desc LIMIT ".$start.",".$length;
+    }
+    
+    $query = $this->db->query($queryString);
+
+    $Danisanlar = $query->result();  ////mainCategories olan satır
+
+    $data = '[';
+
+    if($search){
+      $rFiltered = 0;
+    }else{
+      $rFiltered = $total; //filtrelenmiş kayıt sayısı
+    }
+    $recordsTotal = $total; // toplam kayıt sayısı
+
+    foreach ($Danisanlar as $cat) {      
+      if($search){
+        $rFiltered++;
+      }
+          
+    // if($search){
+       if($cat->danisanID>0){  
+       
+          $Ad = $cat->danisanAd;
+          $Soyad = $cat->danisanSoyad;
+          $Dad = $cat->DanismanAd;
+          $Dsoyad = $cat->DanismanSoyad;
+          $terapitip = $cat->terapiAdi;
+          $tarih = $cat->randevuBaslangicTarihSaat;
+      
+
+        }else{
+          $Ad = $cat->danisanAd;
+          $Soyad = $cat->danisanSoyad;
+          $Dad = $cat->DanismanAd;
+          $Dsoyad = $cat->DanismanSoyad;
+          $terapitip = $cat->terapiAdi;
+          $tarih = $cat->randevuBaslangicTarihSaat;
+        
+        }
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+  //print_r($data);
+
+    }
+    
+    $data = substr($data, 0, strlen($data)-1);
+    $data .= ']';
+
+
+    // echo $data;
+    if($data == ']'){$data='[]';}
+    // echo $data;
+
+
+
+    echo '
+    {
+    "draw": '.$draw.',
+    "recordsTotal": '.$recordsTotal.',
+    "recordsFiltered": '.$rFiltered.',
+    "data": '.$data.'}';
+  }
+}
+
+
