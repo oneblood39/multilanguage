@@ -112,10 +112,10 @@ echo ''; */
                 <?php
                 echo form_label('Randevu Başlangıç Saat','saat1');
                 echo form_error('saat1');
+                echo form_input('',set_value('',$time),' size="1" readonly');
+    
 
-                echo form_input('first_name',set_value('first_name',$date),' readonly');
-               
-                echo '<SELECT name="dakika">
+                echo ':<SELECT name="dakika">
                 <option>10</option>
                 <option>20</option>
                 <option>30</option>
@@ -130,7 +130,7 @@ echo ''; */
       
             </div>
             <?php //echo form_hidden('user_id',$user->id);?>
-            <?php echo form_submit('submit', 'Güncelle', 'class="btn btn-primary btn-lg btn-block"');?>
+            <?php echo form_submit('submit', 'Randevu Kaydet', 'class="btn btn-primary btn-lg btn-block"');?>
             <?php echo anchor('/admin/users', 'İptal','class="btn btn-default btn-lg btn-block"');?>
             <?php echo form_close();?>
 <!--<input type="submit" class="btn btn-primary" value="Danışan Ekle">-->
