@@ -113,13 +113,7 @@ echo ''; */
                 echo form_label('Randevu Başlangıç Saat','saat1');
                 echo form_error('saat1');
 
-                echo '<SELECT>
-                <option>10</option>
-                <option>20</option>
-                <option>30</option>
-                <option>40</option>
-                <option>50</option>
-                </select>';
+                echo form_input('first_name',set_value('first_name',$date),' readonly');
                
                 echo '<SELECT name="dakika">
                 <option>10</option>
