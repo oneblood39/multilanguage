@@ -71,6 +71,10 @@ class Danisan_dt extends Admin_Controller
       if($search){
         $rFiltered++;
       }
+
+      $datasessionmevcut = $this->session->flashdata('item'); 
+
+print_r($datasessionmevcut);
           
     // if($search){
        if($cat->danisanID>0){  
@@ -88,7 +92,8 @@ class Danisan_dt extends Admin_Controller
           $Tel = $cat->danisanTel;
         
         }
-        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
+        " <a href=\"'.site_url('admin/terapi/randevu/randevuekle_step2/').$cat->danisanID.'\"><span title=\"randevu ekle\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

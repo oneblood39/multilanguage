@@ -34,10 +34,34 @@
 $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7);  
+
+                $datasession = array(
+                    'randevuDanismanID' => $danisman_id,                  
+                    'date' => $date,
+                    'time' => $time                                    
+                );
+
+$this->load->library('session');
+$this->session->set_flashdata('item', $datasession);
   ?>
 <button type="button" class="btn btn-primary" id="birkan">Yeni Danışan</button>
-<a href="<?php echo site_url('admin/terapi/danisan');?>" class="btn btn-primary" id="birkan">Mevcut Danışan</a>
+<?php 
+echo '<a href="';
+echo site_url('admin/terapi/danisan/');
+echo '"'; 
+echo 'class="btn btn-primary" id="birkan">Mevcut Danışan</a>';
+?>
 <br><br>
+<?php echo '<form method="post" action="../../../../danisan/">';?>
+    <?php echo form_hidden('date',$date);?>
+    <?php echo form_hidden('danismanID',$danisman_id);?>
+    <?php echo form_hidden('time',$time);?>
+<input type="submit" class="btn btn-primary" value="Mevcut Danışan">
+ <!-- <button type="button" class="btn btn-primary" >Danışan Ekle</button> -->
+  </form>
+
+
+
 <?php echo '<form id="form1" method="post" action="../../../randevuekle_step1/'.$date.'/'.$danisman_id.'/'.$time.'">';
 echo '';
 ?>

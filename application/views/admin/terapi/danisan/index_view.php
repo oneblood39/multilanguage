@@ -28,9 +28,12 @@
 
         <div class="col-lg-12" style="margin-top: 10px;">
            
+<a href="http://localhost/multilanguage/admin/terapi/randevu/randevuekle_step2/17">mmmmmm</a>
 
+<?php //$datasessionmevcut = $this->session->flashdata('item'); 
 
-<?php //print_r($data);?>
+//print_r($datasessionmevcut);
+?>
 
         </div>
     </div>

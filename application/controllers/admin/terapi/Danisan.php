@@ -15,9 +15,10 @@ class Danisan extends Admin_Controller
         }*/
     }
 
-    public function index() ///çağrılar index sayfası
+    public function index($datas = NULL) ///çağrılar index sayfası
     {
         $this->data['page_title'] = 'Danişan Takip';
+         $this->load->library('session');
         $this->data['users'] = $this->ion_auth->users(array())->result();
 
        $this->data['before_body'] ='<script type="text/javascript">
@@ -35,6 +36,30 @@ class Danisan extends Admin_Controller
          });
         -->
         </script>';
+
+echo "<br><br><br><br>";
+
+                $data = array(
+                  
+                    'DanismanID' => $this->input->post('danismanID'),                  
+                    'date' => $this->input->post('date'),
+                    'time' => $this->input->post('time')
+                                     
+                );
+                $date = $this->input->post('date');
+                $time =$this->input->post('time');
+                $danismanID = $this->input->post('danismanID');
+                //print_r($data);
+
+                //echo $date.'  '.$time.' '.$danismanID;
+    /*   $datasessionmevcut = $this->session->flashdata('item'); 
+
+      print_r($datasessionmevcut);*/
+      //$this->session->set_userdata('item', $datasessionmevcut);
+//$datasessionmevcutyaz = $this->session->userdata('item'); 
+
+//print_r($datasessionmevcutyaz);
+      echo $this->session->userdata('randevuDanismanID'); 
 
         $this->render('admin/terapi/danisan/index_view','admin_master',$this->data);
 	}

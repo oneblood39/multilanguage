@@ -39,14 +39,14 @@ echo '<br><br><br><br>';
                     'danisanTel' => $this->input->post('tel')
                    
                 );
-            print_r($data);
+          //  print_r($data);
             echo '<br>';
 
-           // $this->db->insert("tbldanisan",$data);   
+         $this->db->insert("tbldanisan",$data);   
 
-            echo "Tarih:".$date.'<br>';
-            echo "DanışmanID:".$danisman_id.'<br>';
-            echo "Zaman:".$time.'<br>';
+          //  echo "Tarih:".$date.'<br>';
+           // echo "DanışmanID:".$danisman_id.'<br>';
+           // echo "Zaman:".$time.'<br>';
 
     $sql = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
     $results = $this->db->query($sql)->result();
@@ -54,7 +54,7 @@ echo '<br><br><br><br>';
                $danisanID=$result->danisanID;
                $danisanad=$result->danisanID;
                $danisansoyad=$result->danisanID;
-               echo "Danışan ID:".$danisanID;
+             //  echo "Danışan ID:".$danisanID;
                 } 
 }
 
@@ -115,6 +115,73 @@ echo '<br><br><br><br>';
     }
     return false;
   }
+
+       public function createRandevuStep2 () {
+/*
+$date= $this->uri->segment(5);
+$danisman_id= $this->uri->segment(6); 
+$time= $this->uri->segment(7); 
+  */  
+
+
+
+echo '<br><br><br><br>';
+                $data = array(
+                    'randevuDanismanTerapiTipID' => $this->input->post('terapi'),
+                    'randevuDurumuID' => $this->input->post('randevu'),
+                    'ofisID' => $this->input->post('ofis'),
+                    'randevuDanisanID' => $this->input->post('danisanID'),
+                    'randevuDanismanID' => $this->input->post('danismanID'),                  
+                    'date' => $this->input->post('date'),
+                    'time' => $this->input->post('time'),
+                    'dakika' => $this->input->post('dakika')                   
+                );
+
+           // print_r($data);
+            echo '<br>';
+            $dakika=$this->input->post('dakika');
+           // echo $dakika;
+
+$time = $this->input->post('time');
+$date = $this->input->post('date');
+$datelast= $date.' '.$time.':'.$dakika.':'.'00';
+//echo $datelast;
+
+
+$terapi=$this->input->post('terapi');
+$danisman_id=$this->input->post('danismanID');
+
+
+    $sql = "SELECT * FROM vwdanismanterapi where terapiTipID=".$terapi." and userID=".$danisman_id;
+    $results = $this->db->query($sql)->result();
+     foreach ($results as $result) {
+       $ucret=$result->DanismanSeansUcret;
+     }
+
+$userID=$this->ion_auth->user()->row()->id;
+
+$datakayit = array(
+'randevuDanisanID' => $this->input->post('danisanID'),
+'randevuDanismanTerapiTipID' => $terapi,
+'ofisID' => $this->input->post('ofis'),
+'randevuDurumuID' => $this->input->post('randevu'),
+'randevuSeansUcret' => $ucret,
+'randevuBaslangicTarihSaat' => $datelast,
+'islemKullaniciID' => $userID
+
+);
+
+//print_r($datakayit);
+
+$this->db->insert("tblrandevu",$datakayit);   
+$this->postal->add('Randevu Ekleme Başarılı!','success');
+redirect('admin/terapi/randevu/','refresh');
+
+
+
+ 
+}
+
 
 
 

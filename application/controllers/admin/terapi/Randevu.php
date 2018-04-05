@@ -94,6 +94,26 @@ $(document).ready(function(){
 });
 </script>
   ';
+
+
+$date= $this->uri->segment(5);
+$danisman_id= $this->uri->segment(6); 
+$time= $this->uri->segment(7); 
+echo "<br><br><br><br>";
+echo $date;
+
+ $datasessionmevcut = array(
+                    'randevuDanismanID' => $danisman_id,                  
+                    'date' => $date,
+                    'time' => $time                                    
+                );
+
+$this->load->library('session');
+$this->session->set_userdata($datasessionmevcut);
+echo $this->session->userdata('randevuDanismanID'); 
+
+// print_r($datasessionmevcutyaz);
+
         $this->render('admin/terapi/randevu/create_view_1','admin_master',$this->data);
   }
 
@@ -124,7 +144,56 @@ public function randevuekle_step1 ($data, $ofisID){
         $this->data['randevudurum'] = $this->randevu_model->getRandevuDurumForDropdown(array());
  
   $this->randevu_model->createRandevuStep1($this->input->post(),$data);
-  $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$data,$ofisID);
+  $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$data,$ofisID,$this->input->post());
+}
+
+public function randevuekle_step2 (){
+        $this->data['page_title'] = 'Randevular';
+        $this->load->library('form_validation');
+        $this->load->library('session');
+
+
+        //$danisman_id= $this->uri->segment(6); 
+        //$ofis = $this->randevu_model->getOfis((int) $ofisID);
+      /*  
+        $this->data['users'] = $this->ion_auth->users(array())->result();
+        $this->data['ofisler'] = $this->randevu_model->getOfficesForDropdown(array("0"," -- "));
+        $this->data['terapiler'] = $this->randevu_model->getTerapiForDropdown(array("0"," -- "),$danisman_id);
+        $this->data['randevudurum'] = $this->randevu_model->getRandevuDurumForDropdown(array());
+ */
+$danisan_id= $this->uri->segment(5); 
+if ($danisan_id!='') {
+ echo $danisan_id; 
+/*
+  $this->data['page_title'] = 'Randevular';
+        $this->load->library('form_validation');
+        $this->load->library('session');
+        $this->data['before_head'] ='<script type="text/javascript">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="../../../../../../assets/admin/js/selectchained.js" type="text/javascript"></script>
+';
+*/
+
+echo "<br><br><br><br>";
+echo "burda";
+       //$datasessionmevcut = $this->session->flashdata('item'); 
+      
+echo $this->session->userdata('randevuDanismanID');
+echo "<br>";
+echo $this->session->userdata('date');
+echo "<br>";
+echo $this->session->userdata('time'); 
+
+      //print_r($datasessionmevcut);
+ //$this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data);
+} else {  
+  $this->randevu_model->createRandevuStep2($this->input->post());
+}
+ // $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$data,$ofisID);
+
 }
 
 
