@@ -150,7 +150,8 @@ $datelast= $date.' '.$time.':'.$dakika.':'.'00';
 
 $terapi=$this->input->post('terapi');
 $danisman_id=$this->input->post('danismanID');
-
+ // if($danisman_id=='') { $danisman_id=$this->session->userdata('randevuDanismanID'); }
+ //if($terapi=='') {   }
 
     $sql = "SELECT * FROM vwdanismanterapi where terapiTipID=".$terapi." and userID=".$danisman_id;
     $results = $this->db->query($sql)->result();

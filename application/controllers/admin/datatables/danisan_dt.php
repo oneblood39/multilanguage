@@ -93,7 +93,7 @@ print_r($datasessionmevcut);
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
-        " <a href=\"'.site_url('admin/terapi/randevu/randevuekle_step2/').$cat->danisanID.'\"><span title=\"randevu ekle\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        " <a href=\"'.site_url('admin/terapi/randevu/randevuekle_step3/').$cat->danisanID.'\"><span title=\"randevu ekle\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

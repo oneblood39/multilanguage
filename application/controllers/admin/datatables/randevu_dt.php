@@ -17,7 +17,10 @@ class Randevu_dt extends Admin_Controller
   public function getall(){
 
     $start = 0;
-    $length = 10;
+    $length =10;
+
+    $ofis=$this->ion_auth->user()->row()->company;
+    if ($ofis==3) {  $filtre=' '; $filtresearch=' WHERE '; } else { $filtre=' WHERE tblofis.ofisID='.$ofis; $filtresearch=$filtre.' and '; }
 
     if($this->input->get('start')){
       $start = (int)$this->input->get('start');
@@ -42,9 +45,10 @@ class Randevu_dt extends Admin_Controller
    $data = array();
 
     // toplam kategori sayısı
-    $query = $this->db->query("SELECT COUNT(danisanID) as total FROM tbldanisan");
+    $query = $this->db->query("SELECT COUNT(randevuID) as total  FROM tblrandevu");
    
     $total = $query->row()->total;
+
 
     if($search){
       $queryString = "SELECT 
@@ -70,13 +74,16 @@ LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID
 left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID 
-WHERE tbldanisan.danisanAd like ".$this->db->escape('%'.$search.'%').
+".$filtresearch." (tbldanisan.danisanAd like ".$this->db->escape('%'.$search.'%').
 " or danisanSoyad like ".$this->db->escape('%'.$search.'%').
 " or users.first_name like ".$this->db->escape('%'.$search.'%').
 " or users.last_name like ".$this->db->escape('%'.$search.'%').
 " or tnmterapitip.terapiAdi like ".$this->db->escape('%'.$search.'%').
-" ORDER BY tblrandevu.randevuID desc LIMIT ".$start.",".$length;
+") ORDER BY tblrandevu.randevuID desc LIMIT ".$start.",".$length;
     }else{
+
+
+     
       $queryString = "SELECT 
  tbldanisan.danisanID
 ,tbldanisan.danisanAd
@@ -99,8 +106,10 @@ INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuD
 LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID
-left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID ORDER BY tbldanisan.danisanID desc LIMIT ".$start.",".$length;
-    }
+left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID   ".$filtre." ORDER BY tbldanisan.danisanID desc LIMIT ".$start.",".$length;
+    }                                                                           
+
+      ///WHERE tblofis.ofisID=".$ofis."
     
     $query = $this->db->query($queryString);
 

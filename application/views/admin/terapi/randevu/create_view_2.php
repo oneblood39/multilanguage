@@ -13,9 +13,45 @@ $danisman_id= $this->uri->segment(6);
 
 if ($danisman_id=='') { 
   echo "<br<br><br><br>";
-$datasessionmevcut = $this->session->flashdata('item'); 
+$danisan_id= $this->uri->segment(5); 
 
-print_r($datasessionmevcut);
+$danisman_id=$this->session->userdata('randevuDanismanID');
+$date=$this->session->userdata('date');
+$time=$this->session->userdata('time');
+
+echo $this->session->userdata('randevuDanismanID');
+echo "<br>";
+echo $this->session->userdata('date');
+echo "<br>";
+echo $this->session->userdata('time'); 
+
+
+         $sqldanisan = "SELECT * FROM tbldanisan where danisanID=".$danisan_id;
+         $results = $this->db->query($sqldanisan)->result();
+         foreach ($results as $result) {
+               $danisanID=$result->danisanID;
+               $danisanad=$result->danisanAd;
+               $danisansoyad=$result->danisanSoyad;
+              // echo "Danışan ID:".$danisanID;
+                }
+
+         $sqldanisman = "SELECT * FROM users where id=".$danisman_id;
+         $results = $this->db->query($sqldanisman)->result();
+         foreach ($results as $result) {
+               $first=$result->first_name;
+               $last=$result->last_name;
+               $danisman=$first.' '.$last;
+               $locationid=$result->company;
+               $sqlofis = "SELECT * FROM tblofis where ofisID=".$locationid;
+               $results = $this->db->query($sqlofis)->result();
+               foreach ($results as $result) { 
+                    $ofisAdi=$result->ofisAdi;
+               }
+                }   
+
+
+
+
 }else { 
 
 $date= $this->uri->segment(5);
@@ -63,8 +99,11 @@ echo 'Ofis:'.$ofisID;
   ?>
 
 
-<?php echo '<form  method="post" action="../../../randevuekle_step2/">';
-echo ''; 
+<?php 
+$seg6= $this->uri->segment(6);
+if ($seg6=='') { echo '<form  method="post" action="../randevuekle_step4/">';  }
+else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
+
 ?>
           <?php //echo form_open();?>
 
