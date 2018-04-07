@@ -10,7 +10,7 @@
   <a href="<?php echo site_url('admin/terapi/randevu/randevulistele');?>" class="btn btn-primary">Randevu Listele</a><br><br>
 
 <style type="text/css">
-#wgtmsr{
+#wgtmsr {
  width:190px;   
 }
 td {
@@ -21,6 +21,13 @@ background-color: white;
 background-position: top-left;
 }
 table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
+
+#ddd {
+  color: black;
+
+}
+
+
 </style>
 
 <?php
@@ -48,7 +55,7 @@ $sqlofisler = "SELECT * FROM tblofis where ofisID!=3";
                     foreach($ofisler as $cofis){ 
                       $ofisID=$cofis->ofisID;
                       $ofisAdi=$cofis->ofisAdi;
-   echo '<option value="'.$ofisID.'">'.$ofisAdi.'</option>'; 
+   echo '<option value="'.$ofisID.'"'; if ($ofisID==$ofis){ echo 'selected'; } echo '>'.$ofisAdi.'</option>'; 
 
                     }
 }
@@ -76,10 +83,15 @@ echo $i.":00";
 echo'</td>';
 }
 echo '</tr>';
+$ortak=3;
+$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
+//print_r($sqlusers);
+                  $users = $this->db->query($sqlusers)->result();
 foreach($users as $user)
-                {
+   
+                {  $isim=$user->first_name.' '.$user->last_name;
 echo '<tr>';
-echo "<td>";echo $user->username;"</td>";
+echo "<td>";echo $isim;"</td>";
 for ($i = 9; $i <= 21; $i++) {
 
 $search=$date.' '.$i;
@@ -97,7 +109,9 @@ $search=$date.' '.$i;
                 $results = $this->db->query($sql)->result();
                $sayi= $this->db->query($sql)->num_rows();
 
-if ($sayimazeret>0) { echo '<td class="td" colspan="3">'; } else { echo '<td class="td">'; }
+if ($sayimazeret>0) { $i=$i+2; echo '<td style="background-color:#F75D59"  colspan="3">'; } elseif ($sayi>0) {
+  echo '<td style="background-color:#54C571" >';
+} else { echo '<td class="td">'; }
 
 
               if ($sayi=="0" and $sayimazeret=="0") { echo '<a href="';
@@ -108,14 +122,17 @@ if ($sayimazeret>0) { echo '<td class="td" colspan="3">'; } else { echo '<td cla
 
               echo '<p align="center"><font color="white" size="1">randevuAL</font></p>';
               echo '</a>'; }
-              else if ($sayi=="0" and $sayimazeret>0)  { echo "---------------- izinli -------------------";   }
+              else if ($sayi=="0" and $sayimazeret>0)  { echo '<p  align="center"><font color="white" size="2">---------------- İzinli -------------------</font></p>';   }
                 else {          
                 foreach($results as $result)
                 {  
                     $sqldanisan = "SELECT * FROM tbldanisan WHERE danisanID=".$result->danisanID;
                     $danisanlar = $this->db->query($sqldanisan)->result();
                     foreach($danisanlar as $danisan){
-                        echo '<p align="center"><font size="1"><a href="">'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a><br><a href=""></a></font></p>';                  
+                        echo '<p align="center"><font color="white" size="2">
+                       <a style="color:white; vertical-align: middle;" href="" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a></font></p>
+                   
+                        ';                  
                                 }
                    // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';

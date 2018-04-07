@@ -58,13 +58,13 @@ $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7);  
 
-            echo '<br>';
+         /*   echo '<br>';
            // $this->db->insert("tbldanisan",$data);   
             echo "Tarih:".$date.'<br>';
             echo "DanışmanID:".$danisman_id.'<br>';
             echo "Zaman:".$time.'<br>';
 
-
+*/
 
 
          $sqldanisan = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
@@ -94,7 +94,7 @@ $time= $this->uri->segment(7);
 }
            
 $ofisID=$this->ion_auth->user()->row()->company;
-echo 'Ofis:'.$ofisID;
+//echo 'Ofis:'.$ofisID;
                 
   ?>
 

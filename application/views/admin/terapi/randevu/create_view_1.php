@@ -56,7 +56,7 @@ echo 'class="btn btn-primary" id="birkan">Mevcut Danışan</a>';
     <?php echo form_hidden('date',$date);?>
     <?php echo form_hidden('danismanID',$danisman_id);?>
     <?php echo form_hidden('time',$time);?>
-<input type="submit" class="btn btn-primary" value="Mevcut Danışan">
+<!--<input type="submit" class="btn btn-primary" value="Mevcut Danışan">-->
  <!-- <button type="button" class="btn btn-primary" >Danışan Ekle</button> -->
   </form>
 
