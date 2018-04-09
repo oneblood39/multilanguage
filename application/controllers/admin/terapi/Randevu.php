@@ -24,9 +24,51 @@ class Randevu extends Admin_Controller
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
+
   <script>
   $( function() {
     $( "#datepicker" ).datepicker();
+
+/* Turkish initialisation for the jQuery UI date picker plugin. */
+/* Written by Izzet Emre Erkan (kara@karalamalar.net). */
+( function( factory ) {
+  if ( typeof define === "function" && define.amd ) {
+
+    // AMD. Register as an anonymous module.
+    define( [ "../widgets/datepicker" ], factory );
+  } else {
+
+    // Browser globals
+    factory( jQuery.datepicker );
+  }
+}( function( datepicker ) {
+
+datepicker.regional.tr = {
+  closeText: "kapat",
+  prevText: "&#x3C;geri",
+  nextText: "ileri&#x3e",
+  currentText: "bugün",
+  monthNames: [ "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+  "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık" ],
+  monthNamesShort: [ "Oca","Şub","Mar","Nis","May","Haz",
+  "Tem","Ağu","Eyl","Eki","Kas","Ara" ],
+  dayNames: [ "Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi" ],
+  dayNamesShort: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  dayNamesMin: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  weekHeader: "Hf",
+  firstDay: 1,
+  isRTL: false,
+  showMonthAfterYear: false,
+  yearSuffix: "" };
+datepicker.setDefaults( datepicker.regional.tr );
+
+return datepicker.regional.tr;
+
+} ) );
+
+
+
   } );
  
         </script>
