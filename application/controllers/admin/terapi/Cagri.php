@@ -40,6 +40,15 @@ class Cagri extends Admin_Controller
 	}
 
 
+  public function cagriekle() {
+    $this->data['page_title'] = 'Çağrı Takip';
+    $this->data['users'] = $this->ion_auth->users(array())->result();
+
+ $this->render('admin/terapi/cagri/create_view_1');
+
+  }
+
+
 
 
 

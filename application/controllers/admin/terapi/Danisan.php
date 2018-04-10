@@ -37,7 +37,7 @@ class Danisan extends Admin_Controller
         -->
         </script>';
 
-echo "<br><br><br><br>";
+echo "<br><br><br>";
 
                 $data = array(
                   

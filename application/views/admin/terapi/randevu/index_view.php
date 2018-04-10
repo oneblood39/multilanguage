@@ -77,7 +77,6 @@ echo form_close();
 /////////////üst form sonu///////////////////
 
 
-
  echo '<table class="table table-hover table-bordered table-condensed">';
  echo '<tr><td>Saat/Danışman</td>';
 for ($i = 9; $i <= 21; $i++) {
@@ -87,7 +86,8 @@ echo'</td>';
 }
 echo '</tr>';
 $ortak=3;
-$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
+//$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
+$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by first_name asc";
 //print_r($sqlusers);
                   $users = $this->db->query($sqlusers)->result();
 foreach($users as $user)
@@ -184,8 +184,16 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
 
 
    } 
-  elseif ($sayi>0) {
-  echo '<td style="background-color:#54C571" >'; ///randevu var ise renk kodu
+  elseif ($sayi>0) {   ///randevu var ise renk kodu////
+         $sqlrenk = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')"; ////
+         $resultrenk = $this->db->query($sqlrenk)->result();
+          foreach($resultrenk as $result){
+        $randevudurum=$result->RandevuDurumID; /////randevu durumuna göre bg rengi
+   if ($randevudurum=='1')  { echo '<td style="background-color:#BDB76B" >';   }
+   if ($randevudurum=='2')  { echo '<td style="background-color:#FF8C00" >';   }
+   if ($randevudurum=='3')  { echo '<td style="background-color:#8B0000" >';   }
+   if ($randevudurum=='4')  { echo '<td style="background-color:#54C571" >';   }
+         } 
   } 
 else { echo '<td class="td">'; /*echo $sayi.$sayimazeret;*/ }
 

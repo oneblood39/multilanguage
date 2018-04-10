@@ -44,14 +44,14 @@ class Cagri_dt extends Admin_Controller
    // $this->cagri_dt_model->cagridata($data);
 
     // toplam kategori sayısı
-    $query = $this->db->query("SELECT COUNT(cagriID) as total FROM tblcagri");
+    $query = $this->db->query("SELECT COUNT(cagriID) as total FROM vwcagri");
    
     $total = $query->row()->total;
 
     if($search){
-      $queryString = "SELECT * FROM tblcagri WHERE cagriYapanAd like ".$this->db->escape('%'.$search.'%')." or cagriYapanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapilanAd like ".$this->db->escape('%'.$search.'%')." or cagriTarihSaat like ".$this->db->escape('%'.$search.'%')." or cagriYapilanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriID desc LIMIT ".$start.",".$length;
+      $queryString = "SELECT * FROM vwcagri WHERE cagriYapanAd like ".$this->db->escape('%'.$search.'%')." or cagriYapanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapilanAd like ".$this->db->escape('%'.$search.'%')." or cagriTarihSaat like ".$this->db->escape('%'.$search.'%')." or cagriYapilanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriID desc LIMIT ".$start.",".$length;
     }else{
-      $queryString = "SELECT * FROM tblcagri ORDER BY cagriID desc LIMIT ".$start.",".$length;
+      $queryString = "SELECT * FROM vwcagri ORDER BY cagriID desc LIMIT ".$start.",".$length;
     }
     
     $query = $this->db->query($queryString);
@@ -80,6 +80,11 @@ class Cagri_dt extends Admin_Controller
           $Yad = $cat->cagriYapilanAd;
           $Ysoyad = $cat->cagriYapilanSoyad;
           $Tel = $cat->cagriYapanTel;
+          $yakinlik=$cat->cagriYakinlikAdi;
+          $neden=$cat->cagriNedeniAdi;
+          $kaynak=$cat->cagriYonlenmeAdi;
+
+
 
         }else{
           $Ad = $cat->cagriYapanAd;
@@ -87,8 +92,12 @@ class Cagri_dt extends Admin_Controller
           $Yad = $cat->cagriYapilanAd;
           $Ysoyad = $cat->cagriYapilanSoyad;
           $Tel = $cat->cagriYapanTel;
+          $yakinlik=$cat->cagriYakinlikAdi;
+          $neden=$cat->cagriNedeniAdi;
+          $kaynak=$cat->cagriYonlenmeAdi;
+        
         }
-        $data .= '["'.$cat->cagriTarihSaat.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$cat->cagriTarihSaat.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }
