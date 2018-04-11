@@ -7,8 +7,22 @@
               
           <h2>Çağrı Ekle</h2>
 <br>
-<button type="button" class="btn btn-primary" id="birkan">Bireysel Çağrı</button>
-<button type="button" class="btn btn-primary" id="birkan">Kurumsal Çağrı</button>
+
+<div style="padding-left: 1px;">
+<?php 
+echo '<a href="';
+echo site_url('admin/terapi/cagri/bireysel');
+echo '"'; 
+echo 'class="btn btn-primary" >Bireysel Çağrı</a>';
+?>
+  <?php 
+echo '<a href="';
+echo site_url('admin/terapi/cagri/kurumsal');
+echo '"'; 
+echo 'class="btn btn-primary" >Kurumsal Çağrı</a>';
+?>
+</div>
+
 
         </div>
     </div>
