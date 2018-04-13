@@ -15,7 +15,7 @@ class Randevu extends Admin_Controller
         }*/
     }
 
-    public function index() ///roller index sayfası
+    public function index($randevuID = NULL) ///roller index sayfası
     {
         $this->data['page_title'] = 'Randevular';
         $this->load->library('form_validation');
@@ -74,47 +74,56 @@ return datepicker.regional.tr;
         </script>
 
 <style>
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
+
+.couponcode:hover .coupontooltip {
+    display: block;
+
 }
 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
+.test {
+    display: block;
+
+}
+.coupontooltip {
+    display: none;
+    background: #C8C8C8;
+    margin-left: -200px;
+    margin-top: -100px;
+    padding: 10px;
+    position: inherit;
+    z-index: 1000;
+    width:200px;
+    height:100px;
+
 }
 
-.tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
 
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
 </style>
+<script>var tooltip = document.querySelectorAll(\'.coupontooltip\');
 
+document.addEventListener(\'mousemove\', fn, false);
+
+function fn(e) {
+    for (var i=tooltip.length; i--;) {
+        tooltip[i].style.left = e.pageX + \'px\';
+        tooltip[i].style.top = e.pageY + \'px\';
+    }
+}</script>
         ';
+
+
+        $this->data['before_body'] ='<script type="text/javascript">
+var tooltip = document.querySelectorAll(\'.coupontooltip\');
+
+document.addEventListener(\'mousemove\', fn, false);
+
+function fn(e) {
+    for (var i=tooltip.length; i--;) {
+        tooltip[i].style.left = e.pageX + \'px\';
+        tooltip[i].style.top = e.pageY + \'px\';
+    }
+}
+</script>';
 
         $this->data['users'] = $this->ion_auth->users(array())->result();
         $this->render('admin/terapi/randevu/index_view','admin_master',$this->data);

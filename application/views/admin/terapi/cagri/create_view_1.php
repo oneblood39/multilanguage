@@ -21,6 +21,8 @@ echo site_url('admin/terapi/cagri/kurumsal');
 echo '"'; 
 echo 'class="btn btn-primary" >Kurumsal Çağrı</a>';
 ?>
+
+
 </div>
 
 

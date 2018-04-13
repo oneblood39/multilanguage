@@ -82,7 +82,7 @@ echo '<br><br><br><br>';
     }
 
     foreach ($results as $result) {
-      $dropdown[$result->terapiTipID] = $result->terapiAdi;
+      $dropdown[$result->danismanTerapiID] = $result->terapiAdi;
     }
 
     return $dropdown;
@@ -153,7 +153,7 @@ $danisman_id=$this->input->post('danismanID');
  // if($danisman_id=='') { $danisman_id=$this->session->userdata('randevuDanismanID'); }
  //if($terapi=='') {   }
 
-    $sql = "SELECT * FROM vwdanismanterapi where terapiTipID=".$terapi." and userID=".$danisman_id;
+    $sql = "SELECT * FROM vwdanismanterapi where danismanTerapiID=".$terapi;
     $results = $this->db->query($sql)->result();
      foreach ($results as $result) {
        $ucret=$result->DanismanSeansUcret;

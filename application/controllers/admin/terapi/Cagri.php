@@ -110,5 +110,29 @@ class Cagri extends Admin_Controller
   }
 
 
+  public function kurumsalcagri() ///çağrılar index sayfası
+  {
+      $this->data['page_title'] = 'Çağrı Takip';
+      $this->data['users'] = $this->ion_auth->users(array())->result();
+
+       $this->data['before_body'] ='<script type="text/javascript">
+        <!--
+         $(document).ready(function(){
+          $("#kurumsalcagriListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/kurumsalcagri_dt/getall",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });
+        -->
+        </script>';
+        $this->render('admin/terapi/cagri/kurumsal_index_view','admin_master',$this->data);
+  }
+
+
 
 }

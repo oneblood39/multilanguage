@@ -154,7 +154,7 @@ echo '<ul class="dropdown-menu" role="menu">';
                      <li class="divider"></li>'; 
                    echo '<li><a href="'.site_url('admin/terapi/danisan').'">Danışanlar</a></li>';
                    echo '<li class="divider"></li>'; 
-                   echo '<li><a href="'.site_url('admin/terapi/seans').'">Ödeme-Seans Bilgileri</a></li>'; 
+                   echo '<li><a href="'.site_url('admin/terapi/seans').'">Seans Bilgileri</a></li>'; 
                    echo '
       </ul>
                 </li>'; 
@@ -178,7 +178,8 @@ echo '<ul class="dropdown-menu" role="menu">';
            }
      } 
      ?></li>
-<li><?php 
+
+<li><?php /*
 //üst menü yetkilendirmesi - çağrı takip                   
          $user_id=$this->ion_auth->user()->row()->id;
      $query=$this->db->query('Select group_id FROM users_groups where user_id='.$user_id);
@@ -191,7 +192,7 @@ echo '<ul class="dropdown-menu" role="menu">';
           else {  };
            }
      } 
-     ?></li>
+   */  ?></li>
 
 
 

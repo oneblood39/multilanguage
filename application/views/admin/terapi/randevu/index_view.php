@@ -32,7 +32,7 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 </style>
 
 <?php
-
+//error_reporting(0);
 $bugün = date("Y-m-d"); 
 //echo $bugün;
 $date=$this->input->post('tarih');
@@ -188,11 +188,12 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
          $sqlrenk = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')"; ////
          $resultrenk = $this->db->query($sqlrenk)->result();
           foreach($resultrenk as $result){
-        $randevudurum=$result->RandevuDurumID; /////randevu durumuna göre bg rengi
-   if ($randevudurum=='1')  { echo '<td style="background-color:#BDB76B" >';   }
-   if ($randevudurum=='2')  { echo '<td style="background-color:#FF8C00" >';   }
-   if ($randevudurum=='3')  { echo '<td style="background-color:#8B0000" >';   }
-   if ($randevudurum=='4')  { echo '<td style="background-color:#54C571" >';   }
+        $randevudurum=$result->RandevuDurumID;
+        /////randevu durumuna göre bg rengi
+   if ($randevudurum=='1')  { echo '<td  style="background-color:#BDB76B;" >';   }
+   if ($randevudurum=='2')  { echo '<td  style="background-color:#FF8C00;" >';   }
+   if ($randevudurum=='3')  { echo '<td  style="background-color:#8B0000;" >';   }
+   if ($randevudurum=='4')  { echo '<td  style="background-color:#54C571;" >';   }
          } 
   } 
 else { echo '<td class="td">'; /*echo $sayi.$sayimazeret;*/ }
@@ -226,10 +227,6 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 //////////////////////////////////////////////////////////////////////////////////////
                 echo '<a href="';
               echo site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'">';
-
-               // echo '<a href="randevu/randevuekle/'.$date.'/'.$user->id.'/'.$i.'">';
-              /*echo '<img src='.site_url('assets/admin/images/bos_arkaplan.png').'>*/
-
               echo '<p align="center"><font color="white" size="1">randevuAL</font></p>';
               echo '</a>'; }
 
@@ -242,7 +239,39 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
                     $danisanlar = $this->db->query($sqldanisan)->result();
                     foreach($danisanlar as $danisan){
                         echo '<p align="center"><font color="white" size="2">
-                       <a style="color:white; vertical-align: middle;" href="" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a></font></p>
+                       <a style="color:white; vertical-align: middle;" href="" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a>';
+$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')";
+        $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
+         foreach($resultsqlrandevuid as $resultrand){
+        $randevuID=$resultrand->randevuID;
+        $randevuinfo=$resultrand->randevuAciklama;
+        $randevudurum=$resultrand->RandevuDurumID;
+        }
+                       echo '             
+  <div class="test col-md-12 text-center">
+  <div style="float:left">';
+
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuduzenle/').$randevuID;
+  echo '"><small><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
+  </div>
+  <div style="float:left">';
+  if ($randevudurum=='5') { } else {
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID;
+  echo '"><small><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
+  </div>'; }
+  
+  if ($randevuinfo=='') { } else {  ////açıklama varsa göster
+  echo '<div class="couponcode" style="float:left" >
+      <small><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:white; "></span></small>
+     <span class="coupontooltip">'.$randevuinfo.'</span>
+ </div>'; }
+
+
+ echo ' </div>
+  
+         </font>
+                       
+                       </p>
                    
                         ';                  
                                 }

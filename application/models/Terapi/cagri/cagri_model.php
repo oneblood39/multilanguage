@@ -27,7 +27,7 @@ class Cagri_model extends MY_Model
 
 
 
-     public function bireyselcagrikaydet ($data) {
+    public function bireyselcagrikaydet ($data) {
 
     
 echo '<br><br><br><br>';
@@ -117,36 +117,48 @@ echo '<br><br><br><br>';
 
       
      
-
-     public function kurumsalcagrikaydet ($data) {
+public function kurumsalcagrikaydet ($data,$id = NULL) {
     
 echo '<br><br><br><br>';
                 $data = array(
-                    'cagriYapanAd' => $this->input->post('kurum'),
-                    'cagriYapanSoyad' => $this->input->post('kisi'),
-                    'cagriYapilanAd' => $this->input->post('tel'),
-                    'cagriYapilanSoyad' => $this->input->post('eposta'),
-                    'cagriYonlenmeID' => $this->input->post('info')
+                    'cagriKurum' => $this->input->post('kurum'),
+                    'cagriIrtibatAd' => $this->input->post('ad'),
+                    'cagriIrtibatSoyad' => $this->input->post('soyad'),
+                    'cagriIrtibatTel' => $this->input->post('tel'),
+                    'cagriIrtibatEposta' => $this->input->post('eposta'),
+                    'cagriKonu' => $this->input->post('info'),
+                    'cagriDurum' => $this->input->post('cagritipi'),
+                    'cagriOfis' => $this->input->post('ofisID'),
+                    'islemKullaniciID' => $this->input->post('id')
                    
                 );
-print_r($data);
-echo '<br>';
+//print_r($data);
+
+
+$sql = "SELECT * FROM tblcagrikurumsal order by cagriKurumsalID desc limit 0,1";
+$results = $this->db->query($sql)->result();
+         foreach ($results as $result) {
+    $cagri_id=$result->cagriKurumsalID;
+//    echo '<br><br>'.$cagri_id;
+         }
+
  $data2 = $this->input->post('coklu') ;
-print_r($data2);
+ $arraycount=count($data2);
 
 
-/*
-    echo '<br><br>';
-$cok = $this->input->post('coklu');
-print_r($cok);
+for ($i = 0; $i <= $arraycount-1; $i++) {
 
-          print_r(coklu[]);
-            echo '<br>';*/
+  $datasave = array(
+   'kurumsalcagriID' => $cagri_id,
+   'user_id' => $data2[$i]
+  );
+print_r($datasave);
+$this->db->insert("ilscagrikullanici",$datasave);
+   
+}
 
-        // $this->db->insert("tblcagri",$data); 
-        // $this->postal->add('Bireysel Çağrı Ekleme Başarılı!','success');
-        // redirect('admin/terapi/cagri/','refresh');  
-
+         $this->postal->add('Kurumsal Çağrı Ekleme Başarılı!','success');
+         redirect('admin/terapi/cagri/kurumsalcagri','refresh');  
 
 }
 

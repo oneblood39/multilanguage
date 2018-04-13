@@ -14,6 +14,8 @@
 <?php echo '<form id="form1" method="post" action="../cagri/kurumsalcagrikaydet/">';
 $user_id=$this->ion_auth->user()->row()->id;
 $company=$this->ion_auth->user()->row()->company;
+
+//echo $user_id;
 ?>
  <div class="form-group">
                 <?php
@@ -24,9 +26,16 @@ $company=$this->ion_auth->user()->row()->company;
             </div>
             <div class="form-group">
                 <?php
-                echo form_label('İrtibat Kişisi','kisi');
-                echo form_error('kisi');
-                echo form_input('kisi',set_value('kisi'),'class="form-control"');
+                echo form_label('Ad','ad');
+                echo form_error('ad');
+                echo form_input('ad',set_value('ad'),'class="form-control"');
+                ?>
+            </div>
+            <div class="form-group">
+                <?php
+                echo form_label('Soyad','soyad');
+                echo form_error('soyad');
+                echo form_input('soyad',set_value('soyad'),'class="form-control"');
                 ?>
             </div>
             <div class="form-group">
@@ -57,10 +66,10 @@ $company=$this->ion_auth->user()->row()->company;
     $sql = "SELECT * FROM vwusers where group_id=3 or group_id=8";
     $results = $this->db->query($sql)->result();
          foreach ($results as $result) {
-               $user_id=$result->id;
+               $user=$result->id;
                $ad=$result->first_name;
                $soyad=$result->last_name;
-            echo '  <option value="'.$user_id.'">'.$ad.' '.$soyad.'</option>';
+            echo '  <option value="'.$user.'">'.$ad.' '.$soyad.'</option>';
                 } 
 ?>
 
