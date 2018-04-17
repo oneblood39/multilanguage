@@ -33,17 +33,44 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 
 <?php
 //error_reporting(0);
-$bugün = date("Y-m-d"); 
+$bugün = date("Y/m/d"); 
 //echo $bugün;
-$date=$this->input->post('tarih');
-if ($date!='') {   
-$dizi = explode ("/",$date);
-$date=$dizi[2].'-'.$dizi[0].'-'.$dizi[1];  /*echo $date; */ } else { $date=$bugün; }
-echo 'Seçili Tarih:'; print_r($date);
-$ofis=$this->input->post('ofis'); if($ofis=='') {  $ofis=$this->ion_auth->user()->row()->company; }
+echo $this->session->userdata('date');
 
+/*
+else if ($this->session->userdata('date')!='') {
+$date=$this->session->userdata('date');   
+$dizi = explode ("/",$date);
+$date=$dizi[2].'-'.$dizi[0].'-'.$dizi[1];  /*echo $date;  } 
+
+*/
+
+
+if ($this->input->post('tarih')!='') {
+$date=$this->input->post('tarih');   
+$dizi = explode ("/",$date);
+$date=$dizi[2].'-'.$dizi[0].'-'.$dizi[1];  /*echo $date; */ 
+$ofis=$this->input->post('ofis');
+} 
+else if ($this->session->userdata('date')!='') {
+$date=$this->session->userdata('date');
+$ofis= $this->session->userdata('ofis');}
+else { $date=$bugün; 
+$ofis=$this->ion_auth->user()->row()->company;}
+echo 'Seçili Tarih:'; print_r($date);
+
+  if($ofis=='') {  $ofis=$this->ion_auth->user()->row()->company; }
+
+
+
+
+$formatted_date=date("m/d/Y"); 
 //echo $ofis;
 
+
+/*echo $this->session->userdata('date');
+echo $this->session->userdata('ofis'); 
+*/
 
 /////////////üst form///////////////////
 echo '<form method="post" action="http://localhost/multilanguage/admin/terapi/randevu"><table class="table  table-condensed"><tr>
@@ -74,6 +101,11 @@ if ($this->ion_auth->user()->row()->company!=3) {
 echo '</SELECT></p></td>';
 echo '<td><input type="submit" class="btn btn-primary" value="Filtrele"></td></tr></table>';
 echo form_close();
+
+
+ echo' <br><br><br>
+';
+
 /////////////üst form sonu///////////////////
 
 
@@ -96,12 +128,12 @@ foreach($users as $user)
 echo '<tr>';
 echo "<td>";echo $isim;"</td>";
 for ($i = 9; $i <= 21; $i++) {
-
+if ($i=='9'){ $i='09';}///sabah 9 u 09 olarak gösterdim
 $search=$date.' '.$i;
 //echo $search;
  //echo "test";
-//echo '<img src="'.site_url('assests/admin/images/bos_arkaplan.png').'">';
-      $sqlmazeret = "SELECT * FROM ilsdanismanmazeret WHERE (mazeretBaslangicTarihSaat LIKE '%".$search."%') and (danismanUserID='".$user->id."')";
+
+      $sqlmazeret = "SELECT * FROM ilsdanismanmazeret WHERE  (mazeretBaslangicTarihSaat LIKE '%".$search."%') and (danismanUserID='".$user->id."')";
       $resultmazeretler = $this->db->query($sqlmazeret)->result();
                 foreach($resultmazeretler as $resultmazeret){  
                   $baslangic=$resultmazeret->mazeretBaslangicTarihSaat;
@@ -109,7 +141,7 @@ $search=$date.' '.$i;
                   print_r($bitis);
                 }
       $sayimazeret= $this->db->query($sqlmazeret)->num_rows(); 
-                $sql = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')"; /////burası user-id olmayabilir
+                $sql = "SELECT * FROM vwrandevu WHERE RandevuDurumID<>5 and (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')"; /////burası user-id olmayabilir
                 $results = $this->db->query($sql)->result();
                 $sayi= $this->db->query($sql)->num_rows();
 
@@ -190,10 +222,11 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
           foreach($resultrenk as $result){
         $randevudurum=$result->RandevuDurumID;
         /////randevu durumuna göre bg rengi
-   if ($randevudurum=='1')  { echo '<td  style="background-color:#BDB76B;" >';   }
-   if ($randevudurum=='2')  { echo '<td  style="background-color:#FF8C00;" >';   }
-   if ($randevudurum=='3')  { echo '<td  style="background-color:#8B0000;" >';   }
-   if ($randevudurum=='4')  { echo '<td  style="background-color:#54C571;" >';   }
+   if ($randevudurum=='1')  { echo '<td  style="background-color:#BDB76B;" >';   }  ///teyit alınmadı (kum rengi)
+   if ($randevudurum=='6')  { echo '<td  style="background-color:#74767a;" >';   }  ///arandı, ulaşılamadı (gri)
+   if ($randevudurum=='2')  { echo '<td  style="background-color:#FF8C00;" >';   }  ///teyit alındı (turuncu)
+   if ($randevudurum=='3')  { echo '<td  style="background-color:#8B0000;" >';   }  ///randevuya gelmedi (kırmızı)
+   if ($randevudurum=='4')  { echo '<td  style="background-color:#54C571;" >';   }  ///randevuya geldi(yeşil)
          } 
   } 
 else { echo '<td class="td">'; /*echo $sayi.$sayimazeret;*/ }
@@ -238,8 +271,9 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
                     $sqldanisan = "SELECT * FROM tbldanisan WHERE danisanID=".$result->danisanID;
                     $danisanlar = $this->db->query($sqldanisan)->result();
                     foreach($danisanlar as $danisan){
-                        echo '<p align="center"><font color="white" size="2">
-                       <a style="color:white; vertical-align: middle;" href="" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a>';
+                        echo '<p align="center"><font color="white" size="2">';
+
+                       echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'</a>';
 $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')";
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
@@ -251,19 +285,49 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
   <div class="test col-md-12 text-center">
   <div style="float:left">';
 
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuduzenle/').$randevuID;
-  echo '"><small><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
-  </div>
+
+  echo '
+
   <div style="float:left">';
   if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID;
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
   echo '"><small><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
   </div>'; }
   
   if ($randevuinfo=='') { } else {  ////açıklama varsa göster
   echo '<div class="couponcode" style="float:left" >
       <small><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:white; "></span></small>
-     <span class="coupontooltip">'.$randevuinfo.'</span>
+     <span class="coupontooltip">'.$randevuinfo;?>
+            <div class="form-group">
+                <?php
+                echo '<form class="autoSubmit" method="post" action="http://localhost/multilanguage/admin/terapi/randevu/randevudurumudegistir">';
+                echo '<SELECT  name="randevular">';
+                echo '<option>---</option>';
+                $sqlrandevular = "SELECT * FROM tnmrandevudurum WHERE randevuDurumID!=".'5';
+                    $randevular = $this->db->query($sqlrandevular)->result();
+                    foreach($randevular as $randevu){
+                  $durumid=$randevu->randevuDurumID;
+                  $durumAdi=$randevu->randevuDurumAdi;
+              
+                  echo '<option value="'.$durumid.'"';  echo'>'.$durumAdi.'</option>';
+                      } 
+
+
+
+
+
+
+                echo '</SELECT>';
+                echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
+                echo '</form>';
+
+              /*   echo form_label('Randevu Durumu','randevu');
+                echo form_error('randevu');
+                echo form_dropdown('randevu',$durumAdi,$durumid,'class="form-control"');*/
+                ?>
+                <?php echo'
+            </div>
+     </span>
  </div>'; }
 
 

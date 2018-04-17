@@ -59,7 +59,7 @@ echo '<br><br><br><br>';
 }
 
   public function getOfficesForDropdown($firstElement=array()){
-    $results = $this->db->query('SELECT * FROM tblOfis')->result();
+    $results = $this->db->query('SELECT * FROM tblofis')->result();
     $dropdown = array();
 
     if($firstElement){
@@ -129,7 +129,7 @@ echo '<br><br><br><br>';
                 $data = array(
                     'randevuDanismanTerapiTipID' => $this->input->post('terapi'),
                     'randevuDurumuID' => $this->input->post('randevu'),
-                    'ofisID' => $this->input->post('ofis'),
+                    'odaID' => $this->input->post('oda'),
                     'randevuDanisanID' => $this->input->post('danisanID'),
                     'randevuDanismanID' => $this->input->post('danismanID'),                  
                     'date' => $this->input->post('date'),
@@ -161,16 +161,26 @@ $danisman_id=$this->input->post('danismanID');
 
 $userID=$this->ion_auth->user()->row()->id;
 
+    $oda=$this->input->post('oda');
+    $sqloda = "SELECT * FROM tbloda where odaID=".$oda;
+    $results = $this->db->query($sqloda)->result();
+     foreach ($results as $result) {
+       $ofisID=$result->odaOfisID;
+     }
+
+
 $datakayit = array(
 'randevuDanisanID' => $this->input->post('danisanID'),
 'randevuDanismanTerapiTipID' => $terapi,
-'ofisID' => $this->input->post('ofis'),
+'odaID' => $this->input->post('oda'),
+'ofisID' => $ofisID,
 'randevuDurumuID' => $this->input->post('randevu'),
 'randevuSeansUcret' => $ucret,
 'randevuBaslangicTarihSaat' => $datelast,
 'islemKullaniciID' => $userID
 
 );
+
 
 //print_r($datakayit);
 
@@ -183,11 +193,75 @@ redirect('admin/terapi/randevu/','refresh');
  
 }
 
+   public function randevuiptalet() {
+ $randevu_id= $this->uri->segment(5);
+ $date= $this->uri->segment(6);
+ $ofis= $this->uri->segment(7);
+
+$datasession = array(
+ 'date' => $date,
+ 'ofis' => $ofis
+);
+$this->load->library('session');
+$this->session->set_userdata($datasession);
+
+
+ $durum='5';  ///randevu iptal durumu
+$data =  array('randevuDurumuID' => $durum ); 
+
+$this->db->where('randevuID', $randevu_id);
+$this->db->update('tblrandevu',$data);
+$this->postal->add('Randevu İptal Edildi!','success');
+redirect('admin/terapi/randevu/','refresh');
+
+ 
+    }
 
 
 
 
+  public function getOdalarForDropdown($firstElement=array(),$ofisID){
+    if($ofisID=='3') { $results=$this->db->query('SELECT * FROM tbloda')->result(); }
+    else { 
+         $results = $this->db->query('SELECT * FROM tbloda where odaOfisID='.$ofisID.'')->result();
+    }
 
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->odaID] = $result->odaAdi;
+    }
+
+    return $dropdown;
+  }
+
+
+public function randevudurumudegistir() {
+//echo 'test';
+
+$datakayit = array(
+'randevuDurumuID' => $this->input->post('randevular')
+
+);
+
+$randevu_id=$this->input->post('randevuid');
+//echo $randevu_id;
+//
+$randevudurum=$this->input->post('randevular');
+//print_r($randevudurum);
+
+$this->db->where('randevuID', $randevu_id);
+$this->db->update('tblrandevu',$datakayit);
+$this->postal->add('Randevu Güncellendi!','success');
+redirect('admin/terapi/randevu/','refresh');
+
+
+
+}
 
 
 

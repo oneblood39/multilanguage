@@ -28,7 +28,7 @@ class Users_model extends MY_Model
   public function getOfficesForDropdown($firstElement=array()){
     //$this->data['groups'] = $this->users_model->getUserGroups();
 
-    $results = $this->db->query('SELECT * FROM tblOfis')->result();
+    $results = $this->db->query('SELECT * FROM tblofis')->result();
     $dropdown = array();
 
     if($firstElement){

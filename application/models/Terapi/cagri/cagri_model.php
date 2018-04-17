@@ -164,9 +164,17 @@ $this->db->insert("ilscagrikullanici",$datasave);
 
 
 
+   public function cagriyarandevuata() {
+ $randevu_id= $this->uri->segment(5);
+ $cagri_id= $this->uri->segment(6);
 
+$data =  array('cagriRandevuID' => $randevu_id ); 
 
-
+$this->db->where('cagriID', $cagri_id);
+$this->db->update('tblcagri',$data);
+$this->postal->add('Çağrı randevu ile İlişkilendirildi!','success');
+redirect('admin/terapi/cagri/','refresh');
+}
 
 
 

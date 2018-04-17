@@ -97,7 +97,7 @@ class Cagri_dt extends Admin_Controller
           $kaynak=$cat->cagriYonlenmeAdi;
         
         }
-        $data .= '["'.$cat->cagriTarihSaat.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$cat->cagriTarihSaat.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'"," <a href=\"'.site_url('admin/terapi/cagri/randevueslestir/').$cat->cagriID.'\"><span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

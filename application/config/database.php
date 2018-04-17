@@ -64,10 +64,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '', // of course your pass can be different than mine
-	'database' => 'birkan',
+	'hostname' => '217.116.197.83',
+	'username' => 'wu_mizmeryonetim',
+	'password' => 'Ax5o#90xt5290', // of course your pass can be different than mine
+	'database' => 'mizmeryonetim',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

@@ -133,6 +133,39 @@ class Cagri extends Admin_Controller
         $this->render('admin/terapi/cagri/kurumsal_index_view','admin_master',$this->data);
   }
 
+    public function randevueslestir() ///çağrıdan randevuya geçiş
+  {
+      $this->data['page_title'] = 'Randevu Listele';
+        $this->data['users'] = $this->ion_auth->users(array())->result();
+
+         $cagri_id=$this->uri->segment(5);
+echo '<br><br><br><br>';
+         echo $cagri_id;
+
+       $this->data['before_body'] ='<script type="text/javascript">
+        <!--
+         $(document).ready(function(){
+          $("#randevuListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/randevueslestir_dt/getall/'.$cagri_id.'",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });
+        -->
+        </script>';
+
+        $this->render('admin/terapi/randevu/randevulistele_view','admin_master',$this->data);
+ }
+
+    public function cagrieslestir() ////cagriya randevu atıyoruzzz
+  {
+   $this->cagri_model->cagriyarandevuata($this->input->post());
+  }
+
 
 
 }

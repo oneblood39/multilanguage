@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('Bu bölüme erişim engellenmiştir.');
 
-class Randevu_dt extends Admin_Controller
+class Randevueslestir_dt extends Admin_Controller
 {
 
   function __construct()
@@ -14,7 +14,8 @@ class Randevu_dt extends Admin_Controller
 
   }
 
-  public function getall(){
+  public function getall($cagri_id){
+
 
     $start = 0;
     $length =10;
@@ -66,10 +67,10 @@ class Randevu_dt extends Admin_Controller
 ,users.first_name as DanismanAd
 ,users.last_name as DanismanSoyad
 ,tnmterapitip.terapiAdi
-,tnmrandevudurum.RandevuDurumAdi
+,tnmRandevuDurum.RandevuDurumAdi
 FROM tblrandevu 
 INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
+INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
 LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID
@@ -99,10 +100,10 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
 ,users.first_name as DanismanAd
 ,users.last_name as DanismanSoyad
 ,tnmterapitip.terapiAdi
-,tnmrandevudurum.RandevuDurumAdi
+,tnmRandevuDurum.RandevuDurumAdi
 FROM tblrandevu 
 INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
+INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
 LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID
@@ -149,7 +150,7 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $tarih = $cat->randevuBaslangicTarihSaat;
         
         }
-        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'"," <a href=\"'.site_url('admin/terapi/cagri/cagrieslestir/').$cat->danisanID.'/'.$cagri_id.'\"><span title=\"çağrıya randevu ata\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

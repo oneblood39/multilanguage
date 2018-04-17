@@ -93,7 +93,7 @@ $time= $this->uri->segment(7);
 
 }
            
-$ofisID=$this->ion_auth->user()->row()->company;
+//$ofisID=$this->ion_auth->user()->row()->company;
 //echo 'Ofis:'.$ofisID;
                 
   ?>
@@ -147,9 +147,9 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
             </div>
             <div class="form-group">
                 <?php
-                echo form_label('Ofis','ofis');
-                echo form_error('ofis');
-                echo form_dropdown('ofis',$ofisler,$ofisID,'class="form-control"');
+                echo form_label('Odalar','oda');
+                echo form_error('oda');
+                echo form_dropdown('oda',$odalar,'oda','class="form-control"');
                 ?>
             </div>
 
@@ -165,6 +165,7 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
     
 
                 echo ':<SELECT name="dakika">
+                <option>00</option>
                 <option>10</option>
                 <option>20</option>
                 <option>30</option>
@@ -183,7 +184,7 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
             <?php echo form_hidden('danismanID',$danisman_id);?>
             <?php echo form_hidden('time',$time);?>
             <?php echo form_submit('submit', 'Randevu Kaydet', 'class="btn btn-primary btn-lg btn-block"');?>
-            <?php echo anchor('/admin/users', 'İptal','class="btn btn-default btn-lg btn-block"');?>
+            <?php echo anchor('/admin/terapi/randevu', 'İptal','class="btn btn-default btn-lg btn-block"');?>
             <?php echo form_close();?>
 <!--<input type="submit" class="btn btn-primary" value="Danışan Ekle">-->
  <!-- <button type="button" class="btn btn-primary" >Danışan Ekle</button> -->

@@ -71,8 +71,8 @@ return datepicker.regional.tr;
 
   } );
  
-        </script>
-
+</script>
+//////////////////////////////////////////////////
 <style>
 
 .couponcode:hover .coupontooltip {
@@ -87,7 +87,7 @@ return datepicker.regional.tr;
 .coupontooltip {
     display: none;
     background: #C8C8C8;
-    margin-left: -200px;
+    margin-left: -150px;
     margin-top: -100px;
     padding: 10px;
     position: inherit;
@@ -96,9 +96,9 @@ return datepicker.regional.tr;
     height:100px;
 
 }
-
-
 </style>
+
+
 <script>var tooltip = document.querySelectorAll(\'.coupontooltip\');
 
 document.addEventListener(\'mousemove\', fn, false);
@@ -109,6 +109,42 @@ function fn(e) {
         tooltip[i].style.top = e.pageY + \'px\';
     }
 }</script>
+
+///////////////////////////////////////////////////////
+ <script>
+  $( function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+ 
+    $( "#opener" ).on( "click", function() {
+      $( "#dialog" ).dialog( "open" );
+    });
+  } );
+  </script>
+  ///////////////////////
+<script>
+
+$(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').change(function () {
+    const el = $(this);
+    let form;
+
+    if (el.is(\'form\')) { form = el; }
+    else { form = el.closest(\'form\'); }
+
+    form.submit();
+});
+
+</script>
+
         ';
 
 
@@ -123,7 +159,23 @@ function fn(e) {
         tooltip[i].style.top = e.pageY + \'px\';
     }
 }
-</script>';
+</script>
+
+<script>
+
+$(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').change(function () {
+    const el = $(this);
+    let form;
+
+    if (el.is(\'form\')) { form = el; }
+    else { form = el.closest(\'form\'); }
+
+    form.submit();
+});
+</script>
+
+
+';
 
         $this->data['users'] = $this->ion_auth->users(array())->result();
         $this->render('admin/terapi/randevu/index_view','admin_master',$this->data);
@@ -306,13 +358,15 @@ public function randevuekle_step3 (){
           $this->data['page_title'] = 'Randevular';
         $this->load->library('form_validation');
         $this->load->library('session');
-
+        $ofisID=$this->ion_auth->user()->row()->company;
 
        $danisman_id=$this->session->userdata('randevuDanismanID');
+      // $company=$user->company;
 
         $this->data['ofisler'] = $this->randevu_model->getOfficesForDropdown(array("0"," -- "));
         $this->data['terapiler'] = $this->randevu_model->getTerapiForDropdown(array("0"," -- "),$danisman_id);
         $this->data['randevudurum'] = $this->randevu_model->getRandevuDurumForDropdown(array());
+        $this->data['odalar'] = $this->randevu_model->getOdalarForDropdown(array("0"," -- "),$ofisID);
 
          $this->data['page_title'] = 'Randevular';
         $this->load->library('form_validation');
@@ -334,7 +388,15 @@ public function randevuekle_step4 (){
 $this->randevu_model->createRandevuStep2($this->input->post());
   }
 
+public function randevuiptal (){
+  
+$this->randevu_model->randevuiptalet($this->input->post());
+  }
 
+public function randevudurumudegistir (){
+  
+$this->randevu_model->randevudurumudegistir($this->input->post());
+  }
 
 
 
