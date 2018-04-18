@@ -282,12 +282,14 @@ public function randevuekle_step1 ($data, $ofisID){
         </script>';
 
         $danisman_id= $this->uri->segment(6); 
+        $ofisID=$this->ion_auth->user()->row()->company;
         //$ofis = $this->randevu_model->getOfis((int) $ofisID);
         
         $this->data['users'] = $this->ion_auth->users(array())->result();
         $this->data['ofisler'] = $this->randevu_model->getOfficesForDropdown(array("0"," -- "));
         $this->data['terapiler'] = $this->randevu_model->getTerapiForDropdown(array("0"," -- "),$danisman_id);
         $this->data['randevudurum'] = $this->randevu_model->getRandevuDurumForDropdown(array());
+        $this->data['odalar'] = $this->randevu_model->getOdalarForDropdown(array("0"," -- "),$ofisID);
  
   $this->randevu_model->createRandevuStep1($this->input->post(),$data);
   $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$data,$ofisID,$this->input->post());
@@ -388,8 +390,7 @@ public function randevuekle_step4 (){
 $this->randevu_model->createRandevuStep2($this->input->post());
   }
 
-public function randevuiptal (){
-  
+public function randevuiptal (){  
 $this->randevu_model->randevuiptalet($this->input->post());
   }
 

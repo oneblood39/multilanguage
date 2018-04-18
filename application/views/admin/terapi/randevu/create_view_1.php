@@ -47,7 +47,7 @@ $this->session->set_flashdata('item', $datasession);
 <button type="button" class="btn btn-primary" id="birkan">Yeni Danışan</button>
 <?php 
 echo '<a href="';
-echo site_url('admin/terapi/danisan/');
+echo site_url('admin/terapi/danisan/indexrandevuekle/');
 echo '"'; 
 echo 'class="btn btn-primary" id="birkan">Mevcut Danışan</a>';
 ?>

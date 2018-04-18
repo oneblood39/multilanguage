@@ -221,6 +221,8 @@ redirect('admin/terapi/randevu/','refresh');
 
 
   public function getOdalarForDropdown($firstElement=array(),$ofisID){
+echo '<br><br><br>';
+    echo $ofisID;
     if($ofisID=='3') { $results=$this->db->query('SELECT * FROM tbloda')->result(); }
     else { 
          $results = $this->db->query('SELECT * FROM tbloda where odaOfisID='.$ofisID.'')->result();
@@ -249,14 +251,23 @@ $datakayit = array(
 );
 
 $randevu_id=$this->input->post('randevuid');
-//echo $randevu_id;
-//
+
 $randevudurum=$this->input->post('randevular');
 //print_r($randevudurum);
 
+$ofis= $this->input->post('ofis');
+$date =$this->input->post('date');
+
+$datasession = array(
+ 'date' => $date,
+ 'ofis' => $ofis
+);
+$this->load->library('session');
+$this->session->set_userdata($datasession);
+
 $this->db->where('randevuID', $randevu_id);
 $this->db->update('tblrandevu',$datakayit);
-$this->postal->add('Randevu Güncellendi!','success');
+$this->postal->add('Randevu Durumu Değiştirildi!','success');
 redirect('admin/terapi/randevu/','refresh');
 
 

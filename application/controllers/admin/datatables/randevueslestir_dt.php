@@ -67,10 +67,10 @@ class Randevueslestir_dt extends Admin_Controller
 ,users.first_name as DanismanAd
 ,users.last_name as DanismanSoyad
 ,tnmterapitip.terapiAdi
-,tnmRandevuDurum.RandevuDurumAdi
+,tnmrandevudurum.RandevuDurumAdi
 FROM tblrandevu 
 INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
+INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
 LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID
@@ -100,10 +100,10 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
 ,users.first_name as DanismanAd
 ,users.last_name as DanismanSoyad
 ,tnmterapitip.terapiAdi
-,tnmRandevuDurum.RandevuDurumAdi
+,tnmrandevudurum.RandevuDurumAdi
 FROM tblrandevu 
 INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmRandevuDurum on tnmRandevuDurum.randevuDurumID=tblrandevu.randevuDurumuID
+INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
 LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
 LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
 left JOIN users on users.id=ilsdanismanterapi.userID

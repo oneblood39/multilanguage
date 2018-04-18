@@ -285,59 +285,56 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
   <div class="test col-md-12 text-center">
   <div style="float:left">';
 
-
-  echo '
-
-  <div style="float:left">';
-  if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
-  echo '"><small><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
-  </div>'; }
-  
-  if ($randevuinfo=='') { } else {  ////açıklama varsa göster
+//////////////////pencil////////////////////////////////
   echo '<div class="couponcode" style="float:left" >
-      <small><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:white; "></span></small>
-     <span class="coupontooltip">'.$randevuinfo;?>
+      <small><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:white; "></span></small>&nbsp;
+      <span class="coupontooltip">'.$danisan->danisanAd.' '.$danisan->danisanSoyad.' adlı danışanın randevu durumunu değiştiriyorsunuz:';?>
             <div class="form-group">
                 <?php
                 echo '<form class="autoSubmit" method="post" action="http://localhost/multilanguage/admin/terapi/randevu/randevudurumudegistir">';
                 echo '<SELECT  name="randevular">';
-                echo '<option>---</option>';
+                echo '<option style="color:black;">---</option>';
                 $sqlrandevular = "SELECT * FROM tnmrandevudurum WHERE randevuDurumID!=".'5';
                     $randevular = $this->db->query($sqlrandevular)->result();
                     foreach($randevular as $randevu){
                   $durumid=$randevu->randevuDurumID;
                   $durumAdi=$randevu->randevuDurumAdi;
               
-                  echo '<option value="'.$durumid.'"';  echo'>'.$durumAdi.'</option>';
+                  echo '<option style="color:black;" value="'.$durumid.'"';  echo'><font color="black;">'.$durumAdi.'</font></option>';
                       } 
-
-
-
-
-
-
                 echo '</SELECT>';
                 echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
+                echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+                echo '<input type="hidden" name="date" value="'.$date.'">';
                 echo '</form>';
-
-              /*   echo form_label('Randevu Durumu','randevu');
-                echo form_error('randevu');
-                echo form_dropdown('randevu',$durumAdi,$durumid,'class="form-control"');*/
                 ?>
                 <?php echo'
             </div>
      </span>
- </div>'; }
+ </div>';
+//////////////////pencil sonu////////////////////////////////
 
+//////////////////x işareti/////////////////////////////////
+    echo '<div style="float:left">';
+  if ($randevudurum=='5') { } else {
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
+  echo '"><small><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
+  </div>'; }
+///////////////x işareti sonu/////////////////////////
+
+ /////////////////info işareti////////////////////////////  
+  if ($randevuinfo=='') { } else {  ////açıklama varsa göster
+  echo '<div class="couponcode" style="float:left" >
+      <small><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:white; "></span></small>
+      <span class="coupontooltip">'.$randevuinfo;
+ echo '
+     </span>
+ </div>'; }
+/////////////////info işareti sonu///////////////////////////
 
  echo ' </div>
-  
-         </font>
-                       
-                       </p>
-                   
-                        ';                  
+        </font>                   
+        </p>';                  
                                 }
                    // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';
@@ -348,7 +345,7 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
 
             }  
 //içerikkk
-if ($i==21) {echo "</td></tr>";} else {echo'</td>'; }
+if ($i==21) {echo "</td></tr>";} else {echo'</td>'; }   //////akşam saat 21 e kadar randevu veriliyor...
 }
 }
 echo '</table>';

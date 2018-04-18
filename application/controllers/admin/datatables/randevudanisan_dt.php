@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('Bu bölüme erişim engellenmiştir.');
 
-class Danisan_dt extends Admin_Controller
+class Randevudanisan_dt extends Admin_Controller
 {
 
   function __construct()
@@ -93,7 +93,7 @@ print_r($datasessionmevcut);
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
-        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a>"],';
+        " <a href=\"'.site_url('admin/terapi/randevu/randevuekle_step3/').$cat->danisanID.'\"><span title=\"randevu ekle\" class=\"glyphicon glyphicon-random\"></span></a> "],';
   //print_r($data);
 
     }
