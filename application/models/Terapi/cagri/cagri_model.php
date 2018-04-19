@@ -134,6 +134,8 @@ echo '<br><br><br><br>';
                 );
 //print_r($data);
 
+                $this->db->insert("tblcagrikurumsal",$data);
+
 
 $sql = "SELECT * FROM tblcagrikurumsal order by cagriKurumsalID desc limit 0,1";
 $results = $this->db->query($sql)->result();

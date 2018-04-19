@@ -20,7 +20,7 @@ class Randevu_dt extends Admin_Controller
     $length =10;
 
     $ofis=$this->ion_auth->user()->row()->company;
-    if ($ofis==3) {  $filtre=' '; $filtresearch=' WHERE '; } else { $filtre=' WHERE tblofis.ofisID='.$ofis; $filtresearch=$filtre.' and '; }
+    if ($ofis==3) {  $filtre=' '; $filtresearch=' WHERE '; } else { $filtre=' WHERE ofisID='.$ofis; $filtresearch=$filtre.' and '; }
 
     if($this->input->get('start')){
       $start = (int)$this->input->get('start');
@@ -52,61 +52,59 @@ class Randevu_dt extends Admin_Controller
 
     if($search){
       $queryString = "SELECT 
- tbldanisan.danisanID
-,tbldanisan.danisanAd
-,tbldanisan.danisanSoyad
-,tblofis.ofisAdi
-,tblofis.ofisID
-,tblrandevu.randevuID
-,tblrandevu.randevuBaslangicTarihSaat
-,tblrandevu.randevuBitisTarihSaat
-,tblrandevu.randevuSeansUcret
+ danisanID
+,danisanAd
+,danisanSoyad
+,ofisAdi
+,ofisID
+,randevuID
+,randevuBaslangicTarihSaat
+,randevuBitisTarihSaat
+,odaID
+,odaAdi
+,odaKisaltma
+,DanismanUserID
+,DanismanAd
+,DanismanSoyad
+,terapiAdi
+,RandevuDurumAdi
+,RandevuPaketi
+,RandevuPaketSeansSayisi
+,KacinciSeans
+FROM vwrandevu 
 
-,users.ID as DanismanUserID
-,users.first_name as DanismanAd
-,users.last_name as DanismanSoyad
-,tnmterapitip.terapiAdi
-,tnmrandevudurum.RandevuDurumAdi
-FROM tblrandevu 
-INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
-LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
-LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
-left JOIN users on users.id=ilsdanismanterapi.userID
-left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID 
-".$filtresearch." (tbldanisan.danisanAd like ".$this->db->escape('%'.$search.'%').
+".$filtresearch." (danisanAd like ".$this->db->escape('%'.$search.'%').
 " or danisanSoyad like ".$this->db->escape('%'.$search.'%').
-" or users.first_name like ".$this->db->escape('%'.$search.'%').
-" or users.last_name like ".$this->db->escape('%'.$search.'%').
-" or tnmterapitip.terapiAdi like ".$this->db->escape('%'.$search.'%').
-") ORDER BY tblrandevu.randevuID desc LIMIT ".$start.",".$length;
+" or DanismanAd like ".$this->db->escape('%'.$search.'%').
+" or DanismanSoyad like ".$this->db->escape('%'.$search.'%').
+" or terapiAdi like ".$this->db->escape('%'.$search.'%').
+") ORDER BY randevuID desc LIMIT ".$start.",".$length;
     }else{
 
 
      
       $queryString = "SELECT 
- tbldanisan.danisanID
-,tbldanisan.danisanAd
-,tbldanisan.danisanSoyad
-,tblofis.ofisAdi
-,tblofis.ofisID
-,tblrandevu.randevuID
-,tblrandevu.randevuBaslangicTarihSaat
-,tblrandevu.randevuBitisTarihSaat
-,tblrandevu.randevuSeansUcret
-
-,users.ID as DanismanUserID
-,users.first_name as DanismanAd
-,users.last_name as DanismanSoyad
-,tnmterapitip.terapiAdi
-,tnmrandevudurum.RandevuDurumAdi
-FROM tblrandevu 
-INNER JOIN tbldanisan on tbldanisan.danisanID=tblrandevu.randevuDanisanID
-INNER JOIN tnmrandevudurum on tnmrandevudurum.randevuDurumID=tblrandevu.randevuDurumuID
-LEFT JOIN tblofis ON tblofis.ofisID=tblrandevu.ofisID
-LEFT JOIN ilsdanismanterapi on ilsdanismanterapi.danismanTerapiID=tblrandevu.randevuDanismanTerapiTipID
-left JOIN users on users.id=ilsdanismanterapi.userID
-left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID   ".$filtre." ORDER BY tbldanisan.danisanID desc LIMIT ".$start.",".$length;
+ danisanID
+,danisanAd
+,danisanSoyad
+,ofisAdi
+,ofisID
+,randevuID
+,randevuBaslangicTarihSaat
+,randevuBitisTarihSaat
+,odaID
+,odaAdi
+,odaKisaltma
+,DanismanUserID
+,DanismanAd
+,DanismanSoyad
+,terapiAdi
+,RandevuDurumAdi
+,RandevuPaketi
+,RandevuPaketSeansSayisi
+,KacinciSeans
+FROM vwrandevu 
+".$filtre." ORDER BY danisanID desc LIMIT ".$start.",".$length;
     }                                                                           
 
       ///WHERE tblofis.ofisID=".$ofis."
@@ -138,7 +136,11 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $Dsoyad = $cat->DanismanSoyad;
           $terapitip = $cat->terapiAdi;
           $tarih = $cat->randevuBaslangicTarihSaat;
-      
+          $paketadi = $cat->RandevuPaketi;
+          $toplamseans = $cat->RandevuPaketSeansSayisi;
+          $seans = $cat->KacinciSeans;
+          $yazi=$seans.'/'.$toplamseans;
+          if($paketadi!=''){     $yazi=$seans.'/'.$toplamseans;  } else { $yazi='';  }
 
         }else{
           $Ad = $cat->danisanAd;
@@ -147,9 +149,14 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $Dsoyad = $cat->DanismanSoyad;
           $terapitip = $cat->terapiAdi;
           $tarih = $cat->randevuBaslangicTarihSaat;
+          $paketadi = $cat->RandevuPaketi;
+          $toplamseans = $cat->RandevuPaketSeansSayisi;
+          $seans = $cat->KacinciSeans;
+          if($paketadi!=''){     $yazi=$seans.'/'.$toplamseans;  } else { $yazi='';  }
+       
         
         }
-        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'","'.$paketadi.'","'.$yazi.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

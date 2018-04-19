@@ -11,7 +11,7 @@
 
 
 
-<?php echo '<form id="form1" method="post" action="../cagri/kurumsalcagrikaydet/">';
+<?php echo '<form id="form1" method="post" action="../cagri/bireyselcagrikaydet/">';
 $user_id=$this->ion_auth->user()->row()->id;
 $company=$this->ion_auth->user()->row()->company;
 ?>

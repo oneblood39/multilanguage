@@ -19,6 +19,9 @@
           <th>Danışman Soyad</th>
           <th>Terapi Tip</th>
           <th>Tarih</th>
+          <th>Paket Adı</th>
+          <th>Seansı</th>
+
           <th>İşlemler</th>
 
 
