@@ -45,6 +45,9 @@ $date=$dizi[2].'-'.$dizi[0].'-'.$dizi[1];  /*echo $date;  }
 
 */
 
+
+
+
 $date=$bugun;
 $ofis='1';
 
@@ -63,8 +66,10 @@ $ofis=$this->ion_auth->user()->row()->company;}
 
   if($ofis=='') {  $ofis=$this->ion_auth->user()->row()->company; }
 
+  if($ofis=='3') {  $ofis='2'; $date=$bugun; }
 
 
+//echo '<br><br><br>'.$date.'--'.$ofis;
 
 $formatted_date=date("m/d/Y"); 
 //echo $ofis;
@@ -79,7 +84,7 @@ echo '<form method="post" action="http://localhost/multilanguage/admin/terapi/ra
 <td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
 echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">
 ';
-echo '<option>--</option>'; 
+echo '<option value="0">--</option>'; 
 if ($this->ion_auth->user()->row()->company==3) {
 $sqlofisler = "SELECT * FROM tblofis where ofisID!=3";
                     $ofisler = $this->db->query($sqlofisler)->result();
@@ -107,10 +112,26 @@ echo '<td><input type="submit" class="btn btn-primary" value="Filtrele"></td></t
 echo form_close();
 
 
- echo' <br><br>
+ echo' <br>
 ';
 
 /////////////üst form sonu///////////////////
+
+///////
+
+echo '<table width="1350px">
+<tr>
+<td width="30px" style="background-color:#BDB76B;">&nbsp;</td><td> Teyit alınmadı.</td>
+<td width="30px" style="background-color:#74767a;">&nbsp;</td><td> Arandı, ulaşılamadı.</td>
+<td width="30px" style="background-color:#FF8C00;">&nbsp;</td><td> Teyit alındı.</td>
+<td width="30px" style="background-color:#8B0000;">&nbsp;</td><td> Randevuya gelmedi.</td>
+<td width="30px" style="background-color:#54C571;">&nbsp;</td><td> Randevuya geldi.</td>
+<td width="30px" style="background-color:#2fbfc6;">&nbsp;</td><td> Aynı saate birden çok randevu verildi.</td>
+
+</tr>
+</table>';
+
+////////
 
  echo '<b>'.$date.'</b>';
  echo '<table class="table table-hover table-bordered table-condensed">';
@@ -221,7 +242,8 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
 
    } 
   elseif ($sayi>0) {   ///randevu var ise renk kodu////
-         $sqlrenk = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')"; ////
+         $sqlrenk = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5')"; 
+         $sayibitis= $this->db->query($sqlrenk)->num_rows();////
          $resultrenk = $this->db->query($sqlrenk)->result();
           foreach($resultrenk as $result){
         $randevudurum=$result->RandevuDurumID;
@@ -233,14 +255,18 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
         $yazi=$seans.'/'.$toplamseans;
          } else { $toplamseans=''; $seans=''; $yazi=''; }
 
-  
+echo '<td';
+
+   if($sayibitis>1) { echo ' style="background-color:#2fbfc6;" ';  }  
        /////randevu durumuna göre bg rengi
-   if ($randevudurum=='1')  { echo '<td  style="background-color:#BDB76B;" >';   }  ///teyit alınmadı (kum rengi)
-   if ($randevudurum=='6')  { echo '<td  style="background-color:#74767a;" >';   }  ///arandı, ulaşılamadı (gri)
-   if ($randevudurum=='2')  { echo '<td  style="background-color:#FF8C00;" >';   }  ///teyit alındı (turuncu)
-   if ($randevudurum=='3')  { echo '<td  style="background-color:#8B0000;" >';   }  ///randevuya gelmedi (kırmızı)
-   if ($randevudurum=='4')  { echo '<td  style="background-color:#54C571;" >';   }  ///randevuya geldi(yeşil)
+   if ($randevudurum=='1')  { echo ' style="background-color:#BDB76B;" ';   }  ///teyit alınmadı (kum rengi)
+   if ($randevudurum=='6')  { echo ' style="background-color:#74767a;" ';   }  ///arandı, ulaşılamadı (gri)
+   if ($randevudurum=='2')  { echo ' style="background-color:#FF8C00;" ';   }  ///teyit alındı (turuncu)
+   if ($randevudurum=='3')  { echo ' style="background-color:#8B0000;" ';   }  ///randevuya gelmedi (kırmızı)
+   if ($randevudurum=='4')  { echo ' style="background-color:#54C571;" ';   }  ///randevuya geldi(yeşil)
          } 
+
+         echo '>';
   } 
 else { echo '<td class="td">'; /*echo $sayi.$sayimazeret;*/ }
 
@@ -271,15 +297,34 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
                 } 
               }*/
 //////////////////////////////////////////////////////////////////////////////////////
-                echo '<a href="';
-              echo site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'">';
-              echo '<img src="../../assets/admin/images/bos.png" width="70" height="70">';
+            ////////  randevu al linki   /////////
+              echo '<a href="';
+              echo site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'">';             
+              echo '<img src="';echo site_url('assets/admin/images/bos.png'); echo '" width="70" height="70">';
             //  echo '<p align="center"><font color="white" size="2">randevuAL</font></p>';
-              echo '</a>'; }
+              echo '</a>'; 
+            ////////randevu al linki sonu/////////
+
+
+            }
 
 
               else if ($sayi=="0" and $sayimazeret>0)  { echo '<p  align="center"><font color="white" size="1">---------------- İzinli -------------------</font></p>';   }
-                else {          
+                else { 
+
+
+    echo '<div style="float:left">';
+  if ($randevudurum=='5') { } else {
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '"><small><span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
+  </div><br>'; }
+
+
+
+
+
+
+
                 foreach($results as $result)
                 {  
                     $sqldanisan = "SELECT * FROM tbldanisan WHERE danisanID=".$result->danisanID;
@@ -288,16 +333,20 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
                         echo '<p align="center"><font color="white" size="2">';
 
                        echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'('.$odaKisaltma.')'.$yazi.'</a>';
-$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')";
+                       echo '             
+  <div class="test col-md-12 text-center">
+  <div style="float:left; margin-bottom:20px;">';
+
+$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$result->danisanID."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."')";
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
         $randevuID=$resultrand->randevuID;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
-        }
-                       echo '             
-  <div class="test col-md-12 text-center">
-  <div style="float:left">';
+        
+
+
+
 
 //////////////////pencil////////////////////////////////
   echo '<div class="couponcode" style="float:left" >
@@ -328,6 +377,14 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
  </div>';
 //////////////////pencil sonu////////////////////////////////
 
+ //////////////////+ işareti/////////////////////////////////
+  /*  echo '<div style="float:left">';
+  if ($randevudurum=='5') { } else {
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '"><small><span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
+  </div>'; }*/
+///////////////x işareti sonu/////////////////////////
+
 //////////////////x işareti/////////////////////////////////
     echo '<div style="float:left">';
   if ($randevudurum=='5') { } else {
@@ -346,9 +403,16 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
  </div>'; }
 /////////////////info işareti sonu///////////////////////////
 
+}
+
+
+
+
  echo ' </div>
         </font>                   
-        </p>';                  
+        </p>'; 
+ if($sayibitis>1) { echo '<hr style="vertical-align:middle; margin-top:40px;">'; }
+
                                 }
                    // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';

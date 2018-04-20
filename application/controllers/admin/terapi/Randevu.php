@@ -245,7 +245,22 @@ $(document).ready(function(){
 $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7); 
+$ofis= $this->uri->segment(8); 
+
 echo "<br><br><br><br>";
+
+         $sqlkontrol = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$date."%') and (DanismanUserID='".$danisman_id."') and (ofisID!='".$ofis."') and (randevuDurumID!='5')"; 
+         $sayikontrol= $this->db->query($sqlkontrol)->num_rows();////
+
+         if($sayikontrol>0) {
+         $this->postal->add('Aynı gün içinde sadece bir merkezde randevu eklenebilir!','error');
+         redirect('admin/terapi/randevu/','refresh'); }
+
+
+         //$resultrenk = $this->db->query($sqlrenk)->result();
+
+
+
 //echo $date;
 
  $datasessionmevcut = array(
