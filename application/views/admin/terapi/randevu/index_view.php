@@ -393,10 +393,26 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
   </div>'; }
 ///////////////x işareti sonu/////////////////////////
 
+ //////////////////info girme işareti/////////////////////////////////
+   echo '<div class="couponcode" style="float:left" >';
+  if ($randevudurum=='5') { } else {
+  /*echo '<a href="'.site_url('admin/terapi/randevu/randevuinfo/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '">';*/
+  echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:white"></span></small>';
+  echo '</a>&nbsp;
+  <span class="coupontooltip"><div class="form-group">
+  <textarea rows="5" cols="25" style="color:black">
+At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+</textarea>
+  </div></span>
+  </div>'; }
+
+///////////////x işareti sonu/////////////////////////
+
  /////////////////info işareti////////////////////////////  
   if ($randevuinfo=='') { } else {  ////açıklama varsa göster
   echo '<div class="couponcode" style="float:left" >
-      <small><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:white; "></span></small>
+      <small><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:white; "></span></small>
       <span class="coupontooltip">'.$randevuinfo;
  echo '
      </span>
@@ -437,3 +453,15 @@ echo '</table>';
         </div>
     </div>
 </div>
+<!--<script>
+  $(document).ready(function(){
+
+  $('.glyphicon-tag').on('click', function({
+    $('.coupontooltip2').dialog({
+      modal:true
+    });
+
+  }));
+
+});
+</script>-->

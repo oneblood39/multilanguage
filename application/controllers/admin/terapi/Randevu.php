@@ -92,8 +92,8 @@ return datepicker.regional.tr;
     padding: 10px;
     position: inherit;
     z-index: 1000;
-    width:200px;
-    height:100px;
+    width:250px;
+    height:130px;
 
 }
 </style>
@@ -145,6 +145,9 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
 
 </script>
 
+
+
+
         ';
 
 
@@ -173,6 +176,7 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
     form.submit();
 });
 </script>
+
 
 
 ';

@@ -56,7 +56,6 @@
 
 <div class="tab">
   <button class="tablinks" onclick="openCity(event, 'basvuruform')">Başvuru Formları</button>
-  <button class="tablinks" onclick="openCity(event, 'danismanform')">Danışman Formları</button>
   <button class="tablinks" onclick="openCity(event, 'danismannot')">Danışman Notları</button>
   <button class="tablinks" onclick="openCity(event, 'ilaclar')">İlaçlar</button>
   <button class="tablinks" onclick="openCity(event, 'tanilar')">Tanılar</button>
@@ -66,11 +65,6 @@
 <div id="basvuruform" class="tabcontent">
   <h3>Başvuru Formları</h3>
   <p>Başvuru Formları buraya gelecek...</p>
-</div>
-
-<div id="danismanform" class="tabcontent">
-  <h3>Danışman Formları</h3>
-  <p>Danışman Formları buraya gelecek...</p> 
 </div>
 
 <div id="danismannot" class="tabcontent">
