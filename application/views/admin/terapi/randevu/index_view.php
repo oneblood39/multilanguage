@@ -80,7 +80,7 @@ echo $this->session->userdata('ofis');
 */
 
 /////////////üst form///////////////////
-echo '<form method="post" action="http://localhost/multilanguage/admin/terapi/randevu"><table class="table  table-condensed"><tr>
+echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table class="table  table-condensed"><tr>
 <td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
 echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">
 ';
@@ -247,6 +247,7 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
          $resultrenk = $this->db->query($sqlrenk)->result();
           foreach($resultrenk as $result){
         $randevudurum=$result->RandevuDurumID;
+        $randevuID=$result->randevuID;
         $odaKisaltma=$result->odaKisaltma;
         $paketID=$result->paketID;
         if ($paketID!='') { 
@@ -306,6 +307,9 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
             ////////randevu al linki sonu/////////
 
 
+
+
+
             }
 
 
@@ -323,15 +327,41 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 
 
 
-
-
                 foreach($results as $result)
                 {  
                     $sqldanisan = "SELECT * FROM tbldanisan WHERE danisanID=".$result->danisanID;
                     $danisanlar = $this->db->query($sqldanisan)->result();
                     foreach($danisanlar as $danisan){
-                        echo '<p align="center"><font color="white" size="2">';
 
+////////danışan ismini yazdırrmadan önce  etiket simgesi//////
+   echo '<div class="couponcode" style="float:right" >';
+  if ($randevudurum=='5') { echo '</div>'; } else {
+  /*echo '<a href="'.site_url('admin/terapi/randevu/randevuinfo/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '">';*/
+  echo '<form method="post" action="';echo site_url('admin/terapi/randevu/randevuinfodegistir/').$randevuID; echo '">';
+  echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:white"></span></small>';
+  echo '</a>&nbsp;
+  <span class="coupontooltiprandevu"><div class="form-group">
+  <textarea name="randevuinfo" rows="4" cols="25" style="color:black">';
+//echo $randevuID;
+$sqlrandevuinfo = "SELECT * FROM vwrandevu WHERE randevuID=".$randevuID;
+$resultsqlrandevuinfo = $this->db->query($sqlrandevuinfo)->result();
+         foreach($resultsqlrandevuinfo as $result){
+          $info=$result->randevuAciklama;
+          echo $info;
+          }
+
+echo '</textarea>';
+                echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
+                echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+                echo '<input type="hidden" name="date" value="'.$date.'">';
+                echo '<input type="submit" value="Gönder">';
+                echo '</form>';
+  echo '</div></span>
+  </div>'; }
+////////danışan ismini yazdırrmadan önce  etiket simgesi sonu//////
+
+                       echo '<p align="center"><font color="white" size="2">';
                        echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'('.$odaKisaltma.')'.$yazi.'</a>';
                        echo '             
   <div class="test col-md-12 text-center">
@@ -351,7 +381,7 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
 //////////////////pencil////////////////////////////////
   echo '<div class="couponcode" style="float:left" >
       <small><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:white; "></span></small>&nbsp;
-      <span class="coupontooltip">'.$danisan->danisanAd.' '.$danisan->danisanSoyad.' adlı danışanın randevu durumunu değiştiriyorsunuz:';?>
+      <span class="coupontooltiprandevu">'.$danisan->danisanAd.' '.$danisan->danisanSoyad.' adlı danışanın randevu durumunu değiştiriyorsunuz:';?>
             <div class="form-group">
                 <?php
                 echo '<form class="autoSubmit" method="post" action="http://localhost/multilanguage/admin/terapi/randevu/randevudurumudegistir">';
@@ -394,18 +424,9 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
 ///////////////x işareti sonu/////////////////////////
 
  //////////////////info girme işareti/////////////////////////////////
-   echo '<div class="couponcode" style="float:left" >';
-  if ($randevudurum=='5') { } else {
-  /*echo '<a href="'.site_url('admin/terapi/randevu/randevuinfo/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
-  echo '">';*/
-  echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:white"></span></small>';
-  echo '</a>&nbsp;
-  <span class="coupontooltip"><div class="form-group">
-  <textarea rows="5" cols="25" style="color:black">
-At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-</textarea>
-  </div></span>
-  </div>'; }
+
+
+
 
 ///////////////x işareti sonu/////////////////////////
 

@@ -87,11 +87,33 @@ return datepicker.regional.tr;
 .coupontooltip {
     display: none;
     background: #C8C8C8;
-    margin-left: -150px;
-    margin-top: -100px;
+    margin-left: -200px;
+    margin-top: -150px;
     padding: 10px;
     position: inherit;
-    z-index: 1000;
+    z-index: 100000; !important;
+    width:150px;
+    height:60px;
+
+}
+
+.couponcode:hover .coupontooltiprandevu {
+    display: block;
+
+}
+
+.test {
+    display: block;
+
+}
+.coupontooltiprandevu {
+    display: none;
+    background: #C8C8C8;
+    margin-left: 0px;
+    margin-top: 0px;
+    padding: 10px;
+    position: inherit;
+    z-index: 100000; !important;
     width:250px;
     height:130px;
 
@@ -105,8 +127,8 @@ document.addEventListener(\'mousemove\', fn, false);
 
 function fn(e) {
     for (var i=tooltip.length; i--;) {
-        tooltip[i].style.left = e.pageX + \'px\';
-        tooltip[i].style.top = e.pageY + \'px\';
+        tooltip[i].style.left = e.pageX + \'300px\';
+        tooltip[i].style.top = e.pageY + \'300px\';
     }
 }</script>
 
@@ -158,8 +180,8 @@ document.addEventListener(\'mousemove\', fn, false);
 
 function fn(e) {
     for (var i=tooltip.length; i--;) {
-        tooltip[i].style.left = e.pageX + \'px\';
-        tooltip[i].style.top = e.pageY + \'px\';
+        tooltip[i].style.left = e.pageX + \'500px\';
+        tooltip[i].style.top = e.pageY + \'500px\';
     }
 }
 </script>
@@ -189,6 +211,10 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
     {
         $this->data['page_title'] = 'Randevu Listele';
         $this->data['users'] = $this->ion_auth->users(array())->result();
+        $this->data['before_head'] = '
+    
+
+';
 
        $this->data['before_body'] ='<script type="text/javascript">
         <!--
@@ -204,7 +230,10 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
           } );    
          });
         -->
-        </script>';
+        </script>
+
+
+        ';
 
         $this->render('admin/terapi/randevu/randevulistele_view','admin_master',$this->data);
   }
