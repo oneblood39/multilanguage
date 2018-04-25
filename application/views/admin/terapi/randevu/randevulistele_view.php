@@ -4,6 +4,7 @@
         <div class="col-lg-12">
              
               <a href="<?php echo site_url('admin/terapi/randevu');?>" class="btn btn-primary">Randevu Takvim</a>
+              <a href="<?php echo site_url('admin/terapi/randevu/pakettekirandevular');?>" class="btn btn-primary">Paketteki Randevular</a>
    <br>
         </div>
     </div>

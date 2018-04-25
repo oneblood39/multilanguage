@@ -39,7 +39,7 @@ echo '<br><br><br><br>';
                     'danisanTel' => $this->input->post('tel')
                    
                 );
-          //  print_r($data);
+            print_r($data);
             echo '<br>';
 
          $this->db->insert("tbldanisan",$data);   
@@ -141,13 +141,74 @@ echo '<br><br><br><br>';
             echo '<br>';
             $dakika=$this->input->post('dakika');
            // echo $dakika;
-
+$gelenoda=$this->input->post('oda');
 $time = $this->input->post('time');
 $date = $this->input->post('date');
+
+
+
+
+$formatted_date=$date.' '.$time;
+
+
+  $sqlodasorgu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$formatted_date."%') and (odaID='".$gelenoda."')"; 
+  $sayioda= $this->db->query($sqlodasorgu)->num_rows();////
+
+
+if($sayioda>0) { 
+
+/////////odada randevu var ise
 $datelast= $date.' '.$time.':'.$dakika.':'.'00';
 //echo $datelast;
+$terapi=$this->input->post('terapi');
+$danisman_id=$this->input->post('danismanID');
+
+    $sql = "SELECT * FROM vwdanismanterapi where danismanTerapiID=".$terapi;
+    $results = $this->db->query($sql)->result();
+     foreach ($results as $result) {
+       $ucret=$result->DanismanSeansUcret;
+     }
+
+$userID=$this->ion_auth->user()->row()->id;
+
+    $oda=$this->input->post('oda');
+    $sqloda = "SELECT * FROM tbloda where odaID=".$oda;
+    $results = $this->db->query($sqloda)->result();
+     foreach ($results as $result) {
+       $ofisID=$result->odaOfisID;
+     }
 
 
+$datakayit = array(
+'randevuDanisanID' => $this->input->post('danisanID'),
+'randevuDanismanTerapiTipID' => $terapi,
+'odaID' => $this->input->post('oda'),
+'ofisID' => $ofisID,
+'randevuDurumuID' => $this->input->post('randevu'),
+'randevuSeansUcret' => $ucret,
+'randevuBaslangicTarihSaat' => $datelast,
+'islemKullaniciID' => $userID
+
+);
+
+
+//print_r($datakayit);
+
+
+$this->load->library('session');
+$this->session->set_userdata($datakayit);
+
+
+$this->postal->add('Randevu Saatinde Seçtiğiniz Oda Dolu! Yine de randevu vermek istermisiniz?
+<a href="'.site_url('admin/terapi/randevu/randevuyinedeekle').'">Evet</a> -- <a href="'.site_url('admin/terapi/randevu/').'">Hayır</a>
+  ','error');
+redirect('admin/terapi/randevu/','refresh');
+
+
+  } else {
+
+$datelast= $date.' '.$time.':'.$dakika.':'.'00';
+//echo $datelast;
 $terapi=$this->input->post('terapi');
 $danisman_id=$this->input->post('danismanID');
  // if($danisman_id=='') { $danisman_id=$this->session->userdata('randevuDanismanID'); }
@@ -189,7 +250,7 @@ $this->postal->add('Randevu Ekleme Başarılı!','success');
 redirect('admin/terapi/randevu/','refresh');
 
 
-
+}
  
 }
 
@@ -273,6 +334,72 @@ redirect('admin/terapi/randevu/','refresh');
 
 
 }
+
+
+public function randevuinfodegistir() {
+$randevuid= $this->uri->segment(5);
+$datakayit = array(
+ 'randevuAciklama' => $this->input->post('randevuinfo')
+);
+
+$this->db->where('randevuID', $randevuid);
+$this->db->update('tblrandevu',$datakayit);
+$this->postal->add('Randevu Açıklaması Değiştirildi!','success');
+redirect('admin/terapi/randevu/','refresh');
+  }
+
+public function randevuyinedeekle() {
+$datakayit = array(
+'randevuDanisanID' => $this->session->userdata('randevuDanisanID'),
+'randevuDanismanTerapiTipID' => $this->session->userdata('randevuDanismanTerapiTipID'),
+'odaID' => $this->session->userdata('odaID'),
+'ofisID' => $this->session->userdata('ofisID'),
+'randevuDurumuID' => $this->session->userdata('randevuDurumuID'),
+'randevuSeansUcret' => $this->session->userdata('randevuSeansUcret'),
+'randevuBaslangicTarihSaat' => $this->session->userdata('randevuBaslangicTarihSaat'),
+'islemKullaniciID' => $this->session->userdata('islemKullaniciID')
+
+);
+//print_r($datakayit);
+
+$this->db->insert("tblrandevu",$datakayit);   
+$this->postal->add('Randevu Ekleme Başarılı!','success');
+redirect('admin/terapi/randevu/','refresh');
+
+}
+
+
+public function randevuertelekaydet() {
+$date= $this->uri->segment(5);
+$userid= $this->uri->segment(6);
+$time= $this->uri->segment(7);
+$ofis=$this->uri->segment(8);
+$randevuid=$this->uri->segment(9);
+echo '<br><br>';
+echo $date;
+echo '<br><br>';
+echo $userid;
+echo '<br><br>';
+echo $time;
+echo '<br><br>';
+echo $ofis;
+echo '<br><br>';
+echo $randevuid;
+echo '<br><br>';
+
+$lasttime=$date.' '.$time.':00:00';
+echo $lasttime;
+
+$datakayit = array(
+ 'randevuBaslangicTarihSaat' => $lasttime
+);
+$this->db->where('randevuID', $randevuid);
+$this->db->update('tblrandevu',$datakayit);
+$this->postal->add('Randevu Erteleme Başarılı!','success');
+redirect('admin/terapi/randevu/','refresh');
+  }
+
+
 
 
 

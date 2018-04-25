@@ -150,7 +150,7 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $tarih = $cat->randevuBaslangicTarihSaat;
         
         }
-        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'"," <a href=\"'.site_url('admin/terapi/cagri/cagrieslestir/').$cat->danisanID.'/'.$cagri_id.'\"><span title=\"çağrıya randevu ata\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'","'.' '.'","'.' '.'"," <a href=\"'.site_url('admin/terapi/cagri/cagrieslestir/').$cat->danisanID.'/'.$cagri_id.'\"><span title=\"çağrıya randevu ata\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('Bu bölüme erişim engellenmiştir.');
 
-class Kurumsalcagri_dt extends Admin_Controller
+class Devamedencagri_dt extends Admin_Controller
 {
 
   function __construct()
@@ -44,14 +44,14 @@ class Kurumsalcagri_dt extends Admin_Controller
    // $this->cagri_dt_model->cagridata($data);
 
     // toplam kategori sayısı
-    $query = $this->db->query("SELECT COUNT(cagriKurumsalID) as total FROM tblcagrikurumsal");
+    $query = $this->db->query("SELECT COUNT(cagriKurumsalID) as total FROM tblcagrikurumsal WHERE cagriDurum='1'");
    
     $total = $query->row()->total;
 
     if($search){
-      $queryString = "SELECT * FROM tblcagrikurumsal WHERE cagriKurum like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatAd like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatSoyad like ".$this->db->escape('%'.$search.'%')." or cagriKonu like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatTel like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatEposta like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriKurumsalID desc LIMIT ".$start.",".$length;
+      $queryString = "SELECT * FROM tblcagrikurumsal WHERE cagriDurum='1' and cagriKurum like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatAd like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatSoyad like ".$this->db->escape('%'.$search.'%')." or cagriKonu like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatTel like ".$this->db->escape('%'.$search.'%')." or cagriIrtibatEposta like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriKurumsalID desc LIMIT ".$start.",".$length;
     }else{
-      $queryString = "SELECT * FROM tblcagrikurumsal ORDER BY cagriKurumsalID desc LIMIT ".$start.",".$length;
+      $queryString = "SELECT * FROM tblcagrikurumsal where cagriDurum='1' ORDER BY cagriKurumsalID desc LIMIT ".$start.",".$length;
     }
     
     $query = $this->db->query($queryString);
@@ -94,7 +94,7 @@ class Kurumsalcagri_dt extends Admin_Controller
           $Eposta=$cat->cagriIrtibatEposta;
         
         }
-        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'"," <a><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriKurumsalID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

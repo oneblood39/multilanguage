@@ -62,8 +62,9 @@ echo 'class="btn btn-primary" id="birkan">Mevcut Danışan</a>';
 
 
 
-<?php echo '<form id="form1" method="post" action="../../../randevuekle_step1/'.$date.'/'.$danisman_id.'/'.$time.'">';
+<?php echo '<form id="form1" method="post" action="';echo site_url('admin/terapi/randevu/randevuekle_step1/').$date.'/'.$danisman_id.'/'.$time;echo '">';
 echo '';
+//action="../../../randevuekle_step1/'.$date.'/'.$danisman_id.'/'.$time.'"
 ?>
  <div class="form-group">
                 <?php

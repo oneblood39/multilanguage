@@ -30,7 +30,7 @@ class Cagri_model extends MY_Model
     public function bireyselcagrikaydet ($data) {
 
     
-echo '<br><br><br><br>';
+//echo '<br><br><br><br>';
                 $data = array(
                     'cagriYapanAd' => $this->input->post('ad'),
                     'cagriYapanSoyad' => $this->input->post('soyad'),
@@ -47,8 +47,8 @@ echo '<br><br><br><br>';
                     'cagriTipi' => $this->input->post('cagritipi')
                    
                 );
-          print_r($data);
-            echo '<br>';
+         // print_r($data);
+          //  echo '<br>';
 
          $this->db->insert("tblcagri",$data); 
          $this->postal->add('Bireysel Çağrı Ekleme Başarılı!','success');
@@ -119,7 +119,7 @@ echo '<br><br><br><br>';
      
 public function kurumsalcagrikaydet ($data,$id = NULL) {
     
-echo '<br><br><br><br>';
+//echo '<br><br><br><br>';
                 $data = array(
                     'cagriKurum' => $this->input->post('kurum'),
                     'cagriIrtibatAd' => $this->input->post('ad'),
@@ -154,7 +154,7 @@ for ($i = 0; $i <= $arraycount-1; $i++) {
    'kurumsalcagriID' => $cagri_id,
    'user_id' => $data2[$i]
   );
-print_r($datasave);
+//print_r($datasave);
 $this->db->insert("ilscagrikullanici",$datasave);
    
 }

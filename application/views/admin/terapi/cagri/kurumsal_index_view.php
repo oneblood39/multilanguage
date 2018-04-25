@@ -4,6 +4,7 @@
         <div class="col-lg-12">             
               <a href="<?php echo site_url('admin/terapi/cagri/cagriekle');?>" class="btn btn-primary">Çağrı Ekle</a>
               <a href="<?php echo site_url('admin/terapi/cagri/');?>" class="btn btn-primary">Bireysel Çağrılar</a>
+              <a href="<?php echo site_url('admin/terapi/cagri/devamedencagrilar');?>" class="btn btn-primary">Devam Eden Çağrılar</a>
         </div>
     </div>
     <div class="row"><br><br></div>
