@@ -32,16 +32,14 @@ $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7); 
     
-echo '<br><br><br><br>';
+//echo '<br><br><br><br>';
                 $data = array(
                     'danisanAd' => $this->input->post('ad'),
                     'danisanSoyad' => $this->input->post('soyad'),
                     'danisanTel' => $this->input->post('tel')
                    
                 );
-            print_r($data);
-            echo '<br>';
-
+           
          $this->db->insert("tbldanisan",$data);   
 
           //  echo "Tarih:".$date.'<br>';
@@ -125,7 +123,7 @@ $time= $this->uri->segment(7);
 
 
 
-echo '<br><br><br><br>';
+//echo '<br><br><br><br>';
                 $data = array(
                     'randevuDanismanTerapiTipID' => $this->input->post('terapi'),
                     'randevuDurumuID' => $this->input->post('randevu'),
@@ -337,10 +335,11 @@ redirect('admin/terapi/randevu/','refresh');
 
 
 public function randevuinfodegistir() {
-$randevuid= $this->uri->segment(5);
+//$randevuid= $this->uri->segment(5);
 $datakayit = array(
  'randevuAciklama' => $this->input->post('randevuinfo')
 );
+$randevuid=$this->input->post('randevuid');
 
 $this->db->where('randevuID', $randevuid);
 $this->db->update('tblrandevu',$datakayit);
@@ -375,20 +374,8 @@ $userid= $this->uri->segment(6);
 $time= $this->uri->segment(7);
 $ofis=$this->uri->segment(8);
 $randevuid=$this->uri->segment(9);
-echo '<br><br>';
-echo $date;
-echo '<br><br>';
-echo $userid;
-echo '<br><br>';
-echo $time;
-echo '<br><br>';
-echo $ofis;
-echo '<br><br>';
-echo $randevuid;
-echo '<br><br>';
 
 $lasttime=$date.' '.$time.':00:00';
-echo $lasttime;
 
 $datakayit = array(
  'randevuBaslangicTarihSaat' => $lasttime

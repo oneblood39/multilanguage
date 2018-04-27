@@ -35,7 +35,7 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 //error_reporting(0);
 $bugun = date("Y/m/d"); 
 //echo $bugün;
-echo $this->session->userdata('date');
+//echo $this->session->userdata('date');
 
 /*
 else if ($this->session->userdata('date')!='') {
@@ -133,7 +133,14 @@ echo '<table width="1350px">
 
 ////////
 
- echo '<b>'.$date.'</b>';
+ 
+ $dizi = explode ("-",$date);
+$dizi2= isset($dizi[2]) ? $dizi[2] : '';
+$dizi1= isset($dizi[1]) ? $dizi[1] : '';
+$dizi0= isset($dizi[0]) ? $dizi[0] : '';
+$newdate=$dizi2.'-'.$dizi1.'-'.$dizi0;
+echo '<b>'.$newdate.'</b>';
+
  echo '<table class="table table-hover table-bordered table-condensed">';
  echo '<tr><td>Saat/Danışman</td>';
 for ($i = 9; $i <= 21; $i++) {
@@ -333,32 +340,7 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
                     foreach($danisanlar as $danisan) {
 //echo $result->danisanID;
 $danisanid=$result->danisanID;
-////////danışan ismini yazdırrmadan önce  etiket simgesi//////
-   echo '<div class="couponcode" style="float:right" >';
-  if ($randevudurum=='5') { echo '</div>'; } else {
-  echo '<form method="post" action="';echo site_url('admin/terapi/randevu/randevuinfodegistir/').$randevuID; echo '">';
-  echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:white"></span></small>';
-  echo '</a>&nbsp;
-  <span class="coupontooltiprandevu"><div class="form-group">
-  <textarea name="randevuinfo" rows="4" cols="25" style="color:black">';
-//echo $randevuID;
-$sqlrandevuinfo = "SELECT * FROM vwrandevu WHERE randevuID=".$randevuID;
-$resultsqlrandevuinfo = $this->db->query($sqlrandevuinfo)->result();
-         foreach($resultsqlrandevuinfo as $result){
-          $info=$result->randevuAciklama;
-          echo $info;
-          }
 
-echo '</textarea>';
-                echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
-                echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
-                echo '<input type="hidden" name="date" value="'.$date.'">';
-                echo '<input type="submit" value="Gönder">';
-                echo '</form>';
-//////////form sonu////////
-  echo '</div></span>
-  </div>'; }
-////////danışan ismini yazdırrmadan önce  etiket simgesi sonu//////
 
                        echo '<p align="center"><font color="white" size="2">';
                        echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'('.$odaKisaltma.')'.$yazi.'</a>';
@@ -375,14 +357,17 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
        // echo $result->danisanID;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
-        
+
 echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
+
+        
+
 //////////////////pencil////////////////////////////////
-  echo '<td width="25px;"><div class="couponcode" >
+  echo '<td width="20px;"><div class="couponcode" >
      <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:black; "></span>
       <span class="coupontooltiprandevu">'.$danisan->danisanAd.' '.$danisan->danisanSoyad.' adlı danışanın randevu durumunu değiştiriyorsunuz:
             <div class="form-group">
-              <form class="autoSubmit" method="post" action="http://localhost/multilanguage/admin/terapi/randevu/randevudurumudegistir">';
+              <form class="autoSubmit" method="post" action="'.site_url('admin/terapi/randevu/randevudurumudegistir').'">';
                 echo '<SELECT  name="randevular">';
                 echo '<option style="color:black;">---</option>';
                 $sqlrandevular = "SELECT * FROM tnmrandevudurum WHERE randevuDurumID!=".'5';
@@ -406,7 +391,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
  
 
 //////////////////x işareti/////////////////////////////////
-    echo '<td width="25px;"><div>';
+    echo '<td width="20px;"><div>';
   if ($randevudurum=='5') { } else {
   echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:black"></span></a> 
@@ -415,7 +400,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
 
  /////////////////info işareti////////////////////////////  
   if ($randevuinfo=='') { echo '<td width="25px;">'; } else {  ////açıklama varsa göster
-  echo '<td width="25px;"><div class="couponcode" >
+  echo '<td width="20px;"><div class="couponcode" >
      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:black; "></span>
       <span class="coupontooltip">'.$randevuinfo;
  echo '
@@ -424,12 +409,42 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
 /////////////////info işareti sonu///////////////////////////
 
  //////////////////saat işareti/////////////////////////////////
-    echo '<td width="25px;"><div>';
+    echo '<td width="20px;"><div>';
   if ($randevudurum=='5') { } else {
   echo '<a href="'.site_url('admin/terapi/randevu/randevuertele/').$randevuID.'/'.$user->id.'/'.$i.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color:black"></span></a> 
   </div></td>'; }
 ///////////////saat işareti sonu/////////////////////////
+
+
+////////danışan ismini yazdırrmadan önce  etiket simgesi//////
+   echo '<td width="20px;"><div class="couponcode" style="float:right" >';
+  if ($randevudurum=='5') { echo '</div>'; } else {
+  echo '<form method="post" action="';echo site_url('admin/terapi/randevu/randevuinfodegistir/').$randevuID; echo '">';
+  echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:black"></span></small>';
+  echo '</a>&nbsp;
+  <span class="coupontooltiprandevu"><div class="form-group">
+  <textarea name="randevuinfo" rows="4" cols="25" style="color:black">';
+//echo $randevuID;
+$sqlrandevuinfo = "SELECT * FROM vwrandevu WHERE randevuID=".$randevuID;
+$resultsqlrandevuinfo = $this->db->query($sqlrandevuinfo)->result();
+         foreach($resultsqlrandevuinfo as $result){
+          $info=$result->randevuAciklama;
+          echo $info;
+          }
+
+echo '</textarea>';
+                echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
+                echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+                echo '<input type="hidden" name="date" value="'.$date.'">';
+                echo '<input type="submit" value="Gönder">';
+                echo '</form>';
+//////////form sonu////////
+  echo '</div></span>
+  </div></td>'; }
+////////danışan ismini yazdırrmadan önce  etiket simgesi sonu//////
+
+
 echo '</tr>
 </table>';
 

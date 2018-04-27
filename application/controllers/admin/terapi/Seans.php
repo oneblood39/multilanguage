@@ -126,8 +126,7 @@ echo $this->session->userdata('paket');*/
         $this->form_validation->set_rules('paket_adi','Paket Adı','trim');
         $this->form_validation->set_rules('ucret','Ücret','trim');
         $this->form_validation->set_rules('seans_sayisi','Toplam Seans Sayısı','trim');
-
-   
+  
             $this->data['groups'] = $this->ion_auth->groups()->result();
             $this->load->helper('form');
             $this->render('admin/terapi/seans/create_view');

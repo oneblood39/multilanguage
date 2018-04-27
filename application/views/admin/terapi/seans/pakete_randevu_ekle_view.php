@@ -27,7 +27,7 @@ $paket_id= $this->uri->segment(6);
       <?php   echo form_label('Randevular:','ilgili');  ?>
   <select id='callbacks' multiple='multiple' name='coklu[]'>
 <?php 
-    $sql = "SELECT * FROM vwrandevu  where danisanID=".$danisan_id;
+    $sql = "SELECT * FROM vwrandevu  where paketID='' and (danisanID=".$danisan_id.')';
     $results = $this->db->query($sql)->result();
          foreach ($results as $result) {
                $danismanad=$result->DanismanAd;

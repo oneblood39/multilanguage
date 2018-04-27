@@ -12,19 +12,19 @@
 $danisman_id= $this->uri->segment(6); 
 
 if ($danisman_id=='') { 
-  echo "<br<br><br><br>";
+ // echo "<br<br><br><br>";
 $danisan_id= $this->uri->segment(5); 
 
 $danisman_id=$this->session->userdata('randevuDanismanID');
 $date=$this->session->userdata('date');
 $time=$this->session->userdata('time');
-
+/*
 echo $this->session->userdata('randevuDanismanID');
 echo "<br>";
 echo $this->session->userdata('date');
 echo "<br>";
 echo $this->session->userdata('time'); 
-
+*/
 
          $sqldanisan = "SELECT * FROM tbldanisan where danisanID=".$danisan_id;
          $results = $this->db->query($sqldanisan)->result();

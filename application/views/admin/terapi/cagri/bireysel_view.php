@@ -10,8 +10,9 @@
 
 
 
-
+<?php  echo validation_errors();   ?>
 <?php echo '<form id="form1" method="post" action="../cagri/bireyselcagrikaydet/">';
+
 $user_id=$this->ion_auth->user()->row()->id;
 $company=$this->ion_auth->user()->row()->company;
 ?>
@@ -48,6 +49,7 @@ $company=$this->ion_auth->user()->row()->company;
                 echo form_label('Çağrı Yapan Tel','tel');
                 echo form_error('tel');
                 echo form_input('tel',set_value('tel'),'class="form-control"');
+               // echo '<input type="tel" name="tel" class="form-control" pattern=".{10,10}">';
                 ?>
             </div>
             <div class="form-group">

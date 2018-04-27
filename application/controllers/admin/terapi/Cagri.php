@@ -50,9 +50,11 @@ class Cagri extends Admin_Controller
 
  public function bireysel() {
     $this->data['page_title'] = 'Çağrı Ekle';
+    $this->load->helper(array('form', 'url'));
     $this->load->library('form_validation');
     $this->form_validation->set_rules('ad','Ad','trim|required');
     $this->form_validation->set_rules('soyad','Soyad','trim');
+    $this->form_validation->set_rules('tel', 'tel', 'trim|required|min_length[5]|max_length[12]');
     $this->data['users'] = $this->ion_auth->users(array())->result();
 
     $this->data['yakinlik'] = $this->cagri_model->getcagriyakinlikForDropdown(array());

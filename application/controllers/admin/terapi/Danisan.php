@@ -48,7 +48,7 @@ class Danisan extends Admin_Controller
                 $time =$this->input->post('time');
                 $danismanID = $this->input->post('danismanID');
 
-      echo $this->session->userdata('randevuDanismanID'); 
+   //   echo $this->session->userdata('randevuDanismanID'); 
 
         $this->render('admin/terapi/danisan/index_view','admin_master',$this->data);
 	}
@@ -87,7 +87,7 @@ class Danisan extends Admin_Controller
                 $time =$this->input->post('time');
                 $danismanID = $this->input->post('danismanID');
 
-      echo $this->session->userdata('randevuDanismanID'); 
+    //  echo $this->session->userdata('randevuDanismanID'); 
 
         $this->render('admin/terapi/danisan/index_view','admin_master',$this->data);
     }
@@ -112,23 +112,6 @@ class Danisan extends Admin_Controller
         }
         else
         {
-
-
-
-   /*
-            $ad = $this->input->post('ad');
-            $soyad = $this->input->post('soyad');
-            $tel = $this->input->post('tel');
-            $eposta = $this->input->post('eposta');
-            $mizac = $this->input->post('mizac');
-           /* $additional_data = array(
-                'first_name' => $this->input->post('mizac')
-
-            );
-            $this->ion_auth->register($username, $password, $email, $additional_data, $group_ids);
-            $this->postal->add($this->ion_auth->messages(),'success'); ///diğer durumda $data eklenecek...*/
-           // redirect('admin/terapi/danisan');
-
         $this->danisan_model->createDanisan($this->input->post());
         $this->render('admin/terapi/danisan/create_view');
 
@@ -144,7 +127,7 @@ class Danisan extends Admin_Controller
   $this->danisan_model->createDanisanLast();
    }
 
-   public function danisandetay ()    /////danisan ekleme
+   public function danisandetay ()    /////danisan detayı
    {
     $this->data['before_head'] ='<style>
 body {font-family: Arial;}

@@ -51,7 +51,7 @@
 
 
             <?php echo form_submit('submit', 'Danışan Ekle', 'class="btn btn-primary btn-lg btn-block"');?>
-            <?php echo anchor('/admin/users', 'İptal','class="btn btn-default btn-lg btn-block"');?>
+            <?php echo anchor('/admin/terapi/danisan', 'İptal','class="btn btn-default btn-lg btn-block"');?>
             <?php echo form_close();?>
         </div>
     </div>
