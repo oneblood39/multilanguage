@@ -93,7 +93,7 @@ print_r($datasessionmevcut);
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
-        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a>"],';
+        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a><a href=\"'.site_url('admin/terapi/danisan/danisanduzenle/').$cat->danisanID.'\"> <span title=\"danışan düzenleme\" class=\"glyphicon glyphicon-pencil\"></span></a>"],';
   //print_r($data);
 
     }

@@ -33,7 +33,8 @@ class Danisan_model extends MY_Model
                     'danisanSoyad' => $this->input->post('soyad'),
                     'danisanTel' => $this->input->post('tel'),
                     'danisanEposta' => $this->input->post('eposta'),
-                    'danisanTestMizacTipID' => $this->input->post('mizac')
+                    'danisanTestMizacTipID' => $this->input->post('mizac'),
+                    'islemKullaniciID' => $this->input->post('userid')
                 );
            // print_r($data);
 
@@ -87,6 +88,64 @@ foreach ($results as $result) {
      redirect('admin/terapi/danisan/','refresh');
  
    }
+
+public function getDanisan($danisanID){ /////////editte kullandığımız 
+
+    if($danisanID && (int)$danisanID>0){
+      $this->db->where('danisanID', $danisanID);
+      $result = $this->db->get('tbldanisan')->result()[0];
+      return $result;
+    }else{
+      return false;
+    }
+    return false;
+  }
+
+  public function danisanupdate(){
+$danisan_id=$this->input->post('danisanID');
+
+            $data = array(
+                    'danisanAd' => $this->input->post('ad'),
+                    'danisanSoyad' => $this->input->post('soyad'),
+                    'danisanTel' => $this->input->post('tel'),
+                    'danisanEposta' => $this->input->post('eposta'),
+                    'danisanTestMizacTipID' => $this->input->post('mizac')
+                );
+
+$sql="INSERT INTO arstbldanisan (
+     danisanID ,
+    danisanAd ,
+    danisanSoyad ,
+    danisanEposta ,
+    danisanTel ,
+    danisanTestMizacTipID ,
+    danisanUzmanMizacTipID ,
+    islemKullaniciID ,
+    dateCreated)
+SELECT  danisanID ,
+    danisanAd ,
+    danisanSoyad ,
+    danisanEposta ,
+    danisanTel ,
+    danisanTestMizacTipID ,
+    danisanUzmanMizacTipID ,
+    islemKullaniciID ,
+    dateCreated
+FROM tbldanisan
+WHERE danisanID=".$danisan_id;
+
+if ($this->db->query($sql)) {
+ $this->db->where('danisanID', $danisan_id);
+ $this->db->update('tbldanisan',$data);
+ $this->postal->add('Danışan güncelleme başarılı!','success');
+ redirect('admin/terapi/danisan');
+} else {
+ $this->postal->add('Danışan güncelleme başarılı değil!','error');
+redirect('admin/terapi/danisan');
+}
+
+
+  }
 
 
 

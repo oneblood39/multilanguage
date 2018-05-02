@@ -11,10 +11,10 @@
 
 
 
-<?php echo '<form id="form1" method="post" action="../cagri/kurumsalcagrikaydet/">';
+<?php //echo '<form id="form1" method="post" action="../cagri/kurumsalcagrikaydet/">';
 $user_id=$this->ion_auth->user()->row()->id;
 $company=$this->ion_auth->user()->row()->company;
-
+echo form_open();
 //echo $user_id;
 ?>
  <div class="form-group">

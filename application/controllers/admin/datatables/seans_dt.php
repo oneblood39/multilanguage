@@ -89,7 +89,7 @@ class Seans_dt extends Admin_Controller
           $paketSeansSayi = $cat->paketSeansSayi;
         
         }
-        $data .= '["'.$paketno.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\"><span title=\"danışan ile eşleştir\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$paketid.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\"><span title=\"danışan ile eşleştir\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

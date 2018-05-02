@@ -20,7 +20,7 @@ class Randevupaket_dt extends Admin_Controller
     $length =10;
 
     $ofis=$this->ion_auth->user()->row()->company;
-    if ($ofis==3) {  $filtre=' '; $filtresearch=' WHERE paketID!="" '; } else { $filtre=' WHERE paketID!="" and ofisID='.$ofis; $filtresearch=$filtre.' and '; }
+    if ($ofis==3) {  $filtre=' WHERE paketID IS NOT NULL '; $filtresearch='  WHERE paketID IS NOT NULL '; } else { $filtre='  WHERE paketID IS NOT NULL and ofisID='.$ofis; $filtresearch=$filtre.' and '; }
 
     if($this->input->get('start')){
       $start = (int)$this->input->get('start');
@@ -139,6 +139,7 @@ FROM vwrandevu
           $paketadi = $cat->RandevuPaketi;
           $toplamseans = $cat->RandevuPaketSeansSayisi;
           $seans = $cat->KacinciSeans;
+          $durum = $cat->RandevuDurumAdi;
           $yazi=$seans.'/'.$toplamseans;
           if($paketadi!=''){     $yazi=$seans.'/'.$toplamseans;  } else { $yazi='';  }
 
@@ -151,12 +152,13 @@ FROM vwrandevu
           $tarih = $cat->randevuBaslangicTarihSaat;
           $paketadi = $cat->RandevuPaketi;
           $toplamseans = $cat->RandevuPaketSeansSayisi;
+          $durum = $cat->RandevuDurumAdi;
           $seans = $cat->KacinciSeans;
           if($paketadi!=''){     $yazi=$seans.'/'.$toplamseans;  } else { $yazi='';  }
        
         
         }
-        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'","'.$paketadi.'","'.$yazi.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'","'.$paketadi.'","'.$yazi.'","'.$durum.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->danisanID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
   //print_r($data);
 
     }

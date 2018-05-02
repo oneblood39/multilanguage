@@ -1,12 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="container" style="margin-top:60px;">
+
     <div class="row">
-        <div class="col-lg-12">
-   
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12" style="margin-top: 10px;">
+        <div class="col-lg-12" style="margin-top: -60px;">
   <a href="<?php echo site_url('admin/terapi/randevu/randevulistele');?>" class="btn btn-primary">Randevu Listele</a><br><br>
 
 <style type="text/css">
@@ -33,7 +29,7 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 
 <?php
 //error_reporting(0);
-$bugun = date("Y/m/d"); 
+$bugun = date("Y-m-d"); 
 //echo $bugün;
 //echo $this->session->userdata('date');
 
@@ -108,7 +104,7 @@ if ($this->ion_auth->user()->row()->company!=3) {
 }
 
 echo '</SELECT></p></td>';
-echo '<td><input type="submit" class="btn btn-primary" value="Filtrele"></td></tr></table>';
+echo '<td><input type="submit" class="btn btn-primary" value="Git"></td></tr></table>';
 echo form_close();
 
 
@@ -133,15 +129,18 @@ echo '<table width="1350px">
 
 ////////
 
- 
- $dizi = explode ("-",$date);
-$dizi2= isset($dizi[2]) ? $dizi[2] : '';
-$dizi1= isset($dizi[1]) ? $dizi[1] : '';
-$dizi0= isset($dizi[0]) ? $dizi[0] : '';
-$newdate=$dizi2.'-'.$dizi1.'-'.$dizi0;
-echo '<b>'.$newdate.'</b>';
+if ($date) {  
+$dizidate = explode ("-",$date);
+echo '<b>'.$dizidate[2].'-'.$dizidate[1].'-'.$dizidate[0].'</b>'; } else { }
 
- echo '<table class="table table-hover table-bordered table-condensed">';
+
+//$dizi2= isset($dizi[2]) ? $dizi[2] : '';
+//$dizi1= isset($dizi[1]) ? $dizi[1] : '';
+//$dizi0= isset($dizi[0]) ? $dizi[0] : '';
+//$newdate=$dizi2.'-'.$dizi1.'-'.$dizi0;
+//echo '<b>'.$date.'</b>';
+
+ echo '<table class="table table-hover table-bordered table-condensed" >';
  echo '<tr><td>Saat/Danışman</td>';
 for ($i = 9; $i <= 21; $i++) {
 echo '<td>';
@@ -302,13 +301,14 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
   $i=$i+($since_start_daily->h)-1; echo '<td style="background-color:#F75D59"  colspan="'.$since_start_daily->h.'">';
 }
 
+
                 } 
               }*/
 //////////////////////////////////////////////////////////////////////////////////////
             ////////  randevu al linki   /////////
               echo '<a href="';
-              echo site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'">';             
-              echo '<img src="';echo site_url('assets/admin/images/bos.png'); echo '" width="70" height="70">';
+              echo site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'" title="'.$i.':00 - '.($i+1).':00 aralığı">';             
+              echo '<img src="';echo site_url('assets/admin/images/bos.png'); echo '" width="80" height="80">';
             //  echo '<p align="center"><font color="white" size="2">randevuAL</font></p>';
               echo '</a>'; 
             ////////randevu al linki sonu/////////
@@ -342,14 +342,14 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 $danisanid=$result->danisanID;
 
 
-                       echo '<p align="center"><font color="white" size="2">';
+                       echo '<p align="center"><font color="white" size="1">';
                        echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'('.$odaKisaltma.')'.$yazi.'</a>';
                        echo '             
   <div class="test col-md-12 text-center">
   <div style="float:left; margin-bottom:20px;">';
 
 
-$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') order by randevuID desc limit 0,5";
+$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,5";
 
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
@@ -358,16 +358,23 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
 
-echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
+echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
 
         
 
 //////////////////pencil////////////////////////////////
-  echo '<td width="20px;"><div class="couponcode" >
+  echo '<td width="16px;"><div class="couponcode" >
      <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="color:black; "></span>
       <span class="coupontooltiprandevu">'.$danisan->danisanAd.' '.$danisan->danisanSoyad.' adlı danışanın randevu durumunu değiştiriyorsunuz:
-            <div class="form-group">
-              <form class="autoSubmit" method="post" action="'.site_url('admin/terapi/randevu/randevudurumudegistir').'">';
+            <div class="form-group">';
+                 $secilendurum = "SELECT * FROM vwrandevu where randevuID=".$randevuID;
+                 $secilenrandevudurumlar = $this->db->query($secilendurum)->result();
+                 foreach($secilenrandevudurumlar as $secilenrandevudurum){ 
+                  $secilendurumAdi=$secilenrandevudurum->RandevuDurumAdi;
+                  echo $secilendurumAdi;
+                 }
+
+                echo '<form class="autoSubmit" method="post" action="'.site_url('admin/terapi/randevu/randevudurumudegistir').'">';
                 echo '<SELECT  name="randevular">';
                 echo '<option style="color:black;">---</option>';
                 $sqlrandevular = "SELECT * FROM tnmrandevudurum WHERE randevuDurumID!=".'5';
@@ -377,6 +384,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
                   $durumAdi=$randevu->randevuDurumAdi;
               
                   echo '<option style="color:black;" value="'.$durumid.'"';  echo'><font color="black;">'.$durumAdi.'</font></option>';
+
                       } 
                 echo '</SELECT>';
                 echo '<input type="hidden" name="randevuid" value="'.$randevuID.'">';
@@ -391,7 +399,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
  
 
 //////////////////x işareti/////////////////////////////////
-    echo '<td width="20px;"><div>';
+    echo '<td width="16px;"><div>';
   if ($randevudurum=='5') { } else {
   echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:black"></span></a> 
@@ -400,7 +408,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
 
  /////////////////info işareti////////////////////////////  
   if ($randevuinfo=='') { echo '<td width="25px;">'; } else {  ////açıklama varsa göster
-  echo '<td width="20px;"><div class="couponcode" >
+  echo '<td width="16px;"><div class="couponcode" >
      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="color:black; "></span>
       <span class="coupontooltip">'.$randevuinfo;
  echo '
@@ -409,7 +417,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
 /////////////////info işareti sonu///////////////////////////
 
  //////////////////saat işareti/////////////////////////////////
-    echo '<td width="20px;"><div>';
+    echo '<td width="16px;"><div>';
   if ($randevudurum=='5') { } else {
   echo '<a href="'.site_url('admin/terapi/randevu/randevuertele/').$randevuID.'/'.$user->id.'/'.$i.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color:black"></span></a> 
@@ -418,7 +426,7 @@ echo '<table border="0" width="100px;" style="background-color:#FF8C00;"><tr>';
 
 
 ////////danışan ismini yazdırrmadan önce  etiket simgesi//////
-   echo '<td width="20px;"><div class="couponcode" style="float:right" >';
+   echo '<td width="16px;"><div class="couponcode" style="float:right" >';
   if ($randevudurum=='5') { echo '</div>'; } else {
   echo '<form method="post" action="';echo site_url('admin/terapi/randevu/randevuinfodegistir/').$randevuID; echo '">';
   echo '<small><span class="glyphicon glyphicon-tag" aria-hidden="true" style="color:black"></span></small>';
@@ -452,8 +460,6 @@ echo '</tr>
 }
 
 
-
-
  echo ' </div>
         </font>                   
         </p>'; 
@@ -477,21 +483,6 @@ echo '</table>';
 
             
 
-
-
-
         </div>
     </div>
 </div>
-<!--<script>
-  $(document).ready(function(){
-
-  $('.glyphicon-tag').on('click', function({
-    $('.coupontooltip2').dialog({
-      modal:true
-    });
-
-  }));
-
-});
-</script>-->

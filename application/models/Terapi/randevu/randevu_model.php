@@ -136,7 +136,7 @@ $time= $this->uri->segment(7);
                 );
 
            // print_r($data);
-            echo '<br>';
+           // echo '<br>';
             $dakika=$this->input->post('dakika');
            // echo $dakika;
 $gelenoda=$this->input->post('oda');
@@ -281,7 +281,7 @@ redirect('admin/terapi/randevu/','refresh');
 
   public function getOdalarForDropdown($firstElement=array(),$ofisID){
 echo '<br><br><br>';
-    echo $ofisID;
+ //   echo $ofisID;
     if($ofisID=='3') { $results=$this->db->query('SELECT * FROM tbloda')->result(); }
     else { 
          $results = $this->db->query('SELECT * FROM tbloda where odaOfisID='.$ofisID.'')->result();

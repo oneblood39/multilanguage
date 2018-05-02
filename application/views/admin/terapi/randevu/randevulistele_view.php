@@ -22,7 +22,7 @@
           <th>Tarih</th>
           <th>Paket Adı</th>
           <th>Seansı</th>
-
+          <th>Durumu</th>
           <th>İşlemler</th>
 
 

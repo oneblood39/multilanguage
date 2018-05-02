@@ -98,17 +98,23 @@ class Danisan extends Admin_Controller
      
         $this->data['page_title'] = 'Danışan Ekle';
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('ad','Ad','trim|required');
-        $this->form_validation->set_rules('soyad','Soyad','trim');
-        $this->form_validation->set_rules('tel','Tel','trim');
-        $this->form_validation->set_rules('eposta','Eposta','trim|required|valid_email');
-        $this->form_validation->set_rules('mizac','Mizac','trim');
+
+        $this->form_validation->set_rules('ad','Ad','required');
+        $this->form_validation->set_rules('soyad','Soyad','trim|required');
+        $this->form_validation->set_rules('tel','Tel','trim|numeric|required|min_length[10]|max_length[10]');
+        $this->form_validation->set_rules('eposta','E-Posta','trim|valid_email');
+        $this->form_validation->set_error_delimiters('<br><b><font color="#FF0000">', '</font></b>');
+        $this->form_validation->set_message('required', 'Bu alanı doldurmak zorundasınız!');
+        $this->form_validation->set_message('min_length', 'Bu alan minimum 10 karakter olmalı!');
+        $this->form_validation->set_message('max_length', 'Bu alan maximum 10 karakter olmalı!');
+        $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
+        $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
 
         if($this->form_validation->run()===FALSE)
         {
-            $this->data['groups'] = $this->ion_auth->groups()->result();
+            //$this->data['groups'] = $this->ion_auth->groups()->result();
             $this->load->helper('form');
-            $this->render('admin/terapi/danisan/create_view');
+           // 
         }
         else
         {
@@ -116,7 +122,7 @@ class Danisan extends Admin_Controller
         $this->render('admin/terapi/danisan/create_view');
 
         }
-
+     $this->render('admin/terapi/danisan/create_view','admin_master',$this->data);
 
     }
 
@@ -187,7 +193,83 @@ $this->data['before_body'] ='<script type="text/javascript">
         </script>';
    $this->render('admin/terapi/danisan/detay_view','admin_master',$this->data);
    }
+   
+  
+  public function danisanduzenle ($danisanID=NULL) {
+       $this->data['page_title'] = 'Danışan Düzenle';
+       $this->load->library('form_validation');
+       $danisan = $this->danisan_model->getDanisan((int) $danisanID);
 
+        $this->form_validation->set_rules('ad','Ad','required');
+        $this->form_validation->set_rules('soyad','Soyad','trim|required');
+        $this->form_validation->set_rules('tel','Tel','trim|numeric|required|min_length[10]|max_length[10]');
+        $this->form_validation->set_rules('eposta','E-Posta','trim|valid_email');
+        $this->form_validation->set_error_delimiters('<br><b><font color="#FF0000">', '</font></b>');
+        $this->form_validation->set_message('required', 'Bu alanı doldurmak zorundasınız!');
+        $this->form_validation->set_message('min_length', 'Bu alan minimum 10 karakter olmalı!');
+        $this->form_validation->set_message('max_length', 'Bu alan maximum 10 karakter olmalı!');
+        $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
+        $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
+
+
+
+      if($this->input->post('ad')){
+        $this->data['Ad'] = $this->input->post('ad');
+      }else{
+        $this->data['Ad'] = $danisan->danisanAd;
+      }
+
+      if($this->input->post('soyad')){
+        $this->data['Soyad'] = $this->input->post('soyad');
+      }else{
+        $this->data['Soyad'] = $danisan->danisanSoyad;
+      }
+
+      if($this->input->post('eposta')){
+        $this->data['Eposta'] = $this->input->post('eposta');
+      }else{
+        $this->data['Eposta'] = $danisan->danisanEposta;
+      }
+
+       if($this->input->post('tel')){
+        $this->data['Tel'] = $this->input->post('tel');
+      }else{
+        $this->data['Tel'] = $danisan->danisanTel;
+      }
+
+            if($this->input->post('mizac')){
+        $this->data['Mizac'] = $this->input->post('mizac');
+      }else{
+        $this->data['Mizac'] = $danisan->danisanTestMizacTipID;
+      }
+
+
+        //////////////////////form validation script
+         if($this->form_validation->run() === FALSE)
+        {
+            $this->load->helper('form');
+          //  $this->render('admin/terapi/cagri/bireysel_edit_view');
+        }
+        else
+        {
+
+                if($this->input->post()){
+         $this->danisan_model->danisanupdate($this->input->post());
+           }
+         
+           
+            $this->postal->add($this->ion_auth->messages(),'success');
+           // redirect('admin/terapi/cagri');
+        }
+        //////////////////////
+
+       $this->render('admin/terapi/danisan/danisan_edit_view','admin_master',$this->data);  
+
+
+
+
+
+   }
 
 
 

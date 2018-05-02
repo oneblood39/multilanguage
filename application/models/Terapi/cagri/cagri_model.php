@@ -103,9 +103,8 @@ class Cagri_model extends MY_Model
   }
 
 
-   public function getOfis($ofisID){ /////////editte kullandığımız 
-
-    if($ofisID && (int)$ofisID>0){
+  public function getOfis($ofisID){ /////////editte kullandığımız 
+   if($ofisID && (int)$ofisID>0){
       $this->db->where('ofisID', $ofisID);
       $result = $this->db->get('tblOfis')->result()[0];
       return $result;
@@ -115,6 +114,19 @@ class Cagri_model extends MY_Model
     return false;
   }
 
+
+  public function getCagri($cagriID){ /////////editte kullandığımız 
+
+    if($cagriID && (int)$cagriID>0){
+      $this->db->where('cagriID', $cagriID);
+      $result = $this->db->get('tblcagri')->result()[0];
+
+      return $result;
+    }else{
+      return false;
+    }
+    return false;
+  }
       
      
 public function kurumsalcagrikaydet ($data,$id = NULL) {
@@ -178,7 +190,52 @@ $this->postal->add('Çağrı randevu ile İlişkilendirildi!','success');
 redirect('admin/terapi/cagri/','refresh');
 }
 
+ public function bireyselcagriupdate() {
+  $cagri_id=$this->input->post('cagriID');
 
+$data = array (
+'cagriYapanAd' => $this->input->post('ad'),
+'cagriYapanSoyad' => $this->input->post('soyad'),
+'cagriYapilanAd' => $this->input->post('cad'),
+'cagriYapilanSoyad' => $this->input->post('csoyad'),
+'cagriYapanTel' => $this->input->post('tel'),
+'cagriYapanEposta' => $this->input->post('eposta'),
+'cagriYakinlikID' => $this->input->post('cagriyakinlik'),
+'cagriYonlenmeID' => $this->input->post('cagriyonlenme'),
+'cagriNedeniID' => $this->input->post('cagrineden'),
+'cagriAciklama' => $this->input->post('info'),
+'islemKullaniciID' => $this->input->post('id')      
+);
+
+$sql="insert into arstblcagri (cagriID , 
+cagriTarihSaat , 
+cagriTipi , 
+cagriYapanAd ,
+cagriYapanSoyad ,
+cagriYakinlikID ,
+cagriYapilanAd , 
+cagriYapilanSoyad ,
+cagriYonlenmeID ,
+cagriNedeniID ,
+cagriRandevuID ,
+cagriYapanTel ,
+cagriYapanEposta , 
+cagriAciklama ,
+ofisID , 
+islemKullaniciID,dateCreated )
+select * from tblcagri where tblcagri.cagriID=".$cagri_id;
+
+if ($this->db->query($sql)) {
+ $this->db->where('cagriID', $cagri_id);
+ $this->db->update('tblcagri',$data);
+ $this->postal->add('Çağrı güncelleme başarılı!','success');
+ redirect('admin/terapi/cagri');
+} else {
+ $this->postal->add('Çağrı güncelleme başarılı değil!','error');
+redirect('admin/terapi/cagri');
+}
+
+ }
 
 
 }

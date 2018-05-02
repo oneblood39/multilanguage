@@ -279,7 +279,8 @@ $danisman_id= $this->uri->segment(6);
 $time= $this->uri->segment(7); 
 $ofis= $this->uri->segment(8); 
 
-//echo "<br><br><br><br>";
+echo "<br><br><br><br>";
+//echo $time;
 
          $sqlkontrol = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$date."%') and (DanismanUserID='".$danisman_id."') and (ofisID!='".$ofis."') and (randevuDurumID!='5')"; 
          $sayikontrol= $this->db->query($sqlkontrol)->num_rows();////
@@ -303,7 +304,7 @@ $ofis= $this->uri->segment(8);
 
 $this->load->library('session');
 $this->session->set_userdata($datasessionmevcut);
-echo $this->session->userdata('randevuDanismanID'); 
+//echo $this->session->userdata('randevuDanismanID'); 
 
 // print_r($datasessionmevcutyaz);
 
