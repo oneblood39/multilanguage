@@ -31,30 +31,114 @@ class Randevu_model extends MY_Model
 $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7); 
-    
+
 //echo '<br><br><br><br>';
                 $data = array(
                     'danisanAd' => $this->input->post('ad'),
                     'danisanSoyad' => $this->input->post('soyad'),
                     'danisanTel' => $this->input->post('tel')
-                   
+                     
                 );
-           
-         $this->db->insert("tbldanisan",$data);   
 
-          //  echo "Tarih:".$date.'<br>';
-           // echo "DanışmanID:".$danisman_id.'<br>';
-           // echo "Zaman:".$time.'<br>';
-
-    $sql = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
+            $ad=$this->input->post('ad');
+            $soyad=$this->input->post('soyad');
+    $sql = "SELECT * FROM tbldanisan WHERE  danisanAd='".$ad."' and danisanSoyad='".$soyad."'";
     $results = $this->db->query($sql)->result();
+    $sayi= $this->db->query($sql)->num_rows();
+
+                    $data2 = array(  //////sessiona atılacak zımbırtılar:D
+                    'danisanAd' => $this->input->post('ad'),
+                    'danisanSoyad' => $this->input->post('soyad'),
+                    'danisanTel' => $this->input->post('tel'),
+                    'randevuDanismanID' => $danisman_id,
+                    'date' => $date,
+                    'time' => $time
+                );
+
+ if ($sayi>'0') {  
+      $this->load->library('session');
+      $this->session->set_flashdata('item', $data2);
+
+foreach ($results as $result) {
+  $es_ad=$result->danisanAd;
+  $es_soyad=$result->danisanSoyad;
+  $es_tel=$result->danisanTel;
+  $es_posta=$result->danisanEposta;
+}
+
+ /*$datasessionmevcut = array(
+                    'randevuDanismanID' => $danisman_id,                  
+                    'date' => $date,
+                    'time' => $time                                    
+                );*/
+
+$this->load->library('session');
+$this->session->set_userdata($data2);
+//echo $this->session->userdata('randevuDanismanID'); 
+
+       $this->postal->add('Kayıtlı olan mevcut kullanıcı:<br>'.$es_ad.' '.$es_soyad.'<br>Tel:'.$es_tel.'<br>Mail:'.$es_posta.'    <center> Bu isim ve soyisme ait bir danışan var!</center><br><a href="'.site_url('admin/terapi/randevu/yinedekaydet').'">Yine de Kaydet</a>
+        <br>
+        <a href="'.site_url('admin/terapi/randevu').'">İptal</a>','error');
+       redirect('admin/terapi/danisan/','refresh');
+
+          } else {
+
+   $this->db->insert("tbldanisan",$data); 
+
+
+
+       $sql = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
+       $results = $this->db->query($sql)->result();
          foreach ($results as $result) {
                $danisanID=$result->danisanID;
                $danisanad=$result->danisanID;
                $danisansoyad=$result->danisanID;
              //  echo "Danışan ID:".$danisanID;
                 } 
+
+
+
+          }
+
+           
+      
+ //$this->db->insert("tbldanisan",$data);   
+          //  echo "Tarih:".$date.'<br>';
+           // echo "DanışmanID:".$danisman_id.'<br>';
+           // echo "Zaman:".$time.'<br>';
+
+    /*$sql = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
+    $results = $this->db->query($sql)->result();
+         foreach ($results as $result) {
+               $danisanID=$result->danisanID;
+               $danisanad=$result->danisanID;
+               $danisansoyad=$result->danisanID;
+             //  echo "Danışan ID:".$danisanID;
+                } */
+
 }
+
+ public function yinedekaydet () {
+              $data = array(
+                    'danisanAd' => $this->session->userdata('danisanAd'), 
+                    'danisanSoyad' => $this->session->userdata('danisanSoyad'),
+                    'danisanTel' => $this->session->userdata('danisanTel')
+                    //'randevuDanismanID' => $this->session->userdata('randevuDanismanID')
+                   
+                );
+     $this->db->insert("tbldanisan",$data);  
+       $sql = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
+       $results = $this->db->query($sql)->result();
+         foreach ($results as $result) {
+               $danisanID=$result->danisanID;
+               $danisanad=$result->danisanID;
+               $danisansoyad=$result->danisanID;
+             //  echo "Danışan ID:".$danisanID;
+                } 
+
+       redirect('admin/terapi/randevu/randevuekle_step3/'.$this->session->userdata('date').'/'.$this->session->userdata('randevuDanismanID').'/'.$this->session->userdata('time'),'refresh');
+
+  }
 
   public function getOfficesForDropdown($firstElement=array()){
     $results = $this->db->query('SELECT * FROM tblofis')->result();
@@ -120,9 +204,6 @@ $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7); 
   */  
-
-
-
 //echo '<br><br><br><br>';
                 $data = array(
                     'randevuDanismanTerapiTipID' => $this->input->post('terapi'),
@@ -142,6 +223,7 @@ $time= $this->uri->segment(7);
 $gelenoda=$this->input->post('oda');
 $time = $this->input->post('time');
 $date = $this->input->post('date');
+$paket = $this->input->post('paket');
 
 
 
@@ -185,6 +267,7 @@ $datakayit = array(
 'randevuDurumuID' => $this->input->post('randevu'),
 'randevuSeansUcret' => $ucret,
 'randevuBaslangicTarihSaat' => $datelast,
+'randevuPaketID' => $paket,
 'islemKullaniciID' => $userID
 
 );
@@ -236,6 +319,7 @@ $datakayit = array(
 'randevuDurumuID' => $this->input->post('randevu'),
 'randevuSeansUcret' => $ucret,
 'randevuBaslangicTarihSaat' => $datelast,
+'randevuPaketID' => $paket,
 'islemKullaniciID' => $userID
 
 );

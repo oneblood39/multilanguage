@@ -14,7 +14,11 @@ class Cagri_dt extends Admin_Controller
 
   }
 
+
   public function getall(){
+
+
+
 
     $start = 0;
     $length = 10;
@@ -73,6 +77,9 @@ class Cagri_dt extends Admin_Controller
       }
           
     // if($search){
+
+
+
        if($cat->cagriID>0){  
          // $parent = $this->db->query("SELECT * FROM products")->row()->product_name;
           $Ad = $cat->cagriYapanAd;
@@ -83,6 +90,8 @@ class Cagri_dt extends Admin_Controller
           $yakinlik=$cat->cagriYakinlikAdi;
           $neden=$cat->cagriNedeniAdi;
           $kaynak=$cat->cagriYonlenmeAdi;
+
+
 
 
 

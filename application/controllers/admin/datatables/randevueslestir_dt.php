@@ -139,6 +139,7 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $Dsoyad = $cat->DanismanSoyad;
           $terapitip = $cat->terapiAdi;
           $tarih = $cat->randevuBaslangicTarihSaat;
+         
       
 
         }else{
@@ -148,6 +149,7 @@ left JOIN tnmterapitip on tnmterapitip.terapiTipID=ilsdanismanterapi.terapiTipID
           $Dsoyad = $cat->DanismanSoyad;
           $terapitip = $cat->terapiAdi;
           $tarih = $cat->randevuBaslangicTarihSaat;
+       
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Dad.'","'.$Dsoyad.'","'.$terapitip.'","'.$tarih.'","'.' '.'","'.' '.'"," <a href=\"'.site_url('admin/terapi/cagri/cagrieslestir/').$cat->danisanID.'/'.$cagri_id.'\"><span title=\"çağrıya randevu ata\" class=\"glyphicon glyphicon-random\"></span></a>"],';

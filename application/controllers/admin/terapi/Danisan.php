@@ -119,10 +119,10 @@ class Danisan extends Admin_Controller
         else
         {
         $this->danisan_model->createDanisan($this->input->post());
-        $this->render('admin/terapi/danisan/create_view');
+      //  $this->render('admin/terapi/danisan/create_view');
 
         }
-     $this->render('admin/terapi/danisan/create_view','admin_master',$this->data);
+       $this->render('admin/terapi/danisan/create_view','admin_master',$this->data);
 
     }
 

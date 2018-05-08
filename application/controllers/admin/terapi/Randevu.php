@@ -242,7 +242,7 @@ public function randevuekle (){ //randevu ekleme ilk sayfa
         $this->data['page_title'] = 'Randevu Ekle';
         $this->load->library('form_validation');
         $this->form_validation->set_rules('ad','Ad','trim|required');
-        $this->form_validation->set_rules('soyad','Soyad','trim');
+        $this->form_validation->set_rules('soyad','Soyad','trim|required');
 $this->data['before_head'] ='
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
@@ -432,6 +432,14 @@ public function randevuekle_step3 (){
 
 $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data);
 }
+
+public function yinedekaydet (){      
+$this->Randevu_model->yinedekaydet($this->input->post());
+//$this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data);
+}
+
+
+
 
 public function randevuekle_step4 (){
 $this->load->library('session');

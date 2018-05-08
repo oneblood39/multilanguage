@@ -57,14 +57,14 @@ foreach ($results as $result) {
 }
 
     
-  echo 'Bu isim ve soyisme ait bir danisan var.<br><a href="">Detayı Göster</a><br>
+ /* echo '<br><br><br><br>Bu isim ve soyisme ait bir danisan var.<br><a href="">Detayı Göster</a><br>
         <a href="../danisan/lastcreate">Kaydet</a>'; 
        $this->postal->add('
-       <center> Bu isim ve soyisme ait bir danışan var!</center><br>
+   
+        ',' success');*/
+       $this->postal->add('Kayıtlı olan mevcut kullanıcı:<br>'.$es_ad.' '.$es_soyad.'<br>Tel:'.$es_tel.'<br>Mail:'.$es_posta.'    <center> Bu isim ve soyisme ait bir danışan var!</center><br>
         <a href="../danisan/lastcreate">Kaydet</a><br>
-        <a href="../danisan">İptal</a>
-        ',' error');
-       $this->postal->add('Kayıtlı olan mevcut kullanıcı:<br>'.$es_ad.' '.$es_soyad.'<br>Tel:'.$es_tel.'<br>Mail:'.$es_posta.'','success');
+        <a href="../danisan">İptal</a>','success');
           //  redirect('admin/terapi/danisan/','refresh');
     // redirect('admin/terapi/danisan/create');
           }

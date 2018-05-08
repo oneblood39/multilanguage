@@ -152,9 +152,32 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
                 echo form_dropdown('oda',$odalar,'oda','class="form-control"');
                 ?>
             </div>
+            <div class="form-group">
 
-
-
+           <?php
+            // echo $danisanID;
+            $sqlpaket = "SELECT * FROM vwdanisanpaket where danisanID=".$danisanID." and (TamamlananSeansSayisi<paketSeansSayi)";
+            $sayipaket= $this->db->query($sqlpaket)->num_rows();
+           if($sayipaket>0) {  
+           echo form_label('Paketler','paket');
+           echo '<SELECT name="paket" class="form-control">';
+           echo '<option value=""> -- </option>';            
+            $results = $this->db->query($sqlpaket)->result();
+            foreach ($results as $result) {
+              $tamam=$result->TamamlananSeansSayisi;
+              $seanssayi=$result->paketSeansSayi;
+              $paket_id=$result->paketID;
+              $paketAdi=$result->paketAdi;
+              //echo $paket_id;
+            echo '<option value="'.$paket_id.'">'.$paketAdi.'</option>';
+            }
+            echo '</SELECT>';
+            echo form_error('paket'); } else  { }
+               // echo form_dropdown('paket','','paket','class="form-control"');
+            
+             ?>
+          </div>
+              
 
 
             <div class="form-group">

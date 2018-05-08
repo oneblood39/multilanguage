@@ -108,11 +108,51 @@ echo '<td><input type="submit" class="btn btn-primary" value="Git"></td></tr></t
 echo form_close();
 
 
- echo' <br>
+ echo' 
 ';
 
 /////////////üst form sonu///////////////////
+//echo 'ofis:'.$ofis.' - ';
+//echo 'tarih:'.$date;
 
+////////////////////////Raporlar///////////////////
+ $sqlrapor1 = "SELECT * FROM vwrandevu WHERE RandevuDurumID<>5 and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ //$resultsqlrapor1 = $this->db->query($sqlrapor1)->result();
+ $sayirapor1= $this->db->query($sqlrapor1)->num_rows();
+ echo '<br>Toplam randevu Sayısı:'.$sayirapor1;
+
+ $sqlrapor2 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=1) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor2= $this->db->query($sqlrapor2)->num_rows();
+
+ $sqlrapor3 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=2) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor3= $this->db->query($sqlrapor3)->num_rows();
+
+ $sqlrapor4 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=3) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor4= $this->db->query($sqlrapor4)->num_rows();
+
+ $sqlrapor5 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=4) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor5= $this->db->query($sqlrapor5)->num_rows();
+
+ $sqlrapor6 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=5) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor6= $this->db->query($sqlrapor6)->num_rows();
+
+ $sqlrapor7 = "SELECT * FROM vwrandevu WHERE (RandevuDurumID=6) and (randevuBaslangicTarihSaat LIKE '%".$date."%') and (ofisID='".$ofis."')";
+ $sayirapor7= $this->db->query($sqlrapor7)->num_rows();
+
+  echo '<table class="table table-hover table-bordered table-condensed" >';
+  echo '<tr>';
+  echo '<td>Teyit Alınmayan Randevu Sayısı: '.$sayirapor2.'</td>';
+  echo '<td>Teyit Alınan Randevu Sayısı: '.$sayirapor3.'</td>';
+  echo '<td>Danışanın Gelmediği Randevu Sayısı: '.$sayirapor4.'</td>';
+  echo '</tr>';
+  echo '<tr>';
+  echo '<td>Danışanın Geldiği Randevu Sayısı: '.$sayirapor5.'</td>';
+  echo '<td>İptal Edilen Randevu Sayısı: '.$sayirapor6.'</td>';
+  echo '<td>Aranılıp Ulaşılamayan Randevu Sayısı: '.$sayirapor7.'</td>';
+  echo '</tr>';
+  echo '</table>';
+
+///////////////////////Raporlar Sonu///////////////
 ///////
 
 echo '<table width="1350px">
@@ -253,9 +293,11 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
          $sayibitis= $this->db->query($sqlrenk)->num_rows();////
          $resultrenk = $this->db->query($sqlrenk)->result();
           foreach($resultrenk as $result){
+
         $randevudurum=$result->RandevuDurumID;
         $randevuID=$result->randevuID;
         $odaKisaltma=$result->odaKisaltma;
+       
         $paketID=$result->paketID;
         if ($paketID!='') { 
         $toplamseans=$result->RandevuPaketSeansSayisi;
@@ -342,8 +384,17 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 $danisanid=$result->danisanID;
 
 
+
                        echo '<p align="center"><font color="white" size="1">';
-                       echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad.'('.$odaKisaltma.')'.$yazi.'</a>';
+                       echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad;
+//////////////////her randevu için oda bilgilerinde danışanın id si de gerekli
+         $sqlicdongu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5') and (danisanID='".$danisanid."')"; 
+         $resulticdonguler = $this->db->query($sqlicdongu)->result();
+          foreach($resulticdonguler as $resulticdongu){
+          $odaKisaltma=$resulticdongu->odaKisaltma;
+                       echo '('.$odaKisaltma.')'.$yazi.'</a>';
+          }              
+
                        echo '             
   <div class="test col-md-12 text-center">
   <div style="float:left; margin-bottom:20px;">';
@@ -354,6 +405,7 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
         $randevuID=$resultrand->randevuID;
+       // $odaKisaltma=$result->odaKisaltma;
        // echo $result->danisanID;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;

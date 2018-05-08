@@ -202,7 +202,7 @@ class Cagri extends Admin_Controller
         -->
         </script>';
 
-        $this->render('admin/terapi/randevu/randevulistele_view','admin_master',$this->data);
+        $this->render('admin/terapi/cagri/randevulistele_view','admin_master',$this->data);
  }
 
     public function cagrieslestir() ////cagriya randevu atıyoruzzz

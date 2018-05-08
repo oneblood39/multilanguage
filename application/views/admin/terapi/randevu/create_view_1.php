@@ -68,23 +68,23 @@ echo '';
 ?>
  <div class="form-group">
                 <?php
-                echo form_label('Danışan Ad','first_name');
-                echo form_error('first_name');
-                echo form_input('ad',set_value('first_name'),'class="form-control"');
+                echo form_label('Danışan Ad','ad');
+                echo form_error('ad');
+                echo form_input('ad',set_value('ad'),'class="form-control"');
                 ?>
             </div>
             <div class="form-group">
                 <?php
-                echo form_label('Danışan Soyad','last_name');
-                echo form_error('last_name');
-                echo form_input('soyad',set_value('last_name'),'class="form-control"');
+                echo form_label('Danışan Soyad','soyad');
+                echo form_error('soyad');
+                echo form_input('soyad',set_value('soyad'),'class="form-control"');
                 ?>
             </div>
             <div class="form-group">
                 <?php
-                echo form_label('Danışan Tel','phone');
-                echo form_error('phone');
-                echo form_input('tel',set_value('phone'),'class="form-control"');
+                echo form_label('Danışan Tel','tel');
+                echo form_error('tel');
+                echo form_input('tel',set_value('tel'),'class="form-control"');
                 ?>
             </div>
 <input type="submit" class="btn btn-primary" value="Danışan Ekle">
