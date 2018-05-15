@@ -17,7 +17,23 @@ class Cagri_dt extends Admin_Controller
 
   public function getall(){
 
+    
+    $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+    // echo $group_id;
+   }
 
+   if($group_id=='11' or $group_id=='10' or $group_id=='9') {
+    $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
+    $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
+
+   } else {
+     $icon='';
+     $icon2='';
+   }
 
 
     $start = 0;
@@ -90,12 +106,28 @@ class Cagri_dt extends Admin_Controller
           $yakinlik=$cat->cagriYakinlikAdi;
           $neden=$cat->cagriNedeniAdi;
           $kaynak=$cat->cagriYonlenmeAdi;
+          $tarih=$cat->randevuBaslangicTarihSaat;
+          $dizi=explode(' ', $tarih);
+          $tarih=$dizi[0];
+          $metin=explode('-', $tarih);
+         // $tarihson=$metin[2];
+          $danismanAd=$cat->danismanAd;
+          $danismanSoyad=$cat->danismanSoyad;
+          if($tarih!='') {
+          
+                 if($group_id=='11' or $group_id=='10' or $group_id=='9') {
+
+               $icon3='<span title=\"randevu ile eşleme kaldır\" class=\"glyphicon glyphicon-remove\"></span>'; 
+              } else {
+                 $icon3='';
+  
+   }
 
 
-
-
+        } else { $icon3=''; }
 
         }else{
+
           $Ad = $cat->cagriYapanAd;
           $Soyad = $cat->cagriYapanSoyad;
           $Yad = $cat->cagriYapilanAd;
@@ -104,9 +136,28 @@ class Cagri_dt extends Admin_Controller
           $yakinlik=$cat->cagriYakinlikAdi;
           $neden=$cat->cagriNedeniAdi;
           $kaynak=$cat->cagriYonlenmeAdi;
+          $tarih=$cat->randevuBaslangicTarihSaat;
+          $dizi=explode(' ', $tarih);
+          $tarih=$dizi[0];
+          $metin=explode('-', $tarih);
+         // $tarihson=$metin[2];
+          $danismanAd=$cat->danismanAd;
+          $danismanSoyad=$cat->danismanSoyad;
+                   if($tarih!='') {
+          
+                 if($group_id=='11' or $group_id=='10' or $group_id=='9') {
+
+               $icon3='<span title=\"randevu ile eşleme kaldır\" class=\"glyphicon glyphicon-remove\"></span>'; 
+              } else {
+                 $icon3='';
+  
+   }
+
+
+        } else { $icon3=''; }
         
         }
-        $data .= '["'.$cat->dateCreated.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'"," <a href=\"'.site_url('admin/terapi/cagri/randevueslestir/').$cat->cagriID.'\"><span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span></a>  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->cagriID.'\"><span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span></a>"],';
+        $data .= '["'.$cat->dateCreated.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'","'.$tarih.'<br>'.$danismanAd.''.$danismanSoyad.'"," <a href=\"'.site_url('admin/terapi/cagri/randevueslestir/').$cat->cagriID.'\">'.$icon.'</a>  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->cagriID.'\">'.$icon2.'</a> <a href=\"'.site_url('admin/terapi/cagri/randevueslemesil/').$cat->cagriID.'\">'.$icon3.'</a>"],';
   //print_r($data);
 
     }

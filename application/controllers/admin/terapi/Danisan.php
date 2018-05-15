@@ -37,6 +37,7 @@ class Danisan extends Admin_Controller
         -->
         </script>';
 
+
                 $data = array(
                   
                     'DanismanID' => $this->input->post('danismanID'),                  
@@ -253,7 +254,7 @@ $this->data['before_body'] ='<script type="text/javascript">
         else
         {
 
-                if($this->input->post()){
+               if($this->input->post()){
          $this->danisan_model->danisanupdate($this->input->post());
            }
          
@@ -263,14 +264,77 @@ $this->data['before_body'] ='<script type="text/javascript">
         }
         //////////////////////
 
-       $this->render('admin/terapi/danisan/danisan_edit_view','admin_master',$this->data);  
-
-
-
-
+      $this->render('admin/terapi/danisan/danisan_edit_view','admin_master',$this->data);  
 
    }
 
+   public function notekle () {
+       $this->data['page_title'] = 'Danışan Notu Ekle';
+       $this->load->library('form_validation');
+       
 
+   $this->render('admin/terapi/danisan/not_ekle_view','admin_master',$this->data);     
+   }
+
+   public function notkaydet () {
+   $this->danisan_model->notkaydet($this->input->post());
+    }
+
+
+   public function ilacekle () {
+       $this->data['page_title'] = 'İlaç Ekle';
+       $this->load->library('form_validation');
+   $this->render('admin/terapi/danisan/ilac_ekle_view','admin_master',$this->data);     
+   }
+  
+  public function ilackaydet () {
+  $this->danisan_model->ilackaydet($this->input->post());
+   }
+
+  public function taniekle () {
+       $this->data['page_title'] = 'Tanı Ekle';
+       $this->load->library('form_validation');
+       $this->data['tanilar'] = $this->danisan_model->gettanilarForDropdown(array("0"," -- "));
+   $this->render('admin/terapi/danisan/tani_ekle_view','admin_master',$this->data);     
+   }
+
+  public function tanikaydet () {
+  $this->danisan_model->tanikaydet($this->input->post());
+   }
+
+   public function testekle () {
+       $this->data['page_title'] = 'Test Talebinde Bulun';
+       $this->load->library('form_validation');
+
+   $this->data['testler'] = $this->danisan_model->gettestlerForDropdown(array());
+   $this->render('admin/terapi/danisan/test_ekle_view','admin_master',$this->data);     
+   }
+
+  public function testkaydet () {
+  $this->danisan_model->testkaydet($this->input->post());
+   }
+
+   public function seansnotuduzenle() {
+     $this->data['page_title'] = 'Seans Notu Düzenle';
+     $this->load->library('form_validation');
+   $this->render('admin/terapi/danisan/not_duzenle_view','admin_master',$this->data); 
+   }
+
+   public function seansnotguncelle() {
+   $this->danisan_model->seansnotguncelle($this->input->post()); 
+   }
+
+   public function psikiyatrikilacekle () {
+       $this->data['page_title'] = 'Psikiyatrik İlaç Öner';
+       $this->load->library('form_validation');
+        $this->data['ilac'] = $this->danisan_model->getilaclarForDropdown(array("0"," -- "));
+        $this->data['doz'] = $this->danisan_model->getdozlarForDropdown(array("0"," -- "));
+
+   $this->render('admin/terapi/danisan/psikiyatrikilac_ekle_view','admin_master',$this->data);     
+   }
+
+   public function psikiyatrikilackaydet () {
+   $this->danisan_model->psikiyatrikilackaydet($this->input->post());
+   }
 
 }

@@ -2,8 +2,24 @@
 <div class="container" style="margin-top:60px;">
     <div class="row">
         <div class="col-lg-12"> 
-        <h2>Seans Bilgileri</h2>            
-              <a href="<?php echo site_url('admin/terapi/seans/paketekle');?>" class="btn btn-primary">Paket Ekle</a>
+        <h2>Seans Bilgileri</h2> 
+                  <?php
+     $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+    // echo $group_id;
+   }
+
+   if($group_id=='11' or $group_id=='10' or $group_id=='9') {
+    echo '<a href="'.site_url('admin/terapi/seans/paketekle').'" class="btn btn-primary">Paket Ekle</a>';   
+   } else {
+     
+   }
+?>  
+
+            
             <!--  <a href="<?php echo site_url('admin/terapi/cagri/kurumsalcagri');?>" class="btn btn-primary">Kurumsal Çağrılar</a> -->
         </div>
     </div>
@@ -19,6 +35,7 @@
           <th>Paket Adı</th>
           <th>Ücreti</th>
           <th>Paket Seans Sayısı</th>
+          <th>1 Ayda Bitirilecek Min. Seans Say.</th>
           <th>İşlemler</th>
         </tr>
       </thead>

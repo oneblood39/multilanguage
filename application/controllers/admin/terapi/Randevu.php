@@ -24,7 +24,9 @@ class Randevu extends Admin_Controller
   <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.1.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-   
+
+
+
 
   <script>
   $( function() {
@@ -197,13 +199,45 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
     form.submit();
 });
 </script>
+<script>
+$(document).ready(function () {
 
+    $("#btn").click(function () {
+        var c = confirm("Uyarı! Bu randevuyu iptal etmek istediğinize emin misiniz?");
+        if (c == true) {
+        return true;
+        } else {
+        return false;
+        }
+    });
+});
 
+</script>
 
 ';
 
-        $this->data['users'] = $this->ion_auth->users(array())->result();
-        $this->render('admin/terapi/randevu/index_view','admin_master',$this->data);
+     $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+
+    // echo '<br><br><br>';
+    // echo $group_id;
+   }
+
+  if ($group_id=='11' or $group_id=='9') {
+    $this->render('admin/terapi/randevu/index_view','admin_master',$this->data); 
+   }
+
+   else {
+     $this->render('admin/terapi/randevu/danisman_index_view','admin_master',$this->data);
+   }
+
+
+        
+       
+
 	}
 
       public function randevulistele() ///randevu listeleme datatable
@@ -690,5 +724,200 @@ $this->Randevu_model->randevuertelekaydet();
 public function randevuyinedeekle(){
   $this->Randevu_model->randevuyinedeekle();
 }
+
+public function mazeretler (){
+
+      $this->data['page_title'] = 'Mazeret Listele';
+      $this->data['users'] = $this->ion_auth->users(array())->result();
+      $this->data['before_head'] = '';
+
+      $this->data['before_body'] ='<script type="text/javascript">
+
+         $(document).ready(function(){
+          $("#randevuListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/mazeretler_dt/getall",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });     
+        </script>
+        ';
+
+        $this->render('admin/terapi/randevu/mazeretlistele_view','admin_master',$this->data);
+
+}
+
+public function mazeretekle(){
+
+        $this->data['page_title'] = 'Mazeret Ekle';
+        $this->load->library('form_validation');
+        $this->load->library('session');
+        $ofisID=$this->ion_auth->user()->row()->company;
+
+
+
+    $this->data['danismanlar'] = $this->Randevu_model->getDanismanlarForDropdown(array("0"," -- "),$ofisID);
+    $this->data['mazeretler'] = $this->Randevu_model->getMazeretlerForDropdown(array("0"," -- "));       
+
+    $this->data['before_head'] ='<script type="text/javascript">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
+
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+
+( function( factory ) {
+  if ( typeof define === "function" && define.amd ) {
+
+    // AMD. Register as an anonymous module.
+    define( [ "../widgets/datepicker" ], factory );
+  } else {
+
+    // Browser globals
+    factory( jQuery.datepicker );
+  }
+}( function( datepicker ) {
+
+datepicker.regional.tr = {
+  closeText: "kapat",
+  prevText: "&#x3C;geri",
+  nextText: "ileri&#x3e",
+  currentText: "bugün",
+  monthNames: [ "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+  "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık" ],
+  monthNamesShort: [ "Oca","Şub","Mar","Nis","May","Haz",
+  "Tem","Ağu","Eyl","Eki","Kas","Ara" ],
+  dayNames: [ "Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi" ],
+  dayNamesShort: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  dayNamesMin: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  weekHeader: "Hf",
+  firstDay: 1,
+  isRTL: false,
+  showMonthAfterYear: false,
+  yearSuffix: "" };
+datepicker.setDefaults( datepicker.regional.tr );
+
+return datepicker.regional.tr;
+
+} ) );
+
+
+
+  } );
+ 
+</script>
+//////////////////////////////////////////////////
+ <script>
+  $( function() {
+    $( "#datepicker2" ).datepicker();
+
+( function( factory ) {
+  if ( typeof define === "function" && define.amd ) {
+
+    // AMD. Register as an anonymous module.
+    define( [ "../widgets/datepicker" ], factory );
+  } else {
+
+    // Browser globals
+    factory( jQuery.datepicker );
+  }
+}( function( datepicker ) {
+
+datepicker.regional.tr = {
+  closeText: "kapat",
+  prevText: "&#x3C;geri",
+  nextText: "ileri&#x3e",
+  currentText: "bugün",
+  monthNames: [ "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+  "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık" ],
+  monthNamesShort: [ "Oca","Şub","Mar","Nis","May","Haz",
+  "Tem","Ağu","Eyl","Eki","Kas","Ara" ],
+  dayNames: [ "Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi" ],
+  dayNamesShort: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  dayNamesMin: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  weekHeader: "Hf",
+  firstDay: 1,
+  isRTL: false,
+  showMonthAfterYear: false,
+  yearSuffix: "" };
+datepicker.setDefaults( datepicker.regional.tr );
+
+return datepicker.regional.tr;
+
+} ) );
+
+
+
+  } );
+ 
+</script>
+
+<link href="../../../assets/admin/locales/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+';
+
+$this->data['before_body'] ='
+<script type="text/javascript" src="../../../assets/admin/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../assets/admin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../assets/admin/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../assets/admin/locales/bootstrap-datetimepicker.tr.js" charset="UTF-8"></script>
+
+
+
+<script type="text/javascript">
+    $(\'.form_datetime\').datetimepicker({
+        language:  \'tr\',
+        weekStart: 1,
+        todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    forceParse: 0,
+        showMeridian: 1
+    });
+  $(\'.form_date\').datetimepicker({
+        language:  \'tr\',
+        weekStart: 1,
+        todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    minView: 2,
+    forceParse: 0
+    });
+  $(\'.form_time\').datetimepicker({
+        language:  \'tr\',
+        weekStart: 1,
+        todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 1,
+    minView: 0,
+    maxView: 1,
+    forceParse: 0
+    });
+</script>
+';
+
+
+
+$this->render('admin/terapi/randevu/mazeret_ekle_view','admin_master',$this->data);
+}
+
+public function mazeretkaydet () {
+$this->Randevu_model->mazeretkaydet();  
+}
+
+public function mazeretdurumdegistir () {
+$this->Randevu_model->mazeretdurumdegistir();
+}
+
 
 }

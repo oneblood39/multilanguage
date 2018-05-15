@@ -34,6 +34,7 @@ class Danisan_model extends MY_Model
                     'danisanTel' => $this->input->post('tel'),
                     'danisanEposta' => $this->input->post('eposta'),
                     'danisanTestMizacTipID' => $this->input->post('mizac'),
+                    'danisanTip' => $this->input->post('danisantip'),
                     'islemKullaniciID' => $this->input->post('userid')
                 );
            // print_r($data);
@@ -147,6 +148,163 @@ redirect('admin/terapi/danisan');
 
   }
 
+
+public function notkaydet () {
+
+  $datakayit=   array(
+    'seansNot' => $this->input->post('not'),
+    'sonrakiSeansNot' => $this->input->post('geleceknot'),
+    'danisanID' => $this->input->post('danisanid'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+  $danisan_id=$this->input->post('danisanid');
+
+//print_r($datakayit);
+    $this->db->insert("ilsdanisanseansnot",$datakayit);
+    $this->postal->add('Danışan Notu Ekleme Başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+
+}
+
+public function ilackaydet () {
+    $datakayit=   array(
+    'ilacAciklama' => $this->input->post('ilac'),
+    'ilacTip' => 2,
+    'danisanID' => $this->input->post('danisanid'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+  $danisan_id=$this->input->post('danisanid');
+   // print_r($datakayit);
+    $this->db->insert("ilsdanisanilac",$datakayit);
+    $this->postal->add('Danışana İlaç Ekleme Başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+
+
+}
+
+public function tanikaydet () {
+    $datakayit=   array(
+    'taniAciklama' => $this->input->post('tani'),
+    'taniID' => $this->input->post('tanilar'),
+    'danisanID' => $this->input->post('danisanid'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+  $danisan_id=$this->input->post('danisanid');
+   // print_r($datakayit);
+    $this->db->insert("ilsdanisantani",$datakayit);
+    $this->postal->add('Danışana Tanı Ekleme Başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+
+}
+
+ public function gettestlerForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmpsikolojiktest')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->psikolojikTestID] = $result->psikolojikTestAdi;
+    }
+
+    return $dropdown;
+  }
+
+
+  public function testkaydet () {
+    $datakayit=   array(
+    'test' => $this->input->post('testler'),
+    'danisanID' => $this->input->post('danisanid'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+   $danisan_id=$this->input->post('danisanid');
+   // print_r($datakayit);
+    $this->db->insert("tbldanisantest",$datakayit);
+    $this->postal->add('Danışana Test Atama Başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+}
+
+ public function seansnotguncelle () {
+    $datakayit=   array(
+    'seansNot' => $this->input->post('not'),
+    'sonrakiSeansNot' => $this->input->post('geleceknot'),
+    'islemKullaniciID' => $this->input->post('userid'),
+    'danismanUserID' => $this->input->post('userid')
+   );
+
+    $seansnot_id=$this->input->post('seansnotid');
+
+ $this->db->where('danisanSeansNotID', $seansnot_id);
+ $this->db->update('ilsdanisanseansnot',$datakayit);
+ $this->postal->add('Seans notu güncelleme başarılı!','success');
+ redirect('admin/terapi/danisan/'); //////yarın bak aq
+}
+
+ public function getilaclarForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmpsikiyatriilac')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->psikiyatriilacID] = $result->psikiyatriilacAdi;
+    }
+
+    return $dropdown;
+  }
+
+   public function getdozlarForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmilacdoz')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->ilacDozID] = $result->ilacDozAdi;
+    }
+
+    return $dropdown;
+  }
+
+  public function psikiyatrikilackaydet () {
+    $datakayit=   array(
+    'ilacTip' => 1,
+    'psikiyatriilacID' => $this->input->post('ilac'),
+    'ilacDozID' => $this->input->post('doz'),
+    'ilacAciklama' => $this->input->post('aciklama'),
+    'islemKullaniciID' => $this->input->post('userid'),
+    'danisanID' => $this->input->post('danisanid')
+   );
+
+   $danisan_id=$this->input->post('danisanid');
+
+    $this->db->insert("ilsdanisanilac",$datakayit);
+    $this->postal->add('Danışana İlaç Atama Başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+
+
+  }
+
+   public function gettanilarForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmpsikiyatriktani')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->psikiyatrikTaniID] = $result->psikiyatrikTaniAdi;
+    }
+
+    return $dropdown;
+  }
 
 
 

@@ -81,6 +81,8 @@ class Devamedencagri_dt extends Admin_Controller
           $Konu = $cat->cagriKonu;
           $Tel = $cat->cagriIrtibatTel;
           $Eposta=$cat->cagriIrtibatEposta;
+           $durum=$cat->cagriDurum;
+          if($durum=='1') { $durum='Devam Eden';} else { $durum='Tamamlandı'; }
   
 
 
@@ -92,9 +94,11 @@ class Devamedencagri_dt extends Admin_Controller
           $Konu = $cat->cagriKonu;
           $Tel = $cat->cagriIrtibatTel;
           $Eposta=$cat->cagriIrtibatEposta;
+           $durum=$cat->cagriDurum;
+          if($durum=='1') { $durum='Devam Eden';} else { $durum='Tamamlandı'; }
         
         }
-        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriKurumsalID.'\"><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'","'.$durum.'"," <a href=\"'.site_url('admin/terapi/cagri/cagridetay/').$cat->cagriKurumsalID.'\"></a>"],';
   //print_r($data);
 
     }

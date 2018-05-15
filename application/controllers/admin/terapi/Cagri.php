@@ -338,6 +338,12 @@ class Cagri extends Admin_Controller
        $this->render('admin/terapi/cagri/bireysel_edit_view','admin_master',$this->data);  
   }
 
+  
+   public function randevueslemesil() ////cagriya randevu atama kaldır
+  {
+   $this->cagri_model->cagridanrandevukaldir($this->input->post());
+  }
+
 
 
 }

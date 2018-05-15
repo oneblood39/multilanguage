@@ -26,6 +26,21 @@ class Seans_model extends MY_Model
     );
 
 
+ public function getTerapiForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmterapitip where paketteKullanilirMi=1')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->terapiTipID] = $result->terapiAdi;
+    }
+
+    return $dropdown;
+  }
+
 
  public function paketrandevukaydet ($data) {
                 $data = array(                
@@ -55,10 +70,12 @@ redirect('admin/terapi/seans/','refresh');
  public function paketkaydet () {
   $userid=$this->ion_auth->user()->row()->id;
                 $data = array(                
-                    'paketNo' => $this->input->post('paketno'),
+                   
                     'paketAdi' => $this->input->post('paket_adi'),  
                     'paketUcret' => $this->input->post('ucret'),  
                     'paketSeansSayi' => $this->input->post('toplam_seans'),
+                    'paketTerapiTip' => $this->input->post('terapi'),
+                    'minimumSeansSayisi' => $this->input->post('min_seans'),
                     'islemKullaniciID' => $userid                       
                 );
 
@@ -68,6 +85,38 @@ $this->db->insert("tblpaket",$data);
 $this->postal->add('Yeni paket oluşturuldu!','success');
 redirect('admin/terapi/seans/','refresh');
  }
+
+  public function paketrandevusil ($data) {
+    $danisan_id=$this->uri->segment(5);
+    $paket_id=$this->uri->segment(6);
+
+                $data = array(                
+                    'randevuPaketID' => NULL                     
+                );
+
+$data2 = $this->input->post('coklu') ;
+$arraycount=count($data2);
+$paketid=$this->input->post('paketid');
+
+for ($i = 0; $i <= $arraycount-1; $i++) {
+  $datasave = array( 
+   'randevuID' => $data2[$i]
+  );
+
+  $randevuid=$data2[$i];
+  //echo $randevuid;
+  //echo '<br>';
+
+$this->db->where('randevuID', $randevuid);
+$this->db->update("tblrandevu",$data);
+
+}
+$this->postal->add('Paketten randevular çıkarıldı!','success');
+redirect('admin/terapi/seans/','refresh');
+
+  }
+
+
 
 
 

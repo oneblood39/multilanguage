@@ -43,6 +43,14 @@
                 echo form_input('eposta',set_value('email'),'class="form-control"');
                 ?>
             </div>
+             <div class="form-group">
+                <label>Danışan Tip:</label>
+              <select name="danisantip" class="form-control">
+                  <option value="1">Yetişkin</option>
+                  <option value="2">Genç</option>
+                  <option value="3">Çocuk</option>
+              </select>
+             </div>
 
             <div class="form-group">
                 <?php

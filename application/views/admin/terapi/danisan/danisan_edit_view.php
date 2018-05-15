@@ -45,6 +45,27 @@
                 ?>
             </div>
 
+          <div class="form-group">
+                <?php
+$sql= "select * from tbldanisan where danisanID=".$danisan_id;
+
+    $results = $this->db->query($sql)->result();
+
+foreach ($results as $result) {
+  $tip=$result->danisanTip;
+}
+
+
+echo '      
+    <label>Danışan Tip:</label>
+              <select name="danisantip" class="form-control">';
+                  echo '<option value="1"';if($tip==1) {echo 'selected';} else { } echo '>Yetişkin</option>
+                  <option value="2"';if($tip==2) {echo 'selected';} else { } echo '>Genç</option>
+                  <option value="3"';if($tip==3) {echo 'selected';} else { } echo '>Çocuk</option>';
+              echo '</select>';
+                ?>
+            </div>
+
             <div class="form-group">
                 <?php
                 echo form_label('Mizaç','mizac');

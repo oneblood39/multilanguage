@@ -237,5 +237,20 @@ redirect('admin/terapi/cagri');
 
  }
 
+ public function cagridanrandevukaldir() {
+ $cagri_id= $this->uri->segment(5);
+//echo $cagri_id;
+
+$datakayit = array(
+  'cagriRandevuID' => NULL 
+   );
+
+ $this->db->where('cagriID', $cagri_id);
+ $this->db->update('tblcagri',$datakayit);
+ $this->postal->add('Çağrı ile randevu eşleştirme kaldırıldı!','success');
+ redirect('admin/terapi/cagri');
+
+}
+
 
 }

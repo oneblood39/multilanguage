@@ -3,7 +3,9 @@
 
     <div class="row">
         <div class="col-lg-12" style="margin-top: -60px;">
-  <a href="<?php echo site_url('admin/terapi/randevu/randevulistele');?>" class="btn btn-primary">Randevu Listele</a><br><br>
+  <a href="<?php echo site_url('admin/terapi/randevu/randevulistele');?>" class="btn btn-primary">Randevu Listele</a>
+<a href="<?php echo site_url('admin/terapi/randevu/mazeretler');?>" class="btn btn-primary">Mazeretler</a>
+  <br><br>
 
 <style type="text/css">
 #wgtmsr {
@@ -204,12 +206,31 @@ $search=$date.' '.$i;
 //echo $search;
  //echo "test";
 
-      $sqlmazeret = "SELECT * FROM ilsdanismanmazeret WHERE  (mazeretBaslangicTarihSaat LIKE '%".$search."%') and (danismanUserID='".$user->id."')";
+      $sqlmazeret = "SELECT * FROM vwdanismanmazeret WHERE  (mazeretBaslangicTarihSaat LIKE '%".$search."%') and (danismanUserID='".$user->id."') and (aktifMi='1')";
       $resultmazeretler = $this->db->query($sqlmazeret)->result();
                 foreach($resultmazeretler as $resultmazeret){  
                   $baslangic=$resultmazeret->mazeretBaslangicTarihSaat;
                   $bitis=$resultmazeret->mazeretBitisTarihSaat;
-                  print_r($bitis);
+                  $mazeretAdi=$resultmazeret->mazeretAdi;
+                  $mazeretAciklama=$resultmazeret->mazeretAciklama;
+
+                 // print_r($bitis);
+                //  echo ($baslangic);
+ 
+                    $metinb=explode(' ', $baslangic);
+                   //print_r($metinb['1']);
+                    $saat=$metinb['1'];
+                    $saatbaslangic=explode(':',$saat);
+                                 $bassaat=$saatbaslangic['0'];
+                                 //print_r($bassaat);
+                       $metinbitis=explode(' ', $bitis);
+                       $saat=$metinbitis['1'];
+                       $saatbitis=explode(':',$saat);
+                            $bitsaat=$saatbitis['0'];
+                            print_r($bitsaat);
+if($bassaat==$bitsaat) { $bitsaat=$bitsaat+1; $bitis=$metinb['0'].' '.$bitsaat.':00:00'; }
+
+
                 }
       $sayimazeret= $this->db->query($sqlmazeret)->num_rows(); 
                 
@@ -230,13 +251,15 @@ if ($sayimazeret>0) {
     echo $since_start->i.' minutes<br>';
     echo $since_start->s.' seconds<br>'; */
 
+ 
+
 //echo $baslangic;
-echo "<br>";
+//echo "<br>";
 $metin=explode(" ", $baslangic);
 //print_r($metin[0]);
 
 $bitistarih=explode(" ", $bitis);
-print_r($bitistarih[0]);
+//print_r($bitistarih[0]);
 
                     if (($since_start->m)>0 or ($since_start->d)>0) {   ///bir gün veya aydan fazla izinli ise case i 
 
@@ -257,7 +280,7 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
  /*
 echo '-';*/
 //echo $baslangic;
-echo "<br>";
+//echo "<br>";
 $metin=explode(" ", $baslangic);
 //print_r($metin[0]);
 $gunsonu=$metin[0].' '.'22:00:00';
@@ -266,7 +289,8 @@ $gunsonu=$metin[0].' '.'22:00:00';
 
      $start_date_daily = new DateTime($baslangic);
      $since_start_daily = $start_date_daily->diff(new DateTime($gunsonu));
-     echo '<br>'.$since_start_daily->h.' hours<br>';
+   //  echo '<br><br><br><br>';
+   //  echo '<br>'.$since_start_daily->h.' hours<br>';
 $i=$i+($since_start_daily->h)-1; echo '<td style="background-color:#F75D59"  colspan="'.$since_start_daily->h.'">';
 
           }///bir gün veya aydan fazla izinli ise case i kapanış
@@ -322,6 +346,9 @@ else { echo '<td class="td">'; /*echo $sayi.$sayimazeret;*/ }
 
 
               if ($sayi=="0" and $sayimazeret=="0") { 
+/*
+               echo '<br><br><br><br>';
+  echo '<br>'.$since_start_daily->h.' hours<br>';
 
 ///////////////////////////////////////////////////////////////////////////////////
 /*$sqlmazeret = "SELECT * FROM ilsdanismanmazeret WHERE (mazeretBitisTarihSaat LIKE '%".$search."%') and (danismanUserID='".$user->id."')";
@@ -362,13 +389,19 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
             }
 
 
-              else if ($sayi=="0" and $sayimazeret>0)  { echo '<p  align="center"><font color="white" size="1">---------------- İzinli -------------------</font></p>';   }
+              else if ($sayi=="0" and $sayimazeret>0)  { echo '<p  align="center"><font color="white" size="2"><b><u>'.$mazeretAdi.'</u></b></font></p>
+<p  align="center"><font color="white" size="2">('.$mazeretAciklama.')</font></p>
+
+                ';   }
                 else { 
+
+
+
 
 
     echo '<div style="float:left">';
   if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '<a  href="'.site_url('admin/terapi/randevu/randevuekle/').$date.'/'.$user->id.'/'.$i.'/'.$ofis;
   echo '"><small><span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
   </div><br>'; }
 
@@ -471,7 +504,7 @@ echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
  //////////////////saat işareti/////////////////////////////////
     echo '<td width="16px;"><div>';
   if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuertele/').$randevuID.'/'.$user->id.'/'.$i.'/'.$ofis;
+  echo '<a data-toggle="confirmation" data-title="Open Google?" href="'.site_url('admin/terapi/randevu/randevuertele/').$randevuID.'/'.$user->id.'/'.$i.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-time" aria-hidden="true" style="color:black"></span></a> 
   </div></td>'; }
 ///////////////saat işareti sonu/////////////////////////
@@ -517,7 +550,12 @@ echo '</tr>
         </p>'; 
  if($sayibitis>1) { echo '<hr style="vertical-align:middle; margin-top:40px;">'; }
 
+
+
                                 }
+
+
+
                    // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';
                    // echo 'Danışanın IDsi='.$result->randevuDanisanID;  

@@ -155,6 +155,8 @@ echo '<ul class="dropdown-menu" role="menu">';
                    echo '<li><a href="'.site_url('admin/terapi/danisan').'">Danışanlar</a></li>';
                    echo '<li class="divider"></li>'; 
                    echo '<li><a href="'.site_url('admin/terapi/seans').'">Seans Bilgileri</a></li>'; 
+                   echo '<li class="divider"></li>'; 
+                   echo '<li><a href="'.site_url('admin/terapi/tanimlar').'">Tanımlar</a></li>'; 
                    echo '
       </ul>
                 </li>'; 

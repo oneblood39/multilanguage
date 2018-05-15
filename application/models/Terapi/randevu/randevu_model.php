@@ -231,7 +231,7 @@ $paket = $this->input->post('paket');
 $formatted_date=$date.' '.$time;
 
 
-  $sqlodasorgu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$formatted_date."%') and (odaID='".$gelenoda."')"; 
+  $sqlodasorgu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$formatted_date."%') and (odaID='".$gelenoda."') and (RandevuDurumID<>5)"; 
   $sayioda= $this->db->query($sqlodasorgu)->num_rows();////
 
 
@@ -459,6 +459,9 @@ $time= $this->uri->segment(7);
 $ofis=$this->uri->segment(8);
 $randevuid=$this->uri->segment(9);
 
+echo '<br><br><br><br><br><br>';
+echo $randevuid;
+
 $lasttime=$date.' '.$time.':00:00';
 
 $datakayit = array(
@@ -468,6 +471,108 @@ $this->db->where('randevuID', $randevuid);
 $this->db->update('tblrandevu',$datakayit);
 $this->postal->add('Randevu Erteleme Başarılı!','success');
 redirect('admin/terapi/randevu/','refresh');
+  }
+
+
+  public function getDanismanlarForDropdown($firstElement=array(),$ofisID){
+
+    if($ofisID=='3') { $results=$this->db->query('SELECT * FROM vwdanisman')->result(); }
+    else { 
+         $results = $this->db->query('SELECT * FROM vwdanisman where ofisID='.$ofisID.' or ofisID="3"')->result();
+    }
+
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->ID] = $result->DanismanAd.' '.$result->DanismanSoyad;
+    }
+
+    return $dropdown;
+  }
+
+  public function mazeretkaydet () {
+    
+
+
+    $datakayit = array(
+   'mazeretBaslangicTarihSaat' => $this->input->post('baslangic'),
+   'mazeretBitisTarihSaat' => $this->input->post('bitis'),
+   'danismanUserID' => $this->input->post('danismanlar'),
+   'mazeretAciklama' => $this->input->post('info'),
+   'danismanMazeretTipID' => $this->input->post('mazeretler'),
+   'islemKullaniciID' => $this->input->post('id'),
+   'aktifMi' => 1
+    );
+$baslangic=$this->input->post('baslangic');
+$bitis=$this->input->post('bitis');
+$danismanUserID=$this->input->post('danismanlar');
+$sqlkontrol="SELECT * FROM mizmeryonetim.vwrandevu
+where randevuBaslangicTarihSaat between '".$baslangic."' and '".$bitis."' and DanismanUserID=".$danismanUserID;
+$sayi= $this->db->query($sqlkontrol)->num_rows();
+    if($sayi>0) { 
+    $this->postal->add('Bu saat aralığında '.$sayi.' adet randevu bulunduğundan mazeret giremezsiniz!','error');
+    redirect('admin/terapi/randevu/mazeretler','refresh');
+    } else {
+    $this->db->insert("ilsdanismanmazeret",$datakayit);   
+    $this->postal->add('Mazeret Ekleme Başarılı!','success');
+    redirect('admin/terapi/randevu/mazeretler','refresh');
+ }
+
+  }
+
+
+   public function getMazeretlerForDropdown($firstElement=array()){
+
+    $results=$this->db->query('SELECT * FROM tnmmazerettip')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->mazeretTipID] = $result->mazeretAdi;
+    }
+
+    return $dropdown;
+  }
+  
+public function mazeretdurumdegistir () {
+
+$mazeretid= $this->uri->segment(5);
+//echo $mazeretid;
+
+
+    $sqlmazeret = "SELECT * FROM vwdanismanmazeret where danismanMazeretID=".$mazeretid;
+    $results = $this->db->query($sqlmazeret)->result();
+     foreach ($results as $result) {
+       $aktiflik=$result->aktifMi;
+     }
+if ($aktiflik=='1') { 
+   $datakayit = array( 
+ 'aktifMi' => 0
+   );
+$this->db->where('danismanMazeretID', $mazeretid);
+$this->db->update('vwdanismanmazeret',$datakayit);
+$this->postal->add('Mazeret Pasif Etme Başarılı!','success');
+redirect('admin/terapi/randevu/mazeretler','refresh');
+
+   }
+  else {  
+ $datakayit = array( 
+ 'aktifMi' => 1
+   );
+$this->db->where('danismanMazeretID', $mazeretid);
+$this->db->update('vwdanismanmazeret',$datakayit);
+$this->postal->add('Mazeret Aktif Etme Başarılı!','success');
+redirect('admin/terapi/randevu/mazeretler','refresh');
+
+    }
+
   }
 
 

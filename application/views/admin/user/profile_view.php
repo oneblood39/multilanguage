@@ -8,21 +8,21 @@
                 <?php
                 echo form_label('Ad','first_name');
                 echo form_error('first_name');
-                echo form_input('first_name',set_value('first_name',$user->first_name),'class="form-control"');
+                echo form_input('first_name',set_value('first_name',$user->first_name),'class="form-control" readonly');
                 ?>
             </div>
             <div class="form-group">
                 <?php
                 echo form_label('Soyad','last_name');
                 echo form_error('last_name');
-                echo form_input('last_name',set_value('last_name',$user->last_name),'class="form-control"');
+                echo form_input('last_name',set_value('last_name',$user->last_name),'class="form-control" readonly');
                 ?>
             </div>
             <div class="form-group">
                 <?php
                 echo form_label('Ofis','company');
                 echo form_error('company');
-                echo form_input('company',set_value('company',$user->company),'class="form-control"');
+                echo form_input('company',set_value('company',$user->company),'class="form-control" readonly');
                 ?>
             </div>
             <div class="form-group">

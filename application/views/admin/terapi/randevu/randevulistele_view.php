@@ -5,6 +5,7 @@
              
               <a href="<?php echo site_url('admin/terapi/randevu');?>" class="btn btn-primary">Randevu Takvim</a>
               <a href="<?php echo site_url('admin/terapi/randevu/pakettekirandevular');?>" class="btn btn-primary">Paketteki Randevular</a>
+              <a href="<?php echo site_url('admin/terapi/randevu/mazeretler');?>" class="btn btn-primary">Mazeretler</a>
    <br>
         </div>
     </div>

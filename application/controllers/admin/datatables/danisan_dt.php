@@ -16,6 +16,24 @@ class Danisan_dt extends Admin_Controller
 
   public function getall(){
 
+
+    $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+    // echo $group_id;
+   }
+
+   if($group_id=='11' or $group_id=='9') {
+    $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
+    $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
+   } else {
+     $icon='';
+     $icon2='';
+   }
+
+
     $start = 0;
     $length = 10;
 
@@ -93,7 +111,7 @@ print_r($datasessionmevcut);
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
-        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a><a href=\"'.site_url('admin/terapi/danisan/danisanduzenle/').$cat->danisanID.'\"> <span title=\"danışan düzenleme\" class=\"glyphicon glyphicon-pencil\"></span></a>"],';
+        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a><a href=\"'.site_url('admin/terapi/danisan/danisanduzenle/').$cat->danisanID.'\"> '.$icon2.'</span></a>"],';
   //print_r($data);
 
     }

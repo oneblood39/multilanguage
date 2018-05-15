@@ -81,7 +81,8 @@ class Kurumsalcagri_dt extends Admin_Controller
           $Konu = $cat->cagriKonu;
           $Tel = $cat->cagriIrtibatTel;
           $Eposta=$cat->cagriIrtibatEposta;
-  
+          $durum=$cat->cagriDurum;
+          if($durum=='1') { $durum='Devam Eden';} else { $durum='Tamamlandı'; }
 
 
 
@@ -92,9 +93,11 @@ class Kurumsalcagri_dt extends Admin_Controller
           $Konu = $cat->cagriKonu;
           $Tel = $cat->cagriIrtibatTel;
           $Eposta=$cat->cagriIrtibatEposta;
+           $durum=$cat->cagriDurum;
+          if($durum=='1') { $durum='Devam Eden';} else { $durum='Tamamlandı'; }
         
         }
-        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'"," <a><span title=\"özellikler\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$cat->dateCreated.'","'.$Kurum.'","'.$Ad.'","'.$Soyad.'","'.$Konu.'","'.$Tel.'","'.$Eposta.'","'.$durum.'"," <a></a>"],';
   //print_r($data);
 
     }

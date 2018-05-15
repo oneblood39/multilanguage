@@ -16,6 +16,22 @@ class Seans_dt extends Admin_Controller
 
   public function getall(){
 
+        $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+    // echo $group_id;
+   }
+
+   if($group_id=='11' or $group_id=='9' or $group_id=='10') {
+    $icon='<span title=\"danışan ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
+    $icon2='<span title=\"paketten randevu çıkar\" class=\"glyphicon glyphicon-arrow-down\"></span>';
+   } else {
+     $icon='';
+     $icon2='';
+   }
+
     $start = 0;
     $length = 10;
 
@@ -80,6 +96,7 @@ class Seans_dt extends Admin_Controller
           $paketAdi = $cat->paketAdi;
           $paketUcret = $cat->paketUcret;
           $paketSeansSayi = $cat->paketSeansSayi;
+          $minseans = $cat->minimumSeansSayisi;
 
         }else{
           $paketid = $cat->paketID;
@@ -87,9 +104,9 @@ class Seans_dt extends Admin_Controller
           $paketAdi = $cat->paketAdi;
           $paketUcret = $cat->paketUcret;
           $paketSeansSayi = $cat->paketSeansSayi;
-        
+          $minseans = $cat->minimumSeansSayisi;        
         }
-        $data .= '["'.$paketid.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\"><span title=\"danışan ile eşleştir\" class=\"glyphicon glyphicon-random\"></span></a>"],';
+        $data .= '["'.$paketid.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'","'.$minseans.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\">'.$icon.'</a> <a href=\"'.site_url('admin/terapi/seans/randevucikar/').$cat->paketID.'\">'.$icon2.'</a>"],';
   //print_r($data);
 
     }

@@ -9,9 +9,9 @@
             <?php echo '<form id="form1" method="post" action="';echo site_url('admin/terapi/seans/paketkaydet');echo '">'; ?>
             <div class="form-group">
                 <?php
-                echo form_label('Paket No','paketno');
+               /* echo form_label('Paket No','paketno');
                 echo form_error('paketno');
-                echo form_input('paketno',set_value('paketno'),'class="form-control"');
+                echo form_input('paketno',set_value('paketno'),'class="form-control"');*/
                 ?>
             </div>
             <div class="form-group">
@@ -33,6 +33,20 @@
                 echo form_label('Toplam Seans Sayısı','toplam_seans');
                 echo form_error('toplam_seans');
                 echo form_input('toplam_seans',set_value('toplam_seans'),'class="form-control"');
+                ?>
+            </div>
+           <div class="form-group">
+                <?php
+                echo form_label('1 Ay İçinde Bitirilmesi Gereken Min. Seans Sayısı','min_seans');
+                echo form_error('min_seans');
+                echo form_input('min_seans',set_value('min_seans'),'class="form-control"');
+                ?>
+            </div>
+            <div class="form-group">
+                <?php
+                echo form_label('Terapi Tip','terapi');
+                echo form_error('terapi');
+                echo form_dropdown('terapi',$terapiler,'terapi','class="form-control" ');
                 ?>
             </div>
             <?php echo form_submit('submit', 'Paket Ekle', 'class="btn btn-primary btn-lg btn-block"');?>

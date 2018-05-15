@@ -2,8 +2,23 @@
 <div class="container" style="margin-top:60px;">
     <div class="row">
         <div class="col-lg-12">
-             
-              <a href="<?php echo site_url('admin/terapi/danisan/create');?>" class="btn btn-primary">Danışan Ekle</a>
+
+          <?php
+     $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+    // echo $group_id;
+   }
+
+   if($group_id=='11' or $group_id=='9') {
+    echo '<a href="'.site_url('admin/terapi/danisan/create').'" class="btn btn-primary">Danışan Ekle</a>';   
+   } else {
+     
+   }
+?>           
+              
    <br>
         </div>
     </div>
