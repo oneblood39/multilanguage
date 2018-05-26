@@ -2,7 +2,6 @@
     <div class="col-xs-10 col-xs-offset-1 ol-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5">
        
         <center><img src="<?php echo site_url('/assets/admin/images/CMS.png');?>"> </center>
-    
         <?php
         echo $this->postal->get();
         ?>

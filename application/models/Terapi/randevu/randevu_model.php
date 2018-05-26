@@ -199,15 +199,12 @@ $this->session->set_userdata($data2);
   }
 
        public function createRandevuStep2 () {
-/*
-$date= $this->uri->segment(5);
-$danisman_id= $this->uri->segment(6); 
-$time= $this->uri->segment(7); 
-  */  
-//echo '<br><br><br><br>';
-                $data = array(
-                    'randevuDanismanTerapiTipID' => $this->input->post('terapi'),
+        $danisan_id= $this->uri->segment(5); 
+        $data = array(
+                    'randevuTerapiTipID' => $this->input->post('terapi'),
                     'randevuDurumuID' => $this->input->post('randevu'),
+                    'randevuSeansTipID' => $this->input->post('seans'),
+                    'randevuDanismanUserID' => $this->input->post('danismanID'),
                     'odaID' => $this->input->post('oda'),
                     'randevuDanisanID' => $this->input->post('danisanID'),
                     'randevuDanismanID' => $this->input->post('danismanID'),                  
@@ -215,6 +212,18 @@ $time= $this->uri->segment(7);
                     'time' => $this->input->post('time'),
                     'dakika' => $this->input->post('dakika')                   
                 );
+
+
+$gelenterapi=$this->input->post('terapi');
+$gelenseans=$this->input->post('seans');
+$goda=$this->input->post('oda');
+
+if($gelenterapi=='' or $gelenseans=='' or $goda=='') {  
+$this->postal->add('Randevu Eklenemedi! Randevu eklerken tüm alanların doldurulması gerekmektedir!','error');
+redirect('admin/terapi/randevu/','refresh');
+} else {
+
+
 
            // print_r($data);
            // echo '<br>';
@@ -229,6 +238,8 @@ $paket = $this->input->post('paket');
 
 
 $formatted_date=$date.' '.$time;
+//echo '<br><br><br>';
+//echo $formatted_date;
 
 
   $sqlodasorgu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$formatted_date."%') and (odaID='".$gelenoda."') and (RandevuDurumID<>5)"; 
@@ -257,11 +268,13 @@ $userID=$this->ion_auth->user()->row()->id;
      foreach ($results as $result) {
        $ofisID=$result->odaOfisID;
      }
-
+$seans=$this->input->post('seans');
 
 $datakayit = array(
 'randevuDanisanID' => $this->input->post('danisanID'),
-'randevuDanismanTerapiTipID' => $terapi,
+'randevuTerapiTipID' => $terapi,
+'randevuSeansTipID' => $seans,
+'randevuDanismanUserID' => $danisman_id,
 'odaID' => $this->input->post('oda'),
 'ofisID' => $ofisID,
 'randevuDurumuID' => $this->input->post('randevu'),
@@ -291,6 +304,7 @@ redirect('admin/terapi/randevu/','refresh');
 $datelast= $date.' '.$time.':'.$dakika.':'.'00';
 //echo $datelast;
 $terapi=$this->input->post('terapi');
+$seans=$this->input->post('seans');
 $danisman_id=$this->input->post('danismanID');
  // if($danisman_id=='') { $danisman_id=$this->session->userdata('randevuDanismanID'); }
  //if($terapi=='') {   }
@@ -313,7 +327,10 @@ $userID=$this->ion_auth->user()->row()->id;
 
 $datakayit = array(
 'randevuDanisanID' => $this->input->post('danisanID'),
-'randevuDanismanTerapiTipID' => $terapi,
+//'randevuDanismanTerapiTipID' => $terapi,
+'randevuTerapiTipID' => $terapi,
+'randevuSeansTipID' => $seans,
+'randevuDanismanUserID' => $danisman_id,
 'odaID' => $this->input->post('oda'),
 'ofisID' => $ofisID,
 'randevuDurumuID' => $this->input->post('randevu'),
@@ -334,6 +351,7 @@ redirect('admin/terapi/randevu/','refresh');
 
 }
  
+}
 }
 
    public function randevuiptalet() {
@@ -432,9 +450,14 @@ redirect('admin/terapi/randevu/','refresh');
   }
 
 public function randevuyinedeekle() {
+
+
 $datakayit = array(
 'randevuDanisanID' => $this->session->userdata('randevuDanisanID'),
-'randevuDanismanTerapiTipID' => $this->session->userdata('randevuDanismanTerapiTipID'),
+//'randevuDanismanTerapiTipID' => $this->session->userdata('randevuDanismanTerapiTipID'),
+'randevuDanismanUserID' => $this->session->userdata('randevuDanismanUserID'),
+'randevuTerapiTipID' => $this->session->userdata('randevuTerapiTipID'),
+'randevuSeansTipID' => $this->session->userdata('randevuSeansTipID'),
 'odaID' => $this->session->userdata('odaID'),
 'ofisID' => $this->session->userdata('ofisID'),
 'randevuDurumuID' => $this->session->userdata('randevuDurumuID'),
@@ -511,7 +534,7 @@ $baslangic=$this->input->post('baslangic');
 $bitis=$this->input->post('bitis');
 $danismanUserID=$this->input->post('danismanlar');
 $sqlkontrol="SELECT * FROM mizmeryonetim.vwrandevu
-where randevuBaslangicTarihSaat between '".$baslangic."' and '".$bitis."' and DanismanUserID=".$danismanUserID;
+where randevuBaslangicTarihSaat > '".$baslangic."' and randevuBaslangicTarihSaat < '".$bitis."' and DanismanUserID=".$danismanUserID;
 $sayi= $this->db->query($sqlkontrol)->num_rows();
     if($sayi>0) { 
     $this->postal->add('Bu saat aralığında '.$sayi.' adet randevu bulunduğundan mazeret giremezsiniz!','error');

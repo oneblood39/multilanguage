@@ -112,7 +112,7 @@ class Ilac_dt extends Admin_Controller
 
         
         }
-        $data .= '["'.$tarih.'","'.$ilacID.'","'.$ilacAdi.'","'.$toplamdoz.'","  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->psikiyatriilacID.'\">'.$icon2.'</a> "],';
+        $data .= '["'.$tarih.'","'.$ilacID.'","'.$ilacAdi.'","'.$toplamdoz.'","  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->psikiyatriilacID.'\"></a> "],';
   //print_r($data);
 
     }

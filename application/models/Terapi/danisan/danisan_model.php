@@ -306,6 +306,41 @@ public function tanikaydet () {
     return $dropdown;
   }
 
+  public function psikiyatrikilacguncelle () {
+   $datakayit=   array(
+    'ilacTip' => 1,
+    'psikiyatriilacID' => $this->input->post('ilac'),
+    'ilacDozID' => $this->input->post('doz'),
+    'ilacAciklama' => $this->input->post('aciklama'),
+    'islemKullaniciID' => $this->input->post('userid'),
+    'danisanID' => $this->input->post('danisanid')
+   );
+
+  $danisanilacID=$this->input->post('danisanilacID');
+  $danisanid=$this->input->post('danisanid');
+
+ $this->db->where('danisanilacID', $danisanilacID);
+ $this->db->update('ilsdanisanilac',$datakayit);
+ $this->postal->add('Psikiyatrik ilaç güncelleme başarılı!','success');
+ redirect('admin/terapi/danisan/danisandetay/'.$danisanid); ///
+
+  }
+
+  public function ilacguncelle () {
+       $datakayit=   array(
+    'ilacAciklama' => $this->input->post('ilac'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+      $danisanilacID=$this->input->post('danisanilacid'); 
+      $danisanid=$this->input->post('danisanid'); 
+
+ $this->db->where('danisanilacID', $danisanilacID);
+ $this->db->update('ilsdanisanilac',$datakayit);
+ $this->postal->add('İlaç güncelleme başarılı!','success');
+ redirect('admin/terapi/danisan/danisandetay/'.$danisanid); 
+
+  }
+
 
 
 }

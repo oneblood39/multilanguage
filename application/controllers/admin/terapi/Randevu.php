@@ -407,26 +407,6 @@ if ($danisan_id!='') {
 ';
 
 
-//echo "burda";
-       //$datasessionmevcut = $this->session->flashdata('item'); 
- /*     
-echo $this->session->userdata('randevuDanismanID');
-echo "<br>";
-echo $this->session->userdata('date');
-echo "<br>";
-echo $this->session->userdata('time'); 
-*/
-//$this->randevu_model->createRandevuStep2($this->input->post());
-
-  //$this->randevu_model->createRandevuStep2($this->input->post());
-  //$this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$this->input->post());
-
-
-
-
-
-
-      //print_r($datasessionmevcut);
 
 $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data);
 } else {  
@@ -444,6 +424,7 @@ public function randevuekle_step3 (){
         $ofisID=$this->ion_auth->user()->row()->company;
 
        $danisman_id=$this->session->userdata('randevuDanismanID');
+       $danisan_id= $this->uri->segment(5);
       // $company=$user->company;
 
         $this->data['ofisler'] = $this->Randevu_model->getOfficesForDropdown(array("0"," -- "));
@@ -464,8 +445,10 @@ public function randevuekle_step3 (){
 
 
 
-$this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data);
+$this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$danisan_id);
 }
+
+
 
 public function yinedekaydet (){      
 $this->Randevu_model->yinedekaydet($this->input->post());
@@ -917,6 +900,251 @@ $this->Randevu_model->mazeretkaydet();
 
 public function mazeretdurumdegistir () {
 $this->Randevu_model->mazeretdurumdegistir();
+}
+
+  public function valid_email($email)
+  {
+    if (function_exists('idn_to_ascii') && defined('INTL_IDNA_VARIANT_UTS46') && $atpos = strpos($email, '@'))
+    {
+      $email = self::substr($email, 0, ++$atpos).idn_to_ascii(self::substr($email, $atpos), 0, INTL_IDNA_VARIANT_UTS46);
+    }
+
+    return (bool) filter_var($email, FILTER_VALIDATE_EMAIL);
+  }
+
+
+
+     public function ayliktakvim($randevuID = NULL) ///roller index sayfası
+    {
+        $this->data['page_title'] = 'Randevular';
+        $this->load->library('form_validation');
+        $this->data['before_head'] ='<script type="text/javascript">
+  
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+
+
+( function( factory ) {
+  if ( typeof define === "function" && define.amd ) {
+
+    // AMD. Register as an anonymous module.
+    define( [ "../widgets/datepicker" ], factory );
+  } else {
+
+    // Browser globals
+    factory( jQuery.datepicker );
+  }
+}( function( datepicker ) {
+
+datepicker.regional.tr = {
+  closeText: "kapat",
+  prevText: "&#x3C;geri",
+  nextText: "ileri&#x3e",
+  currentText: "bugün",
+  monthNames: [ "Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+  "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık" ],
+  monthNamesShort: [ "Oca","Şub","Mar","Nis","May","Haz",
+  "Tem","Ağu","Eyl","Eki","Kas","Ara" ],
+  dayNames: [ "Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi" ],
+  dayNamesShort: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  dayNamesMin: [ "Pz","Pt","Sa","Ça","Pe","Cu","Ct" ],
+  weekHeader: "Hf",
+  firstDay: 1,
+  isRTL: false,
+  showMonthAfterYear: false,
+  yearSuffix: "" };
+datepicker.setDefaults( datepicker.regional.tr );
+
+return datepicker.regional.tr;
+
+} ) );
+
+
+
+  } );
+ 
+</script>
+//////////////////////////////////////////////////
+<style>
+
+.couponcode:hover .coupontooltip {
+    display: block;
+
+}
+
+.test {
+    display: block;
+
+}
+.coupontooltip {
+    display: none;
+    background: #C8C8C8;
+    margin-left: -200px;
+    margin-top: -150px;
+    padding: 10px;
+    position: inherit;
+    z-index: 100000; !important;
+    width:150px;
+    height:60px;
+
+}
+
+.couponcode:hover .coupontooltiprandevu {
+    display: block;
+
+}
+
+.test {
+    display: block;
+
+}
+.coupontooltiprandevu {
+    display: none;
+    background: #C8C8C8;
+    margin-left: 0px;
+    margin-top: 0px;
+    padding: 10px;
+    position: inherit;
+    z-index: 100000; !important;
+    width:250px;
+    height:130px;
+
+}
+</style>
+
+
+<script>var tooltip = document.querySelectorAll(\'.coupontooltip\');
+
+document.addEventListener(\'mousemove\', fn, false);
+
+function fn(e) {
+    for (var i=tooltip.length; i--;) {
+        tooltip[i].style.left = e.pageX + \'300px\';
+        tooltip[i].style.top = e.pageY + \'300px\';
+    }
+}</script>
+
+///////////////////////////////////////////////////////
+ <script>
+  $( function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+ 
+    $( "#opener" ).on( "click", function() {
+      $( "#dialog" ).dialog( "open" );
+    });
+  } );
+  </script>
+  ///////////////////////
+<script>
+
+$(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').change(function () {
+    const el = $(this);
+    let form;
+
+    if (el.is(\'form\')) { form = el; }
+    else { form = el.closest(\'form\'); }
+
+    form.submit();
+});
+
+</script>
+
+
+
+
+        ';
+
+
+        $this->data['before_body'] ='<script type="text/javascript">
+var tooltip = document.querySelectorAll(\'.coupontooltip\');
+
+document.addEventListener(\'mousemove\', fn, false);
+
+function fn(e) {
+    for (var i=tooltip.length; i--;) {
+        tooltip[i].style.left = e.pageX + \'500px\';
+        tooltip[i].style.top = e.pageY + \'500px\';
+    }
+}
+</script>
+
+<script>
+
+$(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').change(function () {
+    const el = $(this);
+    let form;
+
+    if (el.is(\'form\')) { form = el; }
+    else { form = el.closest(\'form\'); }
+
+    form.submit();
+});
+</script>
+<script>
+$(document).ready(function () {
+
+    $("#btn").click(function () {
+        var c = confirm("Uyarı! Bu randevuyu iptal etmek istediğinize emin misiniz?");
+        if (c == true) {
+        return true;
+        } else {
+        return false;
+        }
+    });
+});
+
+</script>
+
+';
+
+     $this->data['users'] = $this->ion_auth->users(array())->result();
+     $user_id=$this->ion_auth->user()->row()->id;
+     $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
+     foreach ($query->result() as $row){
+     $group_id=$row->group_id;
+
+    // echo '<br><br><br>';
+    // echo $group_id;
+   }
+
+
+    $this->render('admin/terapi/randevu/aylik_takvim_view','admin_master',$this->data); 
+}
+
+
+public function mailtest () {
+
+$this->load->library('email');
+ echo $this->email->valid_email('birkan@gmail.com') ? 'yes' : 'no';
+
+$this->email->from('birkan@gmail.com', 'Birkan Yanar');
+$this->email->to('birkan@mizmer.com.tr');
+$this->email->cc('mustafa@mizmer.com.tr');
+//$this->email->bcc('them@their-example.com');
+
+$this->email->subject('Email Test');
+$this->email->message('Test yapıorum.');
+
+$this->email->send();
+
 }
 
 

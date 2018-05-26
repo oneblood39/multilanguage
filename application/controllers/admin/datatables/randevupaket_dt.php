@@ -20,7 +20,7 @@ class Randevupaket_dt extends Admin_Controller
     $length =10;
 
     $ofis=$this->ion_auth->user()->row()->company;
-    if ($ofis==3) {  $filtre=' WHERE paketID IS NOT NULL '; $filtresearch='  WHERE paketID IS NOT NULL '; } else { $filtre='  WHERE paketID IS NOT NULL and ofisID='.$ofis; $filtresearch=$filtre.' and '; }
+    if ($ofis==3) {  $filtre=' WHERE paketID IS NOT NULL '; $filtresearch='  WHERE paketID IS NOT NULL and'; } else { $filtre='  WHERE paketID IS NOT NULL and ofisID='.$ofis; $filtresearch=$filtre.' and '; }
 
     if($this->input->get('start')){
       $start = (int)$this->input->get('start');
@@ -104,7 +104,7 @@ FROM vwrandevu
 ,RandevuPaketSeansSayisi
 ,KacinciSeans
 FROM vwrandevu 
-".$filtre." ORDER BY danisanID desc LIMIT ".$start.",".$length;
+".$filtre." ORDER BY danisanID desc,terapiAdi,KacinciSeans LIMIT ".$start.",".$length;
     }                                                                           
 
       ///WHERE tblofis.ofisID=".$ofis."

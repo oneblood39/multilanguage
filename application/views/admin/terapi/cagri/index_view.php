@@ -37,6 +37,7 @@
           <th>Çağrı Nedeni</th>
           <th>Çağrı Kaynağı</th>
           <th>Randevu Bilgileri</th>
+          <th>Randevu Durumu</th>
           <th>İşlemler</th>
         </tr>
       </thead>

@@ -1,8 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="container" style="margin-top:10px;">
 
-
-
     <div class="row">
          
 
@@ -65,8 +63,6 @@ $time= $this->uri->segment(7);
             echo "Zaman:".$time.'<br>';
 
 */
-
-
          $sqldanisan = "SELECT * FROM tbldanisan order by danisanID desc limit 0,1";
          $results = $this->db->query($sqldanisan)->result();
          foreach ($results as $result) {
@@ -131,12 +127,48 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
                 echo form_input('',set_value('',$danisman),'class="form-control" readonly');
                 ?>
             </div>
+
+   <div class="form-group">
+<label>Terapi Tip</label>
+<select name="terapi" id="mark" class="form-control">
+  <option value="">--</option>
+  <?php 
+$results = $this->db->query('SELECT * FROM vwdanismanterapi where userID='.$danisman_id.'')->result();
+foreach ($results as $result) {
+ $terapiTipID=$result->terapiTipID;
+  $terapiAdi=$result->terapiAdi;
+echo '<option value="'.$terapiTipID.'">'.$terapiAdi.'</option>';
+}
+  ?>
+</select>
+</div>
+<!-- üsttekinin value değerini alttaki dropdownun class değerine ata! chain select  -->
+<div class="form-group">
+  <label>Seans Tip</label>
+<select name="seans" id="series" class="form-control">
+  <option value="">--</option>
+  <?php
+$results = $this->db->query('SELECT * FROM tnmseanstip')->result();
+foreach ($results as $result) {
+  $seanstipID=$result->seansTipID;
+  $terapitipID=$result->terapiTipID;
+  $seansTipAdi=$result->seansTipAdi;
+echo '<option value="'.$seanstipID.'" class="'.$terapitipID.'">'.$seansTipAdi.'</option>';
+}
+  ?>
+</select>
+ </div>
+
+
+
+
+
             <div class="form-group">
-                <?php
+                <?php /*
                 echo form_label('Terapi Tip','terapi');
                 echo form_error('terapi');
-                echo form_dropdown('terapi',$terapiler,'terapi','class="form-control" ');
-                ?>
+                echo form_dropdown('terapi',$terapiler,'terapi','class="form-control"');
+             */   ?>
             </div>
             <div class="form-group">
                 <?php
@@ -152,6 +184,10 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
                 echo form_dropdown('oda',$odalar,'oda','class="form-control"');
                 ?>
             </div>
+
+
+
+
             <div class="form-group">
 
            <?php
@@ -198,10 +234,11 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
                 ?>
             </div>
 
+<div class="form-group">
+
+</div>
    
-            <div class="form-group">
-      
-            </div>
+
             <?php echo form_hidden('date',$date);?>
             <?php echo form_hidden('danisanID',$danisanID);?>
             <?php echo form_hidden('danismanID',$danisman_id);?>
@@ -221,3 +258,11 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
 
     </div>
 </div>
+<script type="text/javascript">
+(function($){$.fn.chained=function(parent_selector,options){return this.each(function(){var self=this;var backup=$(self).clone();$(parent_selector).each(function(){$(this).bind("change",function(){$(self).html(backup.html());var selected="";$(parent_selector).each(function(){selected+="\\"+$(":selected",this).val();});selected=selected.substr(1);var first=$(parent_selector).first();var selected_first=$(":selected",first).val();$("option",self).each(function(){if(!$(this).hasClass(selected)&&!$(this).hasClass(selected_first)&&$(this).val()!==""){$(this).remove();}});if(1==$("option",self).size()&&$(self).val()===""){$(self).attr("disabled","disabled");}else{$(self).removeAttr("disabled");}
+$(self).trigger("change");});if(!$("option:selected",this).length){$("option",this).first().attr("selected","selected");}
+$(this).trigger("change");});});};$.fn.chainedTo=$.fn.chained;})(jQuery);
+  </script>
+<script type="text/javascript">
+  $("#series").chained("#mark");
+</script>

@@ -20,11 +20,14 @@ class Cagri_dt extends Admin_Controller
     
     $this->data['users'] = $this->ion_auth->users(array())->result();
      $user_id=$this->ion_auth->user()->row()->id;
+     $company=$this->ion_auth->user()->row()->company;
      $query=$this->db->query('Select * FROM vwusers where id='.$user_id);
      foreach ($query->result() as $row){
      $group_id=$row->group_id;
     // echo $group_id;
    }
+
+
 
    if($group_id=='11' or $group_id=='10' or $group_id=='9') {
     $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
@@ -64,14 +67,23 @@ class Cagri_dt extends Admin_Controller
    // $this->cagri_dt_model->cagridata($data);
 
     // toplam kategori sayısı
-    $query = $this->db->query("SELECT COUNT(cagriID) as total FROM vwcagri");
+   if($company=='3') {  $query = $this->db->query("SELECT COUNT(cagriID) as total FROM vwcagri");   } else {
+    $query = $this->db->query("SELECT COUNT(cagriID) as total FROM vwcagri where ofisID=".$company);
+   }
+    
    
     $total = $query->row()->total;
 
     if($search){
-      $queryString = "SELECT * FROM vwcagri WHERE cagriYapanAd like ".$this->db->escape('%'.$search.'%')." or cagriYapanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapilanAd like ".$this->db->escape('%'.$search.'%')." or cagriTarihSaat like ".$this->db->escape('%'.$search.'%')." or cagriYapilanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriID desc LIMIT ".$start.",".$length;
+       if ($company=='3') {       $queryString = "SELECT * FROM vwcagri WHERE cagriYapanAd like ".$this->db->escape('%'.$search.'%')." or cagriYapanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapilanAd like ".$this->db->escape('%'.$search.'%')." or cagriTarihSaat like ".$this->db->escape('%'.$search.'%')." or cagriYapilanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriID desc LIMIT ".$start.",".$length; }  else {  
+          
+                 $queryString = "SELECT * FROM vwcagri WHERE ofisID=".$company." and cagriYapanAd like ".$this->db->escape('%'.$search.'%')." or cagriYapanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapilanAd like ".$this->db->escape('%'.$search.'%')." or cagriTarihSaat like ".$this->db->escape('%'.$search.'%')." or cagriYapilanSoyad like ".$this->db->escape('%'.$search.'%')." or cagriYapanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY cagriID desc LIMIT ".$start.",".$length;
+          }
+
     }else{
-      $queryString = "SELECT * FROM vwcagri ORDER BY cagriID desc LIMIT ".$start.",".$length;
+         if ($company=='3') {  $queryString = "SELECT * FROM vwcagri ORDER BY cagriID desc LIMIT ".$start.",".$length;  }
+         else { $queryString = "SELECT * FROM vwcagri where ofisID=".$company." ORDER BY cagriID desc LIMIT ".$start.",".$length; }
+      
     }
     
     $query = $this->db->query($queryString);
@@ -107,6 +119,7 @@ class Cagri_dt extends Admin_Controller
           $neden=$cat->cagriNedeniAdi;
           $kaynak=$cat->cagriYonlenmeAdi;
           $tarih=$cat->randevuBaslangicTarihSaat;
+          $durum=$cat->randevuDurumAdi;
           $dizi=explode(' ', $tarih);
           $tarih=$dizi[0];
           $metin=explode('-', $tarih);
@@ -137,6 +150,7 @@ class Cagri_dt extends Admin_Controller
           $neden=$cat->cagriNedeniAdi;
           $kaynak=$cat->cagriYonlenmeAdi;
           $tarih=$cat->randevuBaslangicTarihSaat;
+          $durum=$cat->randevuDurumAdi;
           $dizi=explode(' ', $tarih);
           $tarih=$dizi[0];
           $metin=explode('-', $tarih);
@@ -157,7 +171,7 @@ class Cagri_dt extends Admin_Controller
         } else { $icon3=''; }
         
         }
-        $data .= '["'.$cat->dateCreated.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'","'.$tarih.'<br>'.$danismanAd.''.$danismanSoyad.'"," <a href=\"'.site_url('admin/terapi/cagri/randevueslestir/').$cat->cagriID.'\">'.$icon.'</a>  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->cagriID.'\">'.$icon2.'</a> <a href=\"'.site_url('admin/terapi/cagri/randevueslemesil/').$cat->cagriID.'\">'.$icon3.'</a>"],';
+        $data .= '["'.$cat->dateCreated.'","'.$Ad.'","'.$Soyad.'","'.$Yad.'","'.$Ysoyad.'","'.$Tel.'","'.$yakinlik.'","'.$neden.'","'.$kaynak.'","'.$tarih.'<br>'.$danismanAd.''.$danismanSoyad.'","'.$durum.'"," <a href=\"'.site_url('admin/terapi/cagri/randevueslestir/').$cat->cagriID.'\">'.$icon.'</a>  <a href=\"'.site_url('admin/terapi/cagri/bireyselcagriduzenle/').$cat->cagriID.'\">'.$icon2.'</a> <a href=\"'.site_url('admin/terapi/cagri/randevueslemesil/').$cat->cagriID.'\">'.$icon3.'</a>"],';
   //print_r($data);
 
     }

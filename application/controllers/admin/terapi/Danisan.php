@@ -15,7 +15,7 @@ class Danisan extends Admin_Controller
         }*/
     }
 
-    public function index($datas = NULL) ///çağrılar index sayfası
+    public function index($datas = NULL) ///index sayfası
     {
         $this->data['page_title'] = 'Danişan Takip';
          $this->load->library('session');
@@ -336,5 +336,55 @@ $this->data['before_body'] ='<script type="text/javascript">
    public function psikiyatrikilackaydet () {
    $this->danisan_model->psikiyatrikilackaydet($this->input->post());
    }
+
+   public function psikiyatrikilacduzenle () {
+    $this->data['page_title'] = 'Psikiyatrik İlaç Öner';
+    $this->load->library('form_validation');
+
+    $this->data['ilac'] = $this->danisan_model->getilaclarForDropdown(array("0"," -- "));
+    $this->data['doz'] = $this->danisan_model->getdozlarForDropdown(array("0"," -- "));
+   
+   $this->render('admin/terapi/danisan/psikiyatrikilac_duzenle_view','admin_master',$this->data);
+   }
+   
+   public function psikiyatrikilacguncelle () {
+    $this->danisan_model->psikiyatrikilacguncelle($this->input->post());
+   }
+
+   public function digerilacduzenle () {
+    $this->data['page_title'] = 'Diğer İlaç Düzenle';
+    $this->load->library('form_validation');
+
+    $this->render('admin/terapi/danisan/digerilac_duzenle_view','admin_master',$this->data);
+   }
+
+   public function ilacguncelle () {
+    $this->danisan_model->ilacguncelle($this->input->post());
+   }
+
+   public function kendidanisanlarim($datas = NULL) 
+    {
+        $this->data['page_title'] = 'Danişan Takip';
+         $this->load->library('session');
+        $this->data['users'] = $this->ion_auth->users(array())->result();
+
+       $this->data['before_body'] ='<script type="text/javascript">
+        <!--
+         $(document).ready(function(){
+          $("#danisanListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/kendidanisanlarim_dt/getall",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });
+        -->
+        </script>';
+
+        $this->render('admin/terapi/danisan/danisanlarim_view','admin_master',$this->data);
+  }
 
 }

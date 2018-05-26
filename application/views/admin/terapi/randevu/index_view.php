@@ -30,6 +30,7 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 </style>
 
 <?php
+$tomorrow=$this->uri->segment(5);
 //error_reporting(0);
 $bugun = date("Y-m-d"); 
 //echo $bugün;
@@ -50,7 +51,7 @@ $date=$bugun;
 $ofis='1';
 
 if ($this->input->post('tarih')!='') {
-$date=$this->input->post('tarih');   
+$date=$this->input->post('tarih');  
 $dizi = explode ("/",$date);
 $date=$dizi[2].'-'.$dizi[0].'-'.$dizi[1];  /*echo $date; */ 
 $ofis=$this->input->post('ofis');
@@ -78,10 +79,18 @@ echo $this->session->userdata('ofis');
 */
 
 /////////////üst form///////////////////
-echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table class="table  table-condensed"><tr>
-<td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
-echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">
-';
+echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table border="0"><tr>
+<td><p><b>Tarih Seçiniz: </b><input style="font-size:13pt;" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+
+if($this->ion_auth->user()->row()->company=='1' or $this->ion_auth->user()->row()->company=='2') 
+{  $ofis=$this->ion_auth->user()->row()->company;
+echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+
+   }
+else {
+
+
+echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">';
 echo '<option value="0">--</option>'; 
 if ($this->ion_auth->user()->row()->company==3) {
 $sqlofisler = "SELECT * FROM tblofis where ofisID!=3";
@@ -105,8 +114,13 @@ if ($this->ion_auth->user()->row()->company!=3) {
                     }
 }
 
-echo '</SELECT></p></td>';
-echo '<td><input type="submit" class="btn btn-primary" value="Git"></td></tr></table>';
+echo '</SELECT></p><input type="submit" class="btn btn-primary" value="Git"></td>';
+
+}////if sonu
+
+
+
+echo '<td>&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Tarihe Git"></td></tr></table>';
 echo form_close();
 
 
@@ -174,6 +188,23 @@ echo '<table width="1350px">
 if ($date) {  
 $dizidate = explode ("-",$date);
 echo '<b>'.$dizidate[2].'-'.$dizidate[1].'-'.$dizidate[0].'</b>'; } else { }
+echo '<br>';
+//echo $date;
+
+
+/*
+$date1 = str_replace('-', '/', $date);
+$tomorrow = date('Y-m-d',strtotime($date1 . "+1 days"));
+echo $tomorrow;
+
+
+echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '">';
+echo '<input type="hidden" name="tarih" value="'.$tomorrow.'">';
+echo '<input type="submit" class="btn btn-primary" value="Git">';
+echo '</form>';
+
+*/
+
 
 
 //$dizi2= isset($dizi[2]) ? $dizi[2] : '';
@@ -192,14 +223,15 @@ echo'</td>';
 echo '</tr>';
 $ortak=3;
 //$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
-$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by first_name asc";
+$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by case when id=6 then 1 else first_name end";
 //print_r($sqlusers);
                   $users = $this->db->query($sqlusers)->result();
 foreach($users as $user)
    
                 {  $isim=$user->first_name.' '.$user->last_name;
+              $gelenid=$user->id;
 echo '<tr>';
-echo "<td>";echo $isim;"</td>";
+echo '<td><a href="';echo site_url('admin/terapi/randevu/ayliktakvim/'.$gelenid);echo'">';echo $isim;'</a></td>';
 for ($i = 9; $i <= 21; $i++) {
 if ($i=='9'){ $i='09';}///sabah 9 u 09 olarak gösterdim
 $search=$date.' '.$i;
@@ -214,20 +246,21 @@ $search=$date.' '.$i;
                   $mazeretAdi=$resultmazeret->mazeretAdi;
                   $mazeretAciklama=$resultmazeret->mazeretAciklama;
 
-                 // print_r($bitis);
-                //  echo ($baslangic);
+                  //print_r($bitis);
+                  //echo ($baslangic);
+                  
  
                     $metinb=explode(' ', $baslangic);
                    //print_r($metinb['1']);
                     $saat=$metinb['1'];
                     $saatbaslangic=explode(':',$saat);
                                  $bassaat=$saatbaslangic['0'];
-                                 //print_r($bassaat);
+                               //  print_r($bassaat);
                        $metinbitis=explode(' ', $bitis);
                        $saat=$metinbitis['1'];
                        $saatbitis=explode(':',$saat);
                             $bitsaat=$saatbitis['0'];
-                            print_r($bitsaat);
+                          //  print_r($bitsaat);
 if($bassaat==$bitsaat) { $bitsaat=$bitsaat+1; $bitis=$metinb['0'].' '.$bitsaat.':00:00'; }
 
 
@@ -417,21 +450,7 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 $danisanid=$result->danisanID;
 
 
-
-                       echo '<p align="center"><font color="white" size="1">';
-                       echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad;
-//////////////////her randevu için oda bilgilerinde danışanın id si de gerekli
-         $sqlicdongu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5') and (danisanID='".$danisanid."')"; 
-         $resulticdonguler = $this->db->query($sqlicdongu)->result();
-          foreach($resulticdonguler as $resulticdongu){
-          $odaKisaltma=$resulticdongu->odaKisaltma;
-                       echo '('.$odaKisaltma.')'.$yazi.'</a>';
-          }              
-
-                       echo '             
-  <div class="test col-md-12 text-center">
-  <div style="float:left; margin-bottom:20px;">';
-
+///////////////////////burayı aldım/////////////////////////////
 
 $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,5";
 
@@ -440,8 +459,39 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
         $randevuID=$resultrand->randevuID;
        // $odaKisaltma=$result->odaKisaltma;
        // echo $result->danisanID;
+        $randevubaslangic=$resultrand->randevuBaslangicTarihSaat;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
+           $ilkrandevu=$resultrand->ilkRandevuMu;
+
+        $randevusaat=explode(' ', $randevubaslangic);
+        $randevusaatformat=$randevusaat['1'];
+        $randevusaati=explode(':', $randevusaatformat);
+        $saat=$randevusaatformat['0'].$randevusaatformat['1'].$randevusaatformat['2'].$randevusaatformat['3'].$randevusaatformat['4'];
+ ///////////////////////burayı aldım/////////////////////////////  
+
+
+
+                       echo '<p align="center"><font color="white" size="1">';
+                       echo '<a title="'.$saat.'" style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad;
+//////////////////her randevu için oda bilgilerinde danışanın id si de gerekli
+         $sqlicdongu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5') and (danisanID='".$danisanid."')"; 
+         $resulticdonguler = $this->db->query($sqlicdongu)->result();
+          foreach($resulticdonguler as $resulticdongu){
+          $odaKisaltma=$resulticdongu->odaKisaltma;
+                       echo '('.$odaKisaltma.')'.$yazi.'</a>';
+          }        
+
+                  if ($ilkrandevu=='1') { echo '&nbsp;<span title="ilk randevu" class="glyphicon glyphicon-star" aria-hidden="true" style="color:white; "></span>';     }
+         else  { }        
+
+                       echo '             
+  <div class="test col-md-12 text-center">
+  <div style="float:left; margin-bottom:20px;">';
+///////////////////////burayı aldım/////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ///////////////////////burayı aldım/////////////////////////////       
 
 echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
 
@@ -457,8 +507,9 @@ echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
                  foreach($secilenrandevudurumlar as $secilenrandevudurum){ 
                   $secilendurumAdi=$secilenrandevudurum->RandevuDurumAdi;
                   echo $secilendurumAdi;
+                  echo '<br>';
                  }
-
+    // echo $randevubaslangic;
                 echo '<form class="autoSubmit" method="post" action="'.site_url('admin/terapi/randevu/randevudurumudegistir').'">';
                 echo '<SELECT  name="randevular">';
                 echo '<option style="color:black;">---</option>';

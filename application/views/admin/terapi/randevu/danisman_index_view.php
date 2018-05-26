@@ -3,6 +3,26 @@
 
     <div class="row">
         <div class="col-lg-12" style="margin-top: -60px;">
+          <?php
+$userid=$this->ion_auth->user()->row()->id;
+$sqlusers="Select * from vwusers where id=".$userid;
+$results= $this->db->query($sqlusers)->result();
+foreach ($results as $result) {
+  $group_id=$result->group_id;
+  //echo $group_id;
+}
+
+if($group_id=='3' or $group_id=='4' or $group_id=='7' or $group_id=='8') {
+////
+ // echo '<a href="'; echo site_url('admin/terapi/danisan/kendidanisanlarim/'); echo '">'; echo ' class="btn btn-primary">'; echo 'Danışanlarım</a>';
+
+   echo ' <a href="';echo site_url('admin/terapi/danisan/kendidanisanlarim');echo'"'; echo 'class="btn btn-primary">Danışanlarım</a>';
+   echo ' <a href="';echo site_url('admin/terapi/randevu/ayliktakvim/'.$userid);echo'"'; echo 'class="btn btn-primary">Takvim</a>';
+} else {
+ 
+  ///
+}
+          ?>
   <a href="<?php echo site_url('admin/terapi/randevu/randevulistele');?>" class="btn btn-primary">Randevu Listele</a>
   <a href="<?php echo site_url('admin/terapi/randevu/mazeretler');?>" class="btn btn-primary">Mazeretler</a>
   <br><br>
@@ -78,10 +98,20 @@ echo $this->session->userdata('ofis');
 */
 
 /////////////üst form///////////////////
-echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table class="table  table-condensed"><tr>
+echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table><tr>
 <td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
-echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">
-';
+
+
+
+if($this->ion_auth->user()->row()->company=='1' or $this->ion_auth->user()->row()->company=='2') 
+{  $ofis=$this->ion_auth->user()->row()->company;
+echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+
+   }
+else {
+
+
+echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">';
 echo '<option value="0">--</option>'; 
 if ($this->ion_auth->user()->row()->company==3) {
 $sqlofisler = "SELECT * FROM tblofis where ofisID!=3";
@@ -105,8 +135,12 @@ if ($this->ion_auth->user()->row()->company!=3) {
                     }
 }
 
-echo '</SELECT></p></td>';
-echo '<td><input type="submit" class="btn btn-primary" value="Git"></td></tr></table>';
+//echo '</SELECT></p><input type="submit" class="btn btn-primary" value="Git"></td>';
+
+}////if sonu
+
+
+echo '<td>&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Tarihe Git"></td></tr></table>';
 echo form_close();
 
 
@@ -213,6 +247,22 @@ $search=$date.' '.$i;
                   $bitis=$resultmazeret->mazeretBitisTarihSaat;
                   $mazeretAdi=$resultmazeret->mazeretAdi;
                   $mazeretAciklama=$resultmazeret->mazeretAciklama;
+
+
+
+                   $metinb=explode(' ', $baslangic);
+                   //print_r($metinb['1']);
+                    $saat=$metinb['1'];
+                    $saatbaslangic=explode(':',$saat);
+                                 $bassaat=$saatbaslangic['0'];
+                                // print_r($bassaat);
+                       $metinbitis=explode(' ', $bitis);
+                       $saat=$metinbitis['1'];
+                       $saatbitis=explode(':',$saat);
+                            $bitsaat=$saatbitis['0'];
+                          //  print_r($bitsaat);
+if($bassaat==$bitsaat) { $bitsaat=$bitsaat+1; $bitis=$metinb['0'].' '.$bitsaat.':00:00'; }
+
 
                  // print_r($bitis);
                 }
@@ -392,26 +442,7 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 $danisanid=$result->danisanID;
 
 
-
-                       echo '<p align="center"><font color="white" size="2">';
-                       echo '<a style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad;
-//////////////////her randevu için oda bilgilerinde danışanın id si de gerekli
-         $sqlicdongu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5') and (danisanID='".$danisanid."')"; 
-         $resulticdonguler = $this->db->query($sqlicdongu)->result();
-          foreach($resulticdonguler as $resulticdongu){
-          $odaKisaltma=$resulticdongu->odaKisaltma;
-          $metin=$resulticdongu->randevuBaslangicTarihSaat;
-          $dizi=explode(' ', $metin);
-          $randevuBaslangicTarihSaat=$dizi['1'];
-                       echo '('.$odaKisaltma.')'.$yazi.'</a>';
-                       echo '<br>'.$randevuBaslangicTarihSaat;
-          }              
-
-                       echo '             
-  <div class="test col-md-12 text-center">
-  <div style="float:left; margin-bottom:20px;">';
-
-
+////////////////////////////////////////////burayı aldım/////////////////////////////////
 $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,5";
 
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
@@ -421,6 +452,48 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
        // echo $result->danisanID;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
+        $randevudurumadi=$resultrand->RandevuDurumAdi;
+        $ilkrandevu=$resultrand->ilkRandevuMu;
+
+////////////////////////////////////////////burayı aldım/////////////////////////////////
+
+
+
+                       echo '<p align="center"><font color="white" size="2">';
+                       echo '<a title="'.$randevudurumadi.'" style="color:white; vertical-align: middle;" target="_blank" href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan->danisanID.'" alt="açıklama" >'.$danisan->danisanAd." ".$danisan->danisanSoyad;
+//////////////////her randevu için oda bilgilerinde danışanın id si de gerekli
+         $sqlicdongu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!='5') and (danisanID='".$danisanid."')"; 
+         $resulticdonguler = $this->db->query($sqlicdongu)->result();
+          foreach($resulticdonguler as $resulticdongu){
+          $odaKisaltma=$resulticdongu->odaKisaltma;
+          $metin=$resulticdongu->randevuBaslangicTarihSaat;
+          $dizi=explode(' ', $metin);
+          $randevuBaslangicTarihSaat=$dizi['1'];
+
+           $paketID=$result->paketID;
+        if ($paketID!='') { 
+        $toplamseans=$result->RandevuPaketSeansSayisi;
+        $seans=$result->KacinciSeans;
+        $yazi=$seans.'/'.$toplamseans;
+         } else { $toplamseans=''; $seans=''; $yazi=''; }
+         
+
+                       echo '('.$odaKisaltma.')'.$yazi.'</a>';
+                       echo '<br>'.$randevuBaslangicTarihSaat;
+          }      
+         if ($ilkrandevu=='1') { echo '&nbsp;<span title="ilk randevu" class="glyphicon glyphicon-star" aria-hidden="true" style="color:white; "></span>';     }
+         else  { }   
+
+                       echo '             
+  <div class="test col-md-12 text-center">
+  <div style="float:left; margin-bottom:20px;">';
+
+////////////////////////////////////////////burayı aldım/////////////////////////////////
+
+
+
+////////////////////////////////////////////burayı aldım/////////////////////////////////
+
 
 echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
 
@@ -437,9 +510,6 @@ echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
 /////////////////info işareti sonu///////////////////////////
 
  
-
-
-
 
 echo '</tr>
 </table>';
