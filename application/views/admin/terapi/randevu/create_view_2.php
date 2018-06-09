@@ -160,6 +160,98 @@ echo '<option value="'.$seanstipID.'" class="'.$terapitipID.'">'.$seansTipAdi.'<
  </div>
 
 
+             
+                <?php
+                
+                $formatteddate=$date.' '.$time.':00:00';
+
+$sql='select IF(count(randevuID)>0,0,1) as ilkRandevuMu from tblrandevu 
+where randevuDanisanID='.$danisanID.'
+and randevuBaslangicTarihSaat<'."'".$formatteddate."'".' 
+and randevuDurumuID not in (3,5,6)';
+$ilkrandevular = $this->db->query($sql)->result();
+foreach ($ilkrandevular as $ilkrandevu) {
+  $ilk=$ilkrandevu->ilkRandevuMu;
+  //echo $ilk;
+  }
+if ($ilk=='1') {   
+
+echo '
+<div class="form-group">
+<label>Randevu Yönlenme Durumu</label>';
+echo '<select class="form-control" name="sekreteryonlendirme">';
+echo '<option> -- </option>';
+echo '<option value="1">Sekreterya Atama</option>';
+echo '<option value="2">İsimle Danışman Talep</option>';
+echo '</select>';
+
+echo '</div>';
+
+
+ }
+
+
+else {
+
+
+     echo '<div class="form-group"> ';
+$sql='select IF(count(randevuID)>0,0,1) as danismanilkRandevuMu from tblrandevu 
+where randevuDanisanID='.$danisanID.'
+and randevuDanismanUserID='.$danisman_id.'
+and randevuBaslangicTarihSaat<'."'".$formatteddate."'".' and randevuDurumuID not in (3,5,6)';
+$ilkrandevular = $this->db->query($sql)->result();
+foreach ($ilkrandevular as $ilkrandevu) {
+  $danismanilk=$ilkrandevu->danismanilkRandevuMu;
+ //echo $ilk;
+  }
+if ($danismanilk=='1') {   echo '<label>Yönlendiren Danışman</label>';
+$ofisID=$this->ion_auth->user()->row()->company;
+echo '<select class="form-control" name="danismanyonlendirme">';
+$results = $this->db->query('SELECT ID,DanismanAd,DanismanSoyad FROM vwdanisman where (ofisID='.$ofisID.' or ofisID=3) and ID<>'.$danisman_id)->result();
+echo '<option> -- </option>';
+foreach ($results as $result) {
+  $ID=$result->ID;
+  $DanismanAd=$result->DanismanAd;
+  $DanismanSoyad=$result->DanismanSoyad;
+ echo '<option value="'.$ID.'">'.$DanismanAd.' '.$DanismanSoyad.'</option>';
+}
+echo '</select>';
+echo '</div>';
+ }
+else { 
+
+echo '<label>Yönlendiren Danışman</label>';
+$ofisID=$this->ion_auth->user()->row()->company;
+
+$results = $this->db->query('SELECT * FROM `vwrandevu` WHERE danisanID='.$danisanID.' order by randevuBaslangicTarihSaat desc limit 1')->result();
+foreach ($results as $result) {
+ $yonlendirenDanismanUserID=$result->yonlendirenDanismanUserID;
+ $yonlendirenDanismanAd=$result->yonlendirenDanismanAd;
+ $yonlendirenDanismanSoyad=$result->yonlendirenDanismanSoyad;
+echo $yonlendirenDanismanUserID;
+ if($yonlendirenDanismanUserID=='') {  $yonlendirenDanismanUserID=0; }
+  }
+echo '<input class="form-control" type="text" value="'.$yonlendirenDanismanAd.' '.$yonlendirenDanismanSoyad.'" name="danismanyonlendirme" readonly>';
+
+echo '</div>';
+
+
+
+}
+
+
+
+
+
+
+ }
+
+             
+
+
+                ?>
+         
+
 
 
 
@@ -242,6 +334,22 @@ echo '<option value="'.$seanstipID.'" class="'.$terapitipID.'">'.$seansTipAdi.'<
             <?php echo form_hidden('date',$date);?>
             <?php echo form_hidden('danisanID',$danisanID);?>
             <?php echo form_hidden('danismanID',$danisman_id);?>
+
+            <?php
+             if($ilk=='1') {  
+              echo form_hidden('yonlendirendanismanID',NULL); 
+            } 
+               
+             else { 
+
+        if (isset($yonlendirenDanismanUserID)) { } else {  $yonlendirenDanismanUserID=0; }
+            echo form_hidden('yonlendirendanismanID',$yonlendirenDanismanUserID);
+
+            }
+
+             ?>
+
+
             <?php echo form_hidden('time',$time);?>
             <?php echo form_submit('submit', 'Randevu Kaydet', 'class="btn btn-primary btn-lg btn-block"');?>
             <?php echo anchor('/admin/terapi/randevu', 'İptal','class="btn btn-default btn-lg btn-block"');?>

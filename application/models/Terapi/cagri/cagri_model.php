@@ -31,6 +31,7 @@ class Cagri_model extends MY_Model
 
     
 //echo '<br><br><br><br>';
+     
                 $data = array(
                     'cagriYapanAd' => $this->input->post('ad'),
                     'cagriYapanSoyad' => $this->input->post('soyad'),
@@ -39,10 +40,12 @@ class Cagri_model extends MY_Model
                     'cagriYonlenmeID' => $this->input->post('cagriyonlenme'),
                     'cagriYakinlikID' => $this->input->post('cagriyakinlik'),
                     'cagriNedeniID' => $this->input->post('cagrineden'),
+                    'talepDanismanUserID' => $this->input->post('danisman'),
                     'cagriYapanEposta' => $this->input->post('eposta'),
                     'cagriAciklama' => $this->input->post('info'),
                     'islemKullaniciID' => $this->input->post('id'),
                     'ofisID' => $this->input->post('ofisID'),
+                    'cagriDurumu' => 1,
                     'cagriYapanTel' => $this->input->post('tel'),
                     'cagriTipi' => $this->input->post('cagritipi')
                    
@@ -97,6 +100,26 @@ class Cagri_model extends MY_Model
 
     foreach ($results as $result) {
       $dropdown[$result->cagriYakinlikID] = $result->cagriYakinlikAdi;
+    }
+
+    return $dropdown;
+  }
+
+    public function getdanismanForDropdown($firstElement=array(),$ofisID){
+   if($ofisID=='3') { 
+   $results = $this->db->query('SELECT ID,DanismanAd,DanismanSoyad FROM vwdanisman')->result();
+   }  else { 
+       $results = $this->db->query('SELECT ID,DanismanAd,DanismanSoyad FROM vwdanisman where ofisID='.$ofisID.' or ofisID=3 order by DanismanAd asc')->result();
+   }
+
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->ID] = $result->DanismanAd.' '.$result->DanismanSoyad;
     }
 
     return $dropdown;
@@ -203,6 +226,7 @@ $data = array (
 'cagriYakinlikID' => $this->input->post('cagriyakinlik'),
 'cagriYonlenmeID' => $this->input->post('cagriyonlenme'),
 'cagriNedeniID' => $this->input->post('cagrineden'),
+'talepDanismanUserID' => $this->input->post('danisman'),
 'cagriAciklama' => $this->input->post('info'),
 'islemKullaniciID' => $this->input->post('id')      
 );
@@ -221,6 +245,7 @@ cagriRandevuID ,
 cagriYapanTel ,
 cagriYapanEposta , 
 cagriAciklama ,
+talepDanismanUserID ,
 ofisID , 
 islemKullaniciID,dateCreated )
 select * from tblcagri where tblcagri.cagriID=".$cagri_id;
@@ -249,6 +274,22 @@ $datakayit = array(
  $this->db->update('tblcagri',$datakayit);
  $this->postal->add('Çağrı ile randevu eşleştirme kaldırıldı!','success');
  redirect('admin/terapi/cagri');
+
+}
+
+public function cagrisonlandir () {
+$cagri_id=$this->input->post('cagriID');
+                  $datakayit = array(
+                    'cagriDurumu' => 2,
+                    'randevuyaDonusmeDurumu' => $this->input->post('randevudurumu'),
+                    'randevuyaDonusmemeNedeni' => $this->input->post('info')                   
+                );
+//print_r($datakayit);
+$this->db->where('cagriID', $cagri_id);
+$this->db->update('tblcagri',$datakayit);
+$this->postal->add('Çağrı sonlandırıldı!','success');
+ redirect('admin/terapi/cagri');
+
 
 }
 

@@ -185,7 +185,7 @@ public function ilackaydet () {
 public function tanikaydet () {
     $datakayit=   array(
     'taniAciklama' => $this->input->post('tani'),
-    'taniID' => $this->input->post('tanilar'),
+    'taniID' => $this->input->post('alttanilar'),
     'danisanID' => $this->input->post('danisanid'),
     'islemKullaniciID' => $this->input->post('userid')
    );
@@ -291,20 +291,7 @@ public function tanikaydet () {
 
   }
 
-   public function gettanilarForDropdown($firstElement=array()){
-    $results = $this->db->query('SELECT * FROM tnmpsikiyatriktani')->result();
-    $dropdown = array();
 
-    if($firstElement){
-      $dropdown[$firstElement[0]] = $firstElement[1];
-    }
-
-    foreach ($results as $result) {
-      $dropdown[$result->psikiyatrikTaniID] = $result->psikiyatrikTaniAdi;
-    }
-
-    return $dropdown;
-  }
 
   public function psikiyatrikilacguncelle () {
    $datakayit=   array(
@@ -341,6 +328,21 @@ public function tanikaydet () {
 
   }
 
+  public function taniguncelle () {
+  $datakayit=   array(
+    'taniID' => $this->input->post('alttanilar'),
+    'taniAciklama' => $this->input->post('tani'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+      $danisantaniid=$this->input->post('danisantaniid'); 
+      $danisanid=$this->input->post('danisanid'); 
 
+
+ $this->db->where('danisantaniID', $danisantaniid);
+ $this->db->update('ilsdanisantani',$datakayit);
+ $this->postal->add('Tanı güncelleme başarılı!','success');
+ redirect('admin/terapi/danisan/danisandetay/'.$danisanid); 
+
+  }
 
 }

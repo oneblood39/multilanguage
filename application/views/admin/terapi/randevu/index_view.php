@@ -80,7 +80,7 @@ echo $this->session->userdata('ofis');
 
 /////////////üst form///////////////////
 echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table border="0"><tr>
-<td><p><b>Tarih Seçiniz: </b><input style="font-size:13pt;" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+<td><p><b>Tarih Seçiniz: </b><input autocomplete="off" style="font-size:13pt;" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
 
 if($this->ion_auth->user()->row()->company=='1' or $this->ion_auth->user()->row()->company=='2') 
 {  $ofis=$this->ion_auth->user()->row()->company;
@@ -462,7 +462,9 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
         $randevubaslangic=$resultrand->randevuBaslangicTarihSaat;
         $randevuinfo=$resultrand->randevuAciklama;
         $randevudurum=$resultrand->RandevuDurumID;
-           $ilkrandevu=$resultrand->ilkRandevuMu;
+        $terapiTipID=$resultrand->terapiTipID;
+        $seanstipadi=$resultrand->seansTipAdi;
+        $ilkrandevu=$resultrand->ilkRandevuMu;
 
         $randevusaat=explode(' ', $randevubaslangic);
         $randevusaatformat=$randevusaat['1'];
@@ -482,8 +484,11 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
                        echo '('.$odaKisaltma.')'.$yazi.'</a>';
           }        
 
-                  if ($ilkrandevu=='1') { echo '&nbsp;<span title="ilk randevu" class="glyphicon glyphicon-star" aria-hidden="true" style="color:white; "></span>';     }
-         else  { }        
+         if ($ilkrandevu=='1') { echo '&nbsp;<span title="ilk randevu" class="glyphicon glyphicon-star" aria-hidden="true" style="color:white; "></span>';     }
+         else  { }    
+
+         if ($terapiTipID=='19') { echo '&nbsp;<span title="'.$seanstipadi.'" class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="color:white; "></span>';     }
+         else  { }      
 
                        echo '             
   <div class="test col-md-12 text-center">
@@ -537,7 +542,7 @@ echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
 //////////////////x işareti/////////////////////////////////
     echo '<td width="16px;"><div>';
   if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptal/').$randevuID.'/'.$date.'/'.$ofis;
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuiptalneden/').$randevuID.'/'.$date.'/'.$ofis;
   echo '"><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:black"></span></a> 
   </div></td>'; }
 ///////////////x işareti sonu/////////////////////////

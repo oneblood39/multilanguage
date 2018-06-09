@@ -76,7 +76,7 @@ echo $this->session->userdata('ofis');
 
 /////////////üst form///////////////////
 echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table><tr>
-<td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+<td><p><b>Tarih Seçiniz: </b><input autocomplete="off" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
 
 
 

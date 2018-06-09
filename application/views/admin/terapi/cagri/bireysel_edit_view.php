@@ -81,6 +81,13 @@ $company=$this->ion_auth->user()->row()->company;
                 echo form_dropdown('cagrineden',$neden,$Nedeni,'class="form-control"');
                 ?>
             </div>
+           <div class="form-group">
+                <?php
+                echo form_label('Aranılan Danışman','');
+                echo form_error('danisman');
+                echo form_dropdown('danisman',$danisman,$Danisman,'class="form-control"');
+                ?>
+            </div>
             <div class="form-group">
                 <?php
                 echo form_label('Açıklama','info');

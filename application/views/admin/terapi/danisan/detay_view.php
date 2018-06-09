@@ -161,7 +161,7 @@
       $islemKullaniciID=$result->islemKullaniciID;
       echo '<tr>';
       echo '<td>'.$aciklama.'</td>';
-       echo '<td>';
+      echo '<td>';
       echo'<a href="'.site_url('admin/terapi/danisan/digerilacduzenle/').$danisan_id.'/'.$danisanilacID.'">';echo '<span style="align:right" title="düzenle" class="glyphicon glyphicon-pencil"></span>';echo '</a>';  
       echo '</td>';
       echo '</tr>';
@@ -178,16 +178,26 @@
     $sql="SELECT * FROM vwdanisantani where danisanID=".$danisan_id;
     $results = $this->db->query($sql)->result();
     echo '<table class="table table-hover table-bordered table-condensed">';
-    echo '<th>Tanı Tipi</th><th>Tanı Açıklama</th><th>İşlemler</th>';
+    echo '<th>Tanı Türü</th><th>Tanı Tipi</th><th>Tanı Açıklama</th><th>Tanıyı Koyan</th><th>İşlemler</th>';
      foreach ($results as $result) {
       //$not=$result->seansNot;
-      $tani=$result->psikiyatrikTaniAdi;
+      $tani=$result->taniAdi;
+      $taniID=$result->danisantaniID;
+      $tanitipi=$result->taniTipi;
       $aciklama=$result->taniAciklama;
+      $koyan=$result->taniyiKoyanDanisman;
       $islemKullaniciID=$result->islemKullaniciID;
+      
       echo '<tr>';
+      echo '<td>'.$tanitipi.'</td>';
       echo '<td>'.$tani.'</td>';
       echo '<td>'.$aciklama.'</td>';
+      echo '<td>'.$koyan.'</td>';
+      echo '<td>';
+      echo'<a href="'.site_url('admin/terapi/danisan/danisantaniduzenle/').$danisan_id.'/'.$taniID.'">';echo '<span style="align:right" title="düzenle" class="glyphicon glyphicon-pencil"></span>';echo '</a>';  
+      echo '</td>';
       echo '</tr>';
+     
      }
      echo '</table>';
 

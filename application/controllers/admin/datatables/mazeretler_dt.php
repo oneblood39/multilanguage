@@ -105,10 +105,10 @@ class Mazeretler_dt extends Admin_Controller
           $aktiflik = $cat->aktifMi;
       
       if ($aktiflik=='1' and $group_id=='11' or $group_id=='9') { 
-       
+
         $span='<span title=\"mazeret pasif et\" class=\"glyphicon glyphicon-arrow-down\">'; 
      
-      } else if ($aktiflik=='0' and $group_id=='11' or $group_id=='9') {
+      } else if ($aktiflik=='0' and  $group_id=='11' or $group_id=='9') {
      
        $span='<span title=\"mazeret aktif et\" class=\"glyphicon glyphicon-arrow-up\">'; 
 

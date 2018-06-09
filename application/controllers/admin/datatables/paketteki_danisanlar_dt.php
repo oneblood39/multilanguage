@@ -17,7 +17,7 @@ class Paketteki_danisanlar_dt extends Admin_Controller
   public function getall(){
 
 //$paket=$this->session->userdata('paket');
-$paket_id=$this->uri->segment(5);
+   $paket_id=$this->uri->segment(5);
 
     $start = 0;
     $length = 10;
@@ -52,7 +52,7 @@ $paket_id=$this->uri->segment(5);
     $total = $query->row()->total;
 
     if($search){
-     /* $queryString = "SELECT * FROM tbldanisan WHERE  danisanAd like ".$this->db->escape('%'.$search.'%')." or danisanSoyad like ".$this->db->escape('%'.$search.'%')." or danisanEposta like ".$this->db->escape('%'.$search.'%')." or danisanTel like ".$this->db->escape('%'.$search.'%')." ORDER BY danisanID desc LIMIT ".$start.",".$length;*/
+      $queryString = "SELECT * FROM vwdanisanpaket WHERE  danisanAd like ".$this->db->escape('%'.$search.'%')." or danisanSoyad like ".$this->db->escape('%'.$search.'%')." ORDER BY danisanID desc LIMIT ".$start.",".$length;
     }else{
       //$queryString = "SELECT * FROM tbldanisan ORDER BY danisanID desc LIMIT ".$start.",".$length;
       $queryString = "SELECT * FROM vwdanisanpaket WHERE paketID=".$paket_id." ORDER BY danisanID desc LIMIT ".$start.",".$length;
@@ -76,9 +76,6 @@ $paket_id=$this->uri->segment(5);
         $rFiltered++;
       }
 
-      //$datasessionmevcut = $this->session->flashdata('item'); 
-
-//print_r($datasessionmevcut);
           
     // if($search){
        if($cat->danisanID>0){  

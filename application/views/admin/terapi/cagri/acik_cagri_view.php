@@ -35,10 +35,7 @@
           <th>Çağrı Yapılan Soyad</th>
           <th>Çağrı Yapan Tel</th>
           <th>Yakınlık Derecesi</th>
-          <th>Çağrı Nedeni</th>
-          <th>Çağrı Kaynağı</th>
-          <th>Randevu Bilgileri</th>
-          <th>Randevu Durumu</th>
+          <th>Açıklama</th>
           <th>İşlemler</th>
         </tr>
       </thead>

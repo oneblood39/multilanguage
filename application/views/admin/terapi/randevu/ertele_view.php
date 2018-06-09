@@ -30,12 +30,35 @@ table { background: url("../../assests/images/bos_arkaplan.png") no-repeat; }
 
 
 </style>
+<style type="text/css">
+#form1{
+  padding:10px;
+  border:2px solid #3498db;
+ /* background:#F0F8FF; */
+  border-radius:15px;
+  display:none;
+}
+#submit{
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 15px;
+  background: #3498db;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+#submit:hover{
+  background: #3cb0fd;
+  text-decoration: none;
+}
+</style>
 
 <?php
 //error_reporting(0);
 $bugun = date("Y/m/d"); 
 //echo $bugün;
-echo $this->session->userdata('date');
+//echo $this->session->userdata('date');
 $randevuid= $this->uri->segment(5);
 $userid= $this->uri->segment(6);
 $ofis= $this->uri->segment(8);
@@ -81,8 +104,16 @@ echo $this->session->userdata('ofis');
 */
 
 /////////////üst form///////////////////
-echo '<form method="post" action="'; echo site_url('admin/terapi/randevu/randevuertele/').$randevuid.'/'.$userid.'/'.'ofis'.'/'.$ofis; echo '"><table class="table  table-condensed"><tr>
-<td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+echo '<form method="post" action="'; echo site_url('admin/terapi/randevu/randevuertele/').$randevuid.'/'.$userid.'/'.'ofis'.'/'.$ofis; echo '"><table><tr>
+<td><p><b>Tarih Seçiniz: </b><input autocomplete="off" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+
+if($this->ion_auth->user()->row()->company=='1' or $this->ion_auth->user()->row()->company=='2') 
+{  $ofis=$this->ion_auth->user()->row()->company;
+echo '<input type="hidden" name="ofis" value="'.$ofis.'">';
+
+   }
+else {
+
 echo '<td><p><b>Ofis Seçiniz: </b><SELECT name="ofis" id="wgtmsr">
 ';
 echo '<option value="0">--</option>'; 
@@ -108,9 +139,15 @@ if ($this->ion_auth->user()->row()->company!=3) {
                     }
 }
 
-echo '</SELECT></p></td>';
-echo '<td><input type="submit" class="btn btn-primary" value="Git"></td></tr></table>';
+echo '</SELECT></p><input type="submit" class="btn btn-primary" value="Git"></td></tr></table>';
+
+}////if sonu
+
+
+
+echo '<td>&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-primary" value="Tarihe Git"></td></tr></table>';
 echo form_close();
+
 
 
  echo' <br>
@@ -321,13 +358,12 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 //////////////////////////////////////////////////////////////////////////////////////
             ////////  randevu al linki   /////////
               echo '<a href="';
-              echo site_url('admin/terapi/randevu/randevuerteleson/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'/'.$randevuid.'">';             
+              echo site_url('admin/terapi/randevu/randevuertelesaatgir/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'/'.$randevuid.'">';             
               echo '<img src="';echo site_url('assets/admin/images/bos.png'); echo '" width="70" height="70">';
             //  echo '<p align="center"><font color="white" size="2">randevuAL</font></p>';
               echo '</a>'; 
+             
             ////////randevu al linki sonu/////////
-
-
 
 
 
@@ -343,7 +379,7 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
 
     echo '<div style="float:left">';
   if ($randevudurum=='5') { } else {
-  echo '<a href="'.site_url('admin/terapi/randevu/randevuerteleson/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'/'.$randevuid;
+  echo '<a href="'.site_url('admin/terapi/randevu/randevuertelesaatgir/').$date.'/'.$user->id.'/'.$i.'/'.$ofis.'/'.$randevuid;
   echo '"><small><span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:white"></span></small></a>&nbsp;
   </div><br>'; }
 

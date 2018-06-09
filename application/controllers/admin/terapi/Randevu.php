@@ -463,6 +463,15 @@ $this->load->library('session');
 $this->Randevu_model->createRandevuStep2($this->input->post());
   }
 
+public function randevuiptalneden (){  
+ $this->data['page_title'] = 'Randevu İptal Nedeni';
+ $this->load->library('form_validation');
+ $this->data['users'] = $this->ion_auth->users(array())->result();
+
+ $this->data['iptalneden'] = $this->Randevu_model->getiptalnedenForDropdown(array());
+ $this->render('admin/terapi/randevu/randevu_iptal_neden_view','admin_master',$this->data);
+  }
+
 public function randevuiptal (){  
 $this->Randevu_model->randevuiptalet($this->input->post());
   }
@@ -516,6 +525,14 @@ $this->data['page_title'] = 'Randevular';
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
+
+   <script>
+$(document).ready(function(){
+    $("#birkan").click(function(){
+        $("#form1").toggle();
+    });
+});
+</script>
 
   <script>
   $( function() {
@@ -663,6 +680,15 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
 
         ';
 
+ $this->data['before_body'] =' 
+<script>
+$(document).ready(function(){
+    $("#birkan").click(function(){
+        $("#form1").toggle();
+    });
+});
+</script>
+  ';
 
         $this->data['before_body'] ='<script type="text/javascript">
 var tooltip = document.querySelectorAll(\'.coupontooltip\');
@@ -700,8 +726,16 @@ $(\'.autoSubmit, .autoSubmit select, .autoSubmit input, .autoSubmit textarea\').
 
 }
 
+
+public function randevuertelesaatgir(){
+      $this->data['page_title'] = 'Randevu Ertele Saat Gir';
+      $this->data['users'] = $this->ion_auth->users(array())->result();
+      $this->load->library('form_validation');
+      $this->render('admin/terapi/randevu/ertele_saatgir_view','admin_master',$this->data);
+}
+
 public function randevuerteleson(){
-$this->Randevu_model->randevuertelekaydet();
+$this->Randevu_model->randevuertelekaydet($this->input->post());
 }
 
 public function randevuyinedeekle(){
@@ -851,6 +885,7 @@ $this->data['before_body'] ='
 <script type="text/javascript" src="../../../assets/admin/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../../../assets/admin/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../../../assets/admin/locales/bootstrap-datetimepicker.tr.js" charset="UTF-8"></script>
+
 
 
 

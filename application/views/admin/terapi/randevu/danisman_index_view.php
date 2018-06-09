@@ -99,7 +99,7 @@ echo $this->session->userdata('ofis');
 
 /////////////üst form///////////////////
 echo '<form method="post" action="'; echo site_url('admin/terapi/randevu'); echo '"><table><tr>
-<td><p><b>Tarih Seçiniz: </b><input name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
+<td><p><b>Tarih Seçiniz: </b><input autocomplete="off" name="tarih" type="text" id="datepicker" placeholder="';if ($date!='') {  } else { echo "-bugün-"; } echo'"></p></td>';
 
 
 
@@ -469,6 +469,8 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
           $metin=$resulticdongu->randevuBaslangicTarihSaat;
           $dizi=explode(' ', $metin);
           $randevuBaslangicTarihSaat=$dizi['1'];
+          $terapiTipID=$resulticdongu->terapiTipID;
+          $seanstipadi=$resulticdongu->seansTipAdi;
 
            $paketID=$result->paketID;
         if ($paketID!='') { 
@@ -482,7 +484,10 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
                        echo '<br>'.$randevuBaslangicTarihSaat;
           }      
          if ($ilkrandevu=='1') { echo '&nbsp;<span title="ilk randevu" class="glyphicon glyphicon-star" aria-hidden="true" style="color:white; "></span>';     }
-         else  { }   
+         else  { }  
+
+         if ($terapiTipID=='19') { echo '&nbsp;<span title="'.$seanstipadi.'" class="glyphicon glyphicon-heart-empty" aria-hidden="true" style="color:white; "></span>';     }
+         else  { }  
 
                        echo '             
   <div class="test col-md-12 text-center">

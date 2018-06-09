@@ -294,7 +294,10 @@ $this->data['before_body'] ='<script type="text/javascript">
   public function taniekle () {
        $this->data['page_title'] = 'Tanı Ekle';
        $this->load->library('form_validation');
-       $this->data['tanilar'] = $this->danisan_model->gettanilarForDropdown(array("0"," -- "));
+
+
+
+   $this->data['tanilar'] = $this->danisan_model->gettanilarForDropdown(array("0"," -- "));
    $this->render('admin/terapi/danisan/tani_ekle_view','admin_master',$this->data);     
    }
 
@@ -386,5 +389,17 @@ $this->data['before_body'] ='<script type="text/javascript">
 
         $this->render('admin/terapi/danisan/danisanlarim_view','admin_master',$this->data);
   }
+
+
+   public function danisantaniduzenle () {
+       $this->data['page_title'] = 'Tanı Düzenle';
+       $this->load->library('form_validation');
+
+   $this->render('admin/terapi/danisan/tani_duzenle_view','admin_master',$this->data);     
+   }
+
+  public function taniguncelle () {
+  $this->danisan_model->taniguncelle($this->input->post());    
+   }
 
 }

@@ -2,7 +2,9 @@
 <div class="container" style="margin-top:60px;">
     <div class="row">
                 <div class="col-lg-12">
-                    <?php $danisan_id=$this->uri->segment(5); ?>
+                    <?php $danisan_id=$this->uri->segment(5);
+$danisantani_id=$this->uri->segment(6);
+                     ?>
       <?php   echo '<a href="'.site_url('admin/terapi/danisan/danisandetay/').$danisan_id.'" class="btn btn-primary">Danışan Profiline Dön</a>'; ?>
 
         </div>
@@ -14,12 +16,14 @@
  ?>
      
             <?php //echo form_open();?>
-            <?php echo '<form method="post" action="'.site_url('admin/terapi/danisan/tanikaydet').'">';   ?>
+            <?php echo '<form method="post" action="'.site_url('admin/terapi/danisan/taniguncelle').'">';   ?>
           <div class="form-group">
-                <?php /*
+                <?php 
+                /*
                 echo form_label('Tanılar','tanilar');
                 echo form_error('tanilar');
                 echo form_dropdown('tanilar',$tanilar,'tanilar','class="form-control" ');  */
+                
                 ?>
             </div>
 
@@ -27,8 +31,19 @@
 <label>Tanı Tipi</label>
 <select name="tanilar" id="mark" class="form-control">
   <option value="">--</option>
-  <option value="1">Psikiyatrik Tanılar</option>
-  <option value="2">Tıbbi Tanılar</option>
+  <?php
+$resultstani = $this->db->query('SELECT * FROM vwdanisantani where danisantaniID='.$danisantani_id)->result();
+foreach ($resultstani as $resulttani) {
+  $tanitipID=$resulttani->taniTipID;
+  $aciklama=$resulttani->taniAciklama;
+
+if ($taniTipID==$danisantani_id) { echo '<option value="1" selected>Psikiyatrik Tanılar</option>'; } else { echo '<option value="1">Psikiyatrik Tanılar</option>'; }
+if ($taniTipID==$danisantani_id) { echo '<option value="2" selected>Tıbbi Tanılar</option>'; } else { echo '<option value="2">Tıbbi Tanılar</option>'; }
+  }
+  echo $tanitipID;
+  ?>
+  
+
 </select>
 </div>
 <!-- üsttekinin value değerini alttaki dropdownun class değerine ata! chain select  -->
@@ -42,7 +57,10 @@ foreach ($results as $result) {
   $ID=$result->taniID;
   $tipID=$result->taniTip;
   $TipAdi=$result->taniAdi;
-echo '<option value="'.$ID.'" class="'.$tipID.'">'.$TipAdi.'</option>';
+  $taniID=$result->danisantaniID;
+
+echo '<option value="'.$ID.'" class="'.$tipID.'"';if($taniID==$danisantani_id){ echo 'selected';} else { }echo ' >'.$TipAdi.'</option>';
+
 }
   ?>
 </select>
@@ -51,13 +69,13 @@ echo '<option value="'.$ID.'" class="'.$tipID.'">'.$TipAdi.'</option>';
                 <?php
                 echo form_label('Açıklama:','tani');
                 echo form_error('tani');
-                echo form_textarea('tani',set_value('tani'),'class="form-control"');
+                echo form_textarea('tani',set_value('tani',$aciklama),'class="form-control"');
                 ?>
             </div>
 
-
                 <?php echo form_hidden('userid',$user_id);?>
                 <?php echo form_hidden('danisanid',$danisan_id);?>
+                <?php echo form_hidden('danisantaniid',$danisantani_id);?>
 
             <?php echo form_submit('submit', 'Tanı Oluştur', 'class="btn btn-primary btn-lg btn-block"');?>
             <?php echo anchor('/admin/terapi/danisan/danisandetay/'.$danisan_id, 'İptal','class="btn btn-default btn-lg btn-block"');?>

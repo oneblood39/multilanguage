@@ -207,7 +207,9 @@ $this->session->set_userdata($data2);
                     'randevuDanismanUserID' => $this->input->post('danismanID'),
                     'odaID' => $this->input->post('oda'),
                     'randevuDanisanID' => $this->input->post('danisanID'),
-                    'randevuDanismanID' => $this->input->post('danismanID'),                  
+                    'randevuDanismanID' => $this->input->post('danismanID'),
+                    'randevuYonlenmeDurumu' => $this->input->post('sekreteryonlendirme'),
+                    'randevuYonlendirenDanismanUserID' => $this->input->post('yonlendirendanismanID'),                  
                     'date' => $this->input->post('date'),
                     'time' => $this->input->post('time'),
                     'dakika' => $this->input->post('dakika')                   
@@ -235,11 +237,8 @@ $date = $this->input->post('date');
 $paket = $this->input->post('paket');
 
 
-
-
 $formatted_date=$date.' '.$time;
-//echo '<br><br><br>';
-//echo $formatted_date;
+
 
 
   $sqlodasorgu = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$formatted_date."%') and (odaID='".$gelenoda."') and (RandevuDurumID<>5)"; 
@@ -275,6 +274,8 @@ $datakayit = array(
 'randevuTerapiTipID' => $terapi,
 'randevuSeansTipID' => $seans,
 'randevuDanismanUserID' => $danisman_id,
+'randevuYonlendirenDanismanUserID' => $this->input->post('yonlendirendanismanID'), 
+'randevuYonlenmeDurumu' => $this->input->post('sekreteryonlendirme'),  
 'odaID' => $this->input->post('oda'),
 'ofisID' => $ofisID,
 'randevuDurumuID' => $this->input->post('randevu'),
@@ -285,8 +286,6 @@ $datakayit = array(
 
 );
 
-
-//print_r($datakayit);
 
 
 $this->load->library('session');
@@ -331,6 +330,8 @@ $datakayit = array(
 'randevuTerapiTipID' => $terapi,
 'randevuSeansTipID' => $seans,
 'randevuDanismanUserID' => $danisman_id,
+'randevuYonlendirenDanismanUserID' => $this->input->post('yonlendirendanismanID'), 
+'randevuYonlenmeDurumu' => $this->input->post('sekreteryonlendirme'),  
 'odaID' => $this->input->post('oda'),
 'ofisID' => $ofisID,
 'randevuDurumuID' => $this->input->post('randevu'),
@@ -340,7 +341,6 @@ $datakayit = array(
 'islemKullaniciID' => $userID
 
 );
-
 
 //print_r($datakayit);
 
@@ -353,6 +353,22 @@ redirect('admin/terapi/randevu/','refresh');
  
 }
 }
+
+  public function getiptalnedenForDropdown($firstElement=array()){
+
+    $results=$this->db->query('SELECT * FROM tnmrandevuiptalnedeni order by randevuiptalNedeniID asc')->result(); 
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+    foreach ($results as $result) {
+      $dropdown[$result->randevuiptalNedeniID] = $result->randevuiptalNedeniAdi;
+    }
+
+    return $dropdown;
+  }
+
 
    public function randevuiptalet() {
  $randevu_id= $this->uri->segment(5);
@@ -367,8 +383,11 @@ $this->load->library('session');
 $this->session->set_userdata($datasession);
 
 
- $durum='5';  ///randevu iptal durumu
-$data =  array('randevuDurumuID' => $durum ); 
+$durum='5';  ///randevu iptal durumu
+$data =  array(
+  'randevuDurumuID' => $durum,
+  'randevuiptalNedeniID' => $this->input->post('iptalneden')
+); 
 
 $this->db->where('randevuID', $randevu_id);
 $this->db->update('tblrandevu',$data);
@@ -456,6 +475,8 @@ $datakayit = array(
 'randevuDanisanID' => $this->session->userdata('randevuDanisanID'),
 //'randevuDanismanTerapiTipID' => $this->session->userdata('randevuDanismanTerapiTipID'),
 'randevuDanismanUserID' => $this->session->userdata('randevuDanismanUserID'),
+'randevuYonlendirenDanismanUserID' => $this->session->userdata('randevuYonlendirenDanismanUserID'),  
+'randevuYonlenmeDurumu' => $this->session->userdata('randevuYonlenmeDurumu'), 
 'randevuTerapiTipID' => $this->session->userdata('randevuTerapiTipID'),
 'randevuSeansTipID' => $this->session->userdata('randevuSeansTipID'),
 'odaID' => $this->session->userdata('odaID'),
@@ -483,9 +504,11 @@ $ofis=$this->uri->segment(8);
 $randevuid=$this->uri->segment(9);
 
 echo '<br><br><br><br><br><br>';
-echo $randevuid;
+//echo $randevuid;
 
-$lasttime=$date.' '.$time.':00:00';
+$dakika=$this->input->post('dakika');
+
+$lasttime=$date.' '.$time.':'.$dakika.':00';
 
 $datakayit = array(
  'randevuBaslangicTarihSaat' => $lasttime
@@ -540,9 +563,26 @@ $sayi= $this->db->query($sqlkontrol)->num_rows();
     $this->postal->add('Bu saat aralığında '.$sayi.' adet randevu bulunduğundan mazeret giremezsiniz!','error');
     redirect('admin/terapi/randevu/mazeretler','refresh');
     } else {
-    $this->db->insert("ilsdanismanmazeret",$datakayit);   
+
+
+$saat=explode(' ', $baslangic);
+$saatbas=explode(':', $saat[1]);
+$saatbas=$saatbas[0];
+
+$saatbitis=explode(' ', $bitis);
+$saatbit=explode(':', $saatbitis[1]);
+$saatbit=$saatbitis[1];
+
+if ($saatbas>=23 or $saatbas<=8 or $saatbit>=23 or $saatbit<=8) {
+    $this->postal->add('Mesai saatleri dışında mazeret ekleyemezsiniz.','error');
+    redirect('admin/terapi/randevu/mazeretler','refresh');
+} else {
+   $this->db->insert("ilsdanismanmazeret",$datakayit);   
     $this->postal->add('Mazeret Ekleme Başarılı!','success');
     redirect('admin/terapi/randevu/mazeretler','refresh');
+}
+
+
  }
 
   }

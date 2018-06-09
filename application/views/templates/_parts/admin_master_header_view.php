@@ -154,7 +154,7 @@ echo '<ul class="dropdown-menu" role="menu">';
                      <li class="divider"></li>'; 
                    echo '<li><a href="'.site_url('admin/terapi/danisan').'">Danışanlar</a></li>';
                    echo '<li class="divider"></li>'; 
-                   echo '<li><a href="'.site_url('admin/terapi/seans').'">Seans Bilgileri</a></li>'; 
+                   echo '<li><a href="'.site_url('admin/terapi/seans').'">Paketler</a></li>'; 
                    echo '<li class="divider"></li>'; 
                    echo '<li><a href="'.site_url('admin/terapi/tanimlar').'">Tanımlar</a></li>'; 
                    echo '
@@ -175,7 +175,7 @@ echo '<ul class="dropdown-menu" role="menu">';
      $queryfonksiyon=$this->db->query('Select fonksiyon_id FROM ils_rolfonksiyon where rol_id='.$group_id); 
          foreach ($queryfonksiyon->result() as $row){
           $fonksiyon_id=$row->fonksiyon_id;
-          if ($fonksiyon_id=='19') {     echo anchor('admin/raporlar','Raporlar');  }
+          if ($fonksiyon_id=='19') {     echo anchor('admin/raporlar/raporlar','Raporlar');  }
           else {  };
            }
      } 

@@ -48,6 +48,13 @@ class Cagri extends Admin_Controller
 
   }
 
+ public function cagrikapama() {
+   $this->data['page_title'] = 'Çağrı Takip';
+   $this->data['users'] = $this->ion_auth->users(array())->result();
+   $this->load->library('form_validation');
+   $this->render('admin/terapi/cagri/cagri_kapama_view');
+  }
+
  public function bireysel() {
     $this->data['page_title'] = 'Çağrı Ekle';
     $this->load->library('form_validation');
@@ -63,9 +70,12 @@ class Cagri extends Admin_Controller
         $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
         $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
 
+        $ofisID=$this->ion_auth->user()->row()->company;
+
     $this->data['yakinlik'] = $this->cagri_model->getcagriyakinlikForDropdown(array());
     $this->data['yonlenme'] = $this->cagri_model->getcagriyonlenmeForDropdown(array());
     $this->data['neden'] = $this->cagri_model->getcagrinedenForDropdown(array());
+    $this->data['danisman'] = $this->cagri_model->getdanismanForDropdown(array(""," -- "),$ofisID);
  
      if($this->form_validation->run()===FALSE)
         {           
@@ -250,9 +260,12 @@ class Cagri extends Admin_Controller
         $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
         $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
 
+        $ofisID=$this->ion_auth->user()->row()->company;
+
        $this->data['yakinlik'] = $this->cagri_model->getcagriyakinlikForDropdown(array());
        $this->data['yonlenme'] = $this->cagri_model->getcagriyonlenmeForDropdown(array());
        $this->data['neden'] = $this->cagri_model->getcagrinedenForDropdown(array());
+       $this->data['danisman'] = $this->cagri_model->getdanismanForDropdown(array(""," -- "),$ofisID);
 
 
       if($this->input->post('ad')){
@@ -308,6 +321,12 @@ class Cagri extends Admin_Controller
       }else{
         $this->data['Nedeni'] = $cagri->cagriNedeniID;
       }
+
+      if($this->input->post('danisman')){
+        $this->data['Danisman'] = $this->input->post('danisman');
+      }else{
+        $this->data['Danisman'] = $cagri->talepDanismanUserID;
+      }
        
       if($this->input->post('info')){
         $this->data['Info'] = $this->input->post('info');
@@ -342,6 +361,34 @@ class Cagri extends Admin_Controller
    public function randevueslemesil() ////cagriya randevu atama kaldır
   {
    $this->cagri_model->cagridanrandevukaldir($this->input->post());
+  }
+
+   public function cagrisonlandir() ////cagri sonlandirma
+  {
+   $this->cagri_model->cagrisonlandir($this->input->post());
+  }
+
+      public function acikcagrilar() 
+  {
+      $this->data['page_title'] = 'Çağrı Takip';
+      $this->data['users'] = $this->ion_auth->users(array())->result();
+
+       $this->data['before_body'] ='<script type="text/javascript">
+        <!--
+         $(document).ready(function(){
+          $("#productsListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/acikcagri_dt/getall",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });
+        -->
+        </script>';
+        $this->render('admin/terapi/cagri/acik_cagri_view','admin_master',$this->data);
   }
 
 
