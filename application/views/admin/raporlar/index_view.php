@@ -15,94 +15,20 @@
 
 ?>
 
-             <!-- <a href="<?php //echo site_url('admin/terapi/cagri/cagriekle');?>" class="btn btn-primary">Çağrı Ekle</a> 
-              <a href="<?php echo site_url('admin/terapi/cagri/kurumsalcagri');?>" class="btn btn-primary">Kurumsal Çağrılar</a> -->
         </div>
     </div>
     <div class="row"><br><br></div>
      <div class="row">
-         <table class="display" cellspacing="0" width="100%" id="productsListTable">
+         <table class="display" cellspacing="0" width="50%" id="productsListTable">
       <thead>
         <tr>
-<td><?php echo '<a href="';echo site_url('admin/raporlar/cagri_raporlar');echo'">Çağrı Rporları</a>'; ?></td>
-<td><?php echo '<a href="';echo site_url('admin/raporlar/raporlar/randevu_raporlar');echo'">Randevu Raporları</a>'; ?></td>
-<td><?php echo '<a href="';echo site_url('admin/raporlar/danisman_raporlar');echo'">Danışman Performans Raporları'; ?></td>
+<td><?php echo '<a href="';echo site_url('admin/raporlar/raporlar/cagri_raporlar');echo'"><img src="../../assets/admin/images/telefon.png"></a>'; ?></td>
+<td><?php echo '<a href="';echo site_url('admin/raporlar/raporlar/randevu_raporlar');echo'"><img src="../../assets/admin/images/takvim.png"></a>'; ?></td>
+<td><?php echo '<a href="';echo site_url('admin/raporlar/raporlar/danisman_raporlar');echo'"><img src="../../assets/admin/images/performans.png"></a>'; ?></td>
         </tr>
       </thead>
 <?php
 
-/*
-$sql="SELECT 
-randevuID,
-concat(DanismanAd,' ',DanismanSoyad) as Danisman,
-concat(danisanAd,' ', danisanSoyad) as Danisan,
-randevuBaslangicTarihSaat as randevu_saati,
-odaAdi,
-terapiAdi,
-seansTipAdi as seansTipi,
-RandevuDurumAdi,
-ilkRandevuMu,
-paketID,
-RandevuPaketi,
-RandevuPaketSeansSayisi,
-KacinciSeans,
-randevuAciklama
-
-FROM mizmeryonetim.vwrandevu where randevuBaslangicTarihSaat between '2018-05-31 00:00:00' and '2018-05-31 22:00:00' 
-and RandevuDurumID <>5
-and ofisID=1
-order by DanismanAd,randevuBaslangicTarihSaat";
-
-$results=$this->db->query($sql)->result();
-echo '<table>';
-foreach ($results as $result) {
-
-  $Danisman=$result->Danisman;
-  $Danisan=$result->Danisan;
-  echo '<tr><td>'.$Danisman;
-  echo '</td>';
-  echo '<td>'.$Danisan.'</td>';
-  echo '</tr>';
-}
-echo '</table>';
-
-
-
-
-
-
-//$this->db->query("SET AUTOCOMMIT=0");
-//$this->db->trans_start();
-
-//$data = $this->db->simple_query("CALL test()");
- //$error = $this->db->error(); 
-//$stmt->store_result();
-//$this->db->reconnect();
-//$this->db->trans_complete();
-//$result = $data->result();
-
-//$sql="spRandevuTarihListele('2018-05-01 00:00:00','2018-05-30 22:00:00')";
-//$field_names = array($sql);
-/*$data = array(
-  'www' => '2018-05-01 00:00:00',
-  'www2' => '2018-05-30 00:00:00'
-   );
-*/
-/* $sql = "CALL test()"; 
-     $result = $this->db->query($sql)->result();
-
-//print_r($data);
-/*
-$result = $this->db->query($sql,array( 
-  'www' => '2018-05-01 00:00:00',
-'www2' => '2018-05-30 00:00:00'));
-*/ //$xx = $this->db->call_function("test"); 
-//$results = $this->db->query($sql)->result();
-
-/*foreach ($results as $result) {
-  $test=$result->DanismanAd;
-}
-*/
 
 
 

@@ -17,15 +17,48 @@
 $user_id=$this->ion_auth->user()->row()->id;
 $company=$this->ion_auth->user()->row()->company;
 ?>
- <div class="form-group">
+<div class="form-group">
                 <?php
 echo '
-<select name="randevudurumu" class="form-control">
+<label>Çağrı Sonlandırma Durumu:</label>
+<select name="cagridurum" class="form-control">
+<option value="1">Açık</option>
+<option value="2">Kapalı</option>
+</select>';
+                ?>
+            </div>
+
+
+
+
+ <div class="form-group">
+                <?php
+echo '<label>Randevuya Dönüşme Durumu:</label>
+<select name="randevudurumu" id="mark" class="form-control">
 <option value="1">Randevuya Dönüştü</option>
 <option value="2">Randevuya Dönüşmedi</option>
 </select>';
                 ?>
             </div>
+
+<!-- üsttekinin value değerini alttaki dropdownun class değerine ata! chain select  -->
+<div class="form-group">
+  <label>Randevuya Dönüşmeme Nedeni</label>
+<select name="nedeni" id="series" class="form-control">
+  <?php
+$results = $this->db->query('SELECT * FROM tnmcagrirandevuyadonusmemenedeni')->result();
+foreach ($results as $result) {
+  $cagrirandevuyadonusmemenedeniID=$result->cagriRandevuyaDonusmemeNedeniID;
+  $cagrirandevuyadonusmemenedeniadi=$result->cagriRandevuyaDonusmemeNedeniAdi;
+echo '<option value="'.$cagrirandevuyadonusmemenedeniID.'" class="2">'.$cagrirandevuyadonusmemenedeniadi.'</option>';
+}
+  ?>
+</select>
+ </div>  
+
+
+
+
             <div class="form-group">
                 <?php
                 echo form_label('Açıklama','info');
@@ -46,3 +79,12 @@ echo '
 
     </div>
 </div>
+
+<script type="text/javascript">
+(function($){$.fn.chained=function(parent_selector,options){return this.each(function(){var self=this;var backup=$(self).clone();$(parent_selector).each(function(){$(this).bind("change",function(){$(self).html(backup.html());var selected="";$(parent_selector).each(function(){selected+="\\"+$(":selected",this).val();});selected=selected.substr(1);var first=$(parent_selector).first();var selected_first=$(":selected",first).val();$("option",self).each(function(){if(!$(this).hasClass(selected)&&!$(this).hasClass(selected_first)&&$(this).val()!==""){$(this).remove();}});if(1==$("option",self).size()&&$(self).val()===""){$(self).attr("disabled","disabled");}else{$(self).removeAttr("disabled");}
+$(self).trigger("change");});if(!$("option:selected",this).length){$("option",this).first().attr("selected","selected");}
+$(this).trigger("change");});});};$.fn.chainedTo=$.fn.chained;})(jQuery);
+  </script>
+<script type="text/javascript">
+  $("#series").chained("#mark");
+</script>

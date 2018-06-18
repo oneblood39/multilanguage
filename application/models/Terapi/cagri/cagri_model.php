@@ -126,7 +126,7 @@ class Cagri_model extends MY_Model
   }
 
 
-  public function getOfis($ofisID){ /////////editte kullandığımız 
+  public function getOfis($ofisID){ 
    if($ofisID && (int)$ofisID>0){
       $this->db->where('ofisID', $ofisID);
       $result = $this->db->get('tblOfis')->result()[0];
@@ -138,7 +138,7 @@ class Cagri_model extends MY_Model
   }
 
 
-  public function getCagri($cagriID){ /////////editte kullandığımız 
+  public function getCagri($cagriID){ 
 
     if($cagriID && (int)$cagriID>0){
       $this->db->where('cagriID', $cagriID);
@@ -247,6 +247,10 @@ cagriYapanEposta ,
 cagriAciklama ,
 talepDanismanUserID ,
 ofisID , 
+cagriDurumu ,
+randevuyaDonusmeDurumu,
+cagriRandevuyaDonusmemeNedeniID ,
+randevuyaDonusmemeNedeni,
 islemKullaniciID,dateCreated )
 select * from tblcagri where tblcagri.cagriID=".$cagri_id;
 
@@ -280,8 +284,9 @@ $datakayit = array(
 public function cagrisonlandir () {
 $cagri_id=$this->input->post('cagriID');
                   $datakayit = array(
-                    'cagriDurumu' => 2,
+                    'cagriDurumu' => $this->input->post('cagridurum'),
                     'randevuyaDonusmeDurumu' => $this->input->post('randevudurumu'),
+                    'cagriRandevuyaDonusmemeNedeniID' => $this->input->post('nedeni'),
                     'randevuyaDonusmemeNedeni' => $this->input->post('info')                   
                 );
 //print_r($datakayit);

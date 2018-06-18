@@ -1,5 +1,4 @@
 <?php
-
 header('Content-Encoding: UTF-8');
 header('Content-Type: text/plain; charset=UTF-8'); 
 header("Content-Disposition: attachment; filename=exceldata.xls");
@@ -16,6 +15,7 @@ $new_text = str_replace($search,$replace,$text);
 return $new_text;
 }
 */
+
 echo "<table border='1'>
   <tr>
     <td>ID</td>
@@ -45,14 +45,11 @@ foreach ($results as $result) {
   $danisanID=$result->danisanID;
   $danisanAd=$result->danisanAd;
   $danisanSoyad=$result->danisanSoyad;
-
 echo '<tr>';
 echo '<td>'.$danisanID.'</td>
       <td>'.$danisanAd.'</td>
       <td>'.$danisanSoyad.'</td>';
 echo '</tr>';
-
-
 }
  
 echo '</table>';

@@ -14,8 +14,7 @@
 
 ?>
 
-             <!-- <a href="<?php //echo site_url('admin/terapi/cagri/cagriekle');?>" class="btn btn-primary">Çağrı Ekle</a> 
-              <a href="<?php echo site_url('admin/terapi/cagri/kurumsalcagri');?>" class="btn btn-primary">Kurumsal Çağrılar</a> -->
+ 
         </div>
     </div>
     <div class="row"><br><br></div>
@@ -35,7 +34,7 @@
 ?>
 <tr>
   <div class="col-lg-4 col-lg-offset-4">
-  <?php echo '<form id="form1" method="post" action="'.site_url('admin/raporlar/raporlar/randevu_raporlar').'">'; ?>
+  <?php echo '<form id="form1" method="post" action="'.site_url('admin/raporlar/raporlar/cagri_raporlar').'">'; ?>
 
  <?php 
 $user_id=$this->ion_auth->user()->row()->id;
@@ -109,14 +108,14 @@ $metin=explode(' ', $bitis);
 $bitis=$metin[0].' '.$metin[1];
 //echo $bitis;
 
-                echo '<tr><td  colspan=3>Tüm Randevular</td>';
-                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/tum_randevular/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
+                echo '<tr><td  colspan=3>Tüm Çağrılar</td>';
+                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/tum_cagrilar/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
 
-                echo '<tr><td  colspan=3>Danışanların Geldiği ya da Geleceği Tüm Randevular</td>';
-                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/gelinen_randevular/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
+                echo '<tr><td  colspan=3>Randevuya Dönüşen Çağrılar</td>';
+                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/randevuya_donusen_cagrilar/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
 
-                echo '<tr><td  colspan=3>İptal Edilen Randevular</td>';
-                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/iptal_randevular/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
+                echo '<tr><td  colspan=3>Randevuya Dönüşmeyen Çağrılar</td>';
+                echo'<td><a href="';echo site_url('admin/raporlar/raporlar/randevuya_donusmeyen_cagrilar/'.$baslangic.'/'.$bitis.'/'.$gelenofis.'');echo'"><img src="../../../assets/admin/images/excel.png"></a></td></tr>';
 
 echo '</table>';
 
