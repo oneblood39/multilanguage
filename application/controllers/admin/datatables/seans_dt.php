@@ -27,9 +27,11 @@ class Seans_dt extends Admin_Controller
    if($group_id=='11' or $group_id=='9' or $group_id=='10') {
     $icon='<span title=\"danışan ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
     $icon2='<span title=\"paketten randevu çıkar\" class=\"glyphicon glyphicon-arrow-down\"></span>';
+    $icon3='<span title=\"Paket Düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
    } else {
      $icon='';
      $icon2='';
+     $icon3='';
    }
 
     $start = 0;
@@ -106,7 +108,7 @@ class Seans_dt extends Admin_Controller
           $paketSeansSayi = $cat->paketSeansSayi;
           $minseans = $cat->minimumSeansSayisi;        
         }
-        $data .= '["'.$paketid.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'","'.$minseans.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\">'.$icon.'</a> <a href=\"'.site_url('admin/terapi/seans/randevucikar/').$cat->paketID.'\">'.$icon2.'</a>"],';
+        $data .= '["'.$paketid.'","'.$paketAdi.'","'.$paketUcret.'","'.$paketSeansSayi.'","'.$minseans.'"," <a href=\"'.site_url('admin/terapi/seans/paketdanisan/').$cat->paketID.'\">'.$icon.'</a> <a href=\"'.site_url('admin/terapi/seans/randevucikar/').$cat->paketID.'\">'.$icon2.'</a> <a href=\"'.site_url('admin/terapi/seans/paketduzenle/').$cat->paketID.'\">'.$icon3.'</a>"],';
   //print_r($data);
 
     }

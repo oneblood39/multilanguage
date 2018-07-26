@@ -25,8 +25,8 @@
       </thead>
       <tbody>
         <tr>
-        <?php  
-           $sql = "SELECT * FROM tbldanisan where danisanID=".$danisan_id;
+     <?php  
+           $sql = "SELECT * FROM vwdanisan where danisanID=".$danisan_id;
            $results = $this->db->query($sql)->result();
      foreach ($results as $result) {
        $ad=$result->danisanAd;
@@ -34,7 +34,10 @@
        $eposta=$result->danisanEposta;
        $tel=$result->danisanTel;
        $testmizac=$result->danisanTestMizacTipID;
+       $testmizacadi=$result->danisanTestMizacTipAdi;
        $uzmanmizac=$result->danisanUzmanMizacTipID;
+       $uzmanmizacadi=$result->danisanUzmanMizacTipAdi;
+     
      }
 
           ?>
@@ -43,18 +46,17 @@
           <td><?php echo $soyad; ?></td>
           <td><?php echo $eposta; ?></td>
           <td><?php echo $tel; ?></td>
-          <td><?php echo $testmizac; ?></td>
-          <td><?php echo $uzmanmizac; ?></td>
+          <td><?php echo $testmizacadi; ?>
+          </td>
+          <td><?php echo $uzmanmizacadi; ?>
+                    <?php  echo '<a href="'.site_url('admin/terapi/danisan/mizacgir/').$danisan_id;echo '" class="btn btn-primary">Mizaç Gir</a>'; ?>
+          </td>
         </tr>
       </tbody>
     </table>
 
-
-
         <div class="col-lg-12" style="margin-top: -20px;">
-
-      
-
+    
 <div class="tab">
   <button class="tablinks" onclick="openCity(event, 'basvuruform')">Başvuru Formları</button>
   <button class="tablinks" onclick="openCity(event, 'ilkgorusme')">İlk Görüşme</button>
@@ -67,7 +69,41 @@
 
 <div id="basvuruform" class="tabcontent">
   <h3>Başvuru Formları</h3>
-  <p>Yapım Aşamasında..</p>
+  
+  <p>
+     <?php  
+
+    echo '<table class="table table-hover table-bordered table-condensed">';
+    echo '<th>Form Türü</th><th>Tarih</th><th>İşlemler</th>';
+   $sql="SELECT * FROM tblbasvuruatama where basvuruDurum=3 and danisanID=".$danisan_id;
+   $results = $this->db->query($sql)->result();
+   foreach ($results as $result) {
+    $basvuruAtamaID=$result->basvuruAtamaID;
+    $basvuruFormID=$result->basvuruFormID;
+
+    if ($basvuruFormID==1) {     $sqlform="SELECT * FROM tblbasvuruyetiskin where basvuruAtamaID=".$basvuruAtamaID; $formadi='Yetişkin Formu';  }
+    else if ($basvuruFormID==2) {    $sqlform="SELECT * FROM tblbasvurucocuk where basvuruAtamaID=".$basvuruAtamaID; $formadi='Çocuk Formu'; }
+    else  if ($basvuruFormID==3) {   $sqlform="SELECT * FROM tblbasvuruergen where basvuruAtamaID=".$basvuruAtamaID; $formadi='Ergen Formu'; } else { }
+
+
+    $results = $this->db->query($sqlform)->result();
+     foreach ($results as $result) {
+      $basvuruYetiskinID=$result->basvuruYetiskinID;
+      $tarih=$result->dateCreated;
+    
+      echo '<tr>';
+      echo '<td>'.$formadi.'</td>';
+      echo '<td>'.$tarih.'</td>';
+      echo '<td>';
+      echo'<a href="'.site_url('admin/terapi/danisan/danisanformuduzenle/').$danisan_id.'/'.$basvuruYetiskinID.'">';echo '<span style="align:right" title="Formu Düzenle" class="glyphicon glyphicon-pencil"></span>';echo '</a> ';  
+            echo'<a href="'.site_url('admin/terapi/danisan/form_goruntule/').$danisan_id.'/'.$basvuruYetiskinID.'">';echo '<span style="align:right" title="Formu Görüntüle" class="glyphicon glyphicon-eye-open"></span>';echo '</a>';  
+      echo '</td>';
+      echo '</tr>';  
+     }//foreach sonu
+   }
+     echo '</table>';
+  ?> 
+  </p>
 </div>
 
 <div id="seansnot" class="tabcontent">
@@ -111,8 +147,52 @@
 </div>
 
 <div id="ilkgorusme" class="tabcontent">
-<h3>İlk Görüşme</h3>
-<p>Yapım Aşamasında..</p>
+
+  <?php
+
+  $sqlilkgorusme="Select * From tbldanisanilkgorusme where danismanUserID=".$user_id;
+  $sayi= $this->db->query($sqlilkgorusme)->num_rows();
+  if($sayi>0) { } else {
+   echo '<a href="'.site_url('admin/terapi/danisan/ilkgorusmenotuekle/').$danisan_id;echo '" class="btn btn-primary">İlk Görüşme Notu Ekle</a>';
+  }
+   echo '<h3>İlk Görüşme</h3>';  
+       $sql="SELECT * FROM vwdanisanilkgorusme where danisanID=".$danisan_id;
+    $results = $this->db->query($sql)->result();
+    echo '<table class="table table-hover table-bordered table-condensed">';
+    echo '<th>Kişilik Örüntüsü</th><th>Konu Başlıkları</th><th>Anne Mizaç</th><th>Baba Mizaç</th><th>İlgili Danışman</th><th>Tarih</th><th>İşlemler</th>';
+     foreach ($results as $result) {
+      $gorusmeID=$result->danisanilkGorusmeID;
+      $kisilik=$result->gozeCarpanKisilikOruntusu;
+      $konu=$result->konuBasliklari;
+      $annemizac=$result->anneMizacID;
+      $annemizacadi=$result->anneMizacTipAdi;
+      $babamizac=$result->babaMizacID;
+      $babamizacadi=$result->babaMizacTipAdi;
+      $danismanAd=$result->danismanAd;
+      $danismanSoyad=$result->danismanSoyad;
+      $tarih=$result->dateCreated;
+      $danisman=$result->danismanUserID;
+      $danismanUserID=$result->danismanUserID;
+      echo '<tr>';
+      echo '<td>'.$kisilik.'</td>';
+      echo '<td>'.$konu.'</td>';
+      echo '<td>'.$annemizacadi.'</td>';
+      echo '<td>'.$babamizacadi.'</td>';
+      echo '<td>'.$danismanAd.' '.$danismanSoyad.'</td>';
+      echo '<td>'.$tarih.'</td>';
+      echo '<td>';
+      if($user_id==$danismanUserID) {       echo'<a href="'.site_url('admin/terapi/danisan/ilkgorusmeduzenle/').$danisan_id.'/'.$gorusmeID.'">';echo '<span style="align:right" title="düzenle" class="glyphicon glyphicon-pencil"></span>';echo '</a>';  } else  { }
+ 
+      echo '</td>';
+      echo '</tr>';  
+     }//foreach sonu
+     echo '</table>';
+
+
+   ?>
+
+
+
 </div>
 
 <div id="psikiyatrikilaclar" class="tabcontent">

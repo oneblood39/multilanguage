@@ -14,11 +14,10 @@
         <link rel="stylesheet" href="<?php echo site_url('assets/admin/css/textext/textext.core.css');?>" type="text/css" />
         <link rel="stylesheet" href="<?php echo site_url('assets/admin/css/textext/textext.plugin.autocomplete.css');?>" type="text/css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
-          
           <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
           <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script><!-- datatable için indirdim  -->
           <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
-   <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' type='text/javascript'></script>
+          <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' type='text/javascript'></script>
         <script src="<?php echo site_url('assets/admin/js/textext.core.js');?>" type="text/javascript" charset="utf-8"></script>
         <script src="<?php echo site_url('assets/admin/js/textext.plugin.autocomplete.js');?>" type="text/javascript" charset="utf-8"></script>
         <script src="<?php echo site_url('assets/admin/js/textext.plugin.filter.js');?>" type="text/javascript" charset="utf-8"></script>
@@ -145,18 +144,31 @@ echo '<ul class="dropdown-menu" role="menu">
      $queryfonksiyon=$this->db->query('Select fonksiyon_id FROM ils_rolfonksiyon where rol_id='.$group_id); 
          foreach ($queryfonksiyon->result() as $row){
           $fonksiyon_id=$row->fonksiyon_id;
-          if ($fonksiyon_id=='6') {     
+          if ($fonksiyon_id=='13') {     
 echo '<a href="' .site_url('admin/terapi').'" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Terapi Takip <span class="caret"></span></a>';
 echo '<ul class="dropdown-menu" role="menu">';
-                 if ($fonksiyon_id=='6') {       echo '<li><a href="'.site_url('admin/terapi/cagri').'">Çağrılar</a></li>
+                 if ($group_id!='2') {       echo '<li><a href="'.site_url('admin/terapi/cagri').'">Çağrılar</a></li>
                     <li class="divider"></li>'; } else { }
-                     echo '<li><a href="'.site_url('admin/terapi/randevu').'">Randevular</a></li> 
-                     <li class="divider"></li>'; 
+
+
+                   if ($group_id!='2') {   echo '<li><a href="'.site_url('admin/terapi/randevu').'">Randevular</a></li> 
+                     <li class="divider"></li>'; } else { }
+
                    echo '<li><a href="'.site_url('admin/terapi/danisan').'">Danışanlar</a></li>';
                    echo '<li class="divider"></li>'; 
-                   echo '<li><a href="'.site_url('admin/terapi/seans').'">Paketler</a></li>'; 
-                   echo '<li class="divider"></li>'; 
-                   echo '<li><a href="'.site_url('admin/terapi/tanimlar').'">Tanımlar</a></li>'; 
+
+                 if ($group_id!='2') {   echo '<li><a href="'.site_url('admin/terapi/seans').'">Paketler</a></li>'; 
+                   echo '<li class="divider"></li>'; } else { }
+
+
+                 if ($group_id!='2') {   echo '<li><a href="'.site_url('admin/terapi/tanimlar').'">Tanımlar</a></li>';   } else { }
+                   
+
+  if ($group_id!='2') {   echo '<li class="divider"></li>'; echo '<li><a href="'.site_url('admin/terapi/danisan/droplar').'">Drop Takip</a></li>
+                  '; } else { }
+
+
+                 
                    echo '
       </ul>
                 </li>'; 
@@ -295,7 +307,16 @@ echo '<ul class="dropdown-menu" role="menu">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $this->ion_auth->user()->row()->username;?> <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="<?php echo site_url('admin/user/profile');?>">Profil Sayfası</a></li>
+
+                       
+                         <?php 
+
+                           if ($group_id!='2') {  
+                         echo  '<li><a href="'; echo site_url('admin/user/profile'); echo'">Profil Sayfası</a></li>';  } else {  }
+
+                          ?>
+
+
                             <?php echo $current_user_menu;?>
                             <li class="divider"></li>
                             <li><a href="<?php echo site_url('admin/user/logout');?>">Çıkış</a></li>

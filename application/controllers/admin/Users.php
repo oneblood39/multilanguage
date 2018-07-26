@@ -158,7 +158,7 @@ class Users extends Admin_Controller
         public function activeusers($group_id = NULL) ///aktif kullanıcılar sayfası
     {
         $this->data['page_title'] = 'Aktif Kullanıcılar';       
-        $this->ion_auth->where('aktiflik','1');
+        $this->ion_auth->where('active','1');
         $this->data['users'] = $this->ion_auth->users(array())->result();
         $this->render('admin/users/active_view');
     }
@@ -166,7 +166,7 @@ class Users extends Admin_Controller
         public function passiveusers($group_id = NULL) ///pasif kullanıcılar sayfası
     {
         $this->data['page_title'] = 'Pasif Kullanıcılar';       
-        $this->ion_auth->where('aktiflik','0');
+        $this->ion_auth->where('active','0');
         $this->data['users'] = $this->ion_auth->users(array())->result();
         $this->render('admin/users/passive_view');
     }
@@ -175,7 +175,7 @@ class Users extends Admin_Controller
     {
          $user_id = $this->uri->segment(4);
             $new_data = array(
-                'aktiflik'      => '0'
+                'active'      => '0'
             );    
              $this->ion_auth->where('id',$user_id);
              $this->ion_auth->update($user_id, $new_data);
@@ -188,7 +188,7 @@ class Users extends Admin_Controller
     {
          $user_id = $this->uri->segment(4);
             $new_data = array(  
-                'aktiflik'      => '1'
+                'active'      => '1'
             );    
              $this->ion_auth->where('id',$user_id);
              $this->ion_auth->update($user_id, $new_data);

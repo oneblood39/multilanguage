@@ -223,7 +223,7 @@ echo'</td>';
 echo '</tr>';
 $ortak=3;
 //$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
-$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by case when id=6 then 1 else first_name end";
+$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by aktiflik";
 //print_r($sqlusers);
                   $users = $this->db->query($sqlusers)->result();
 foreach($users as $user)
@@ -356,11 +356,16 @@ if($bitistarih==$date) { $baslangic=$date.' 09:00:00';
         $odaKisaltma=$result->odaKisaltma;
        
         $paketID=$result->paketID;
-        if ($paketID!='') { 
+        if ($paketID===NULL) { 
+           $toplamseans=''; $seans=''; $yazi='';
+         } else { 
+
         $toplamseans=$result->RandevuPaketSeansSayisi;
         $seans=$result->KacinciSeans;
         $yazi=$seans.'/'.$toplamseans;
-         } else { $toplamseans=''; $seans=''; $yazi=''; }
+        
+
+           }
 
 echo '<td';
 
@@ -416,9 +421,6 @@ if($bitistarih[0]==$date) { $baslangic=$date.' 09:00:00';
             ////////randevu al linki sonu/////////
 
 
-
-
-
             }
 
 
@@ -452,7 +454,14 @@ $danisanid=$result->danisanID;
 
 ///////////////////////burayı aldım/////////////////////////////
 
-$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,5";
+$sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,3";
+$sayiaynisaat= $this->db->query($sqlrandevuid)->num_rows();
+//echo $sayiaynisaat;
+
+
+/*if($sayiaynisaat='2') { $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,1"; } else {
+  $sqlrandevuid=$sqlrandevuid;
+}*/
 
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
@@ -481,6 +490,14 @@ $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '
          $resulticdonguler = $this->db->query($sqlicdongu)->result();
           foreach($resulticdonguler as $resulticdongu){
           $odaKisaltma=$resulticdongu->odaKisaltma;
+           $paketID=$result->paketID;
+        if ($paketID===NULL) { 
+           $toplamseans=''; $seans=''; $yazi='';
+         } else { 
+        $toplamseans=$result->RandevuPaketSeansSayisi;
+        $seans=$result->KacinciSeans;
+        $yazi=$seans.'/'.$toplamseans;
+           }
                        echo '('.$odaKisaltma.')'.$yazi.'</a>';
           }        
 
@@ -612,12 +629,15 @@ echo '</tr>
 
 
 
-                   // echo 'Hocanın IDsi='.$user->id;
+  if($sayiaynisaat > 1)
+    break;                 // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';
                    // echo 'Danışanın IDsi='.$result->randevuDanisanID;  
                    // echo '<br>';
                    // echo  $result->randevuDurumu;   
                          }
+ 
+
 
             }  
 //içerikkk

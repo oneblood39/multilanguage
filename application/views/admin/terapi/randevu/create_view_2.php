@@ -128,7 +128,8 @@ else {echo '<form  method="post" action="../../../randevuekle_step2/">';  }
                 ?>
             </div>
 
-   <div class="form-group">
+
+<div class="form-group">
 <label>Terapi Tip</label>
 <select name="terapi" id="mark" class="form-control">
   <option value="">--</option>
@@ -157,18 +158,18 @@ echo '<option value="'.$seanstipID.'" class="'.$terapitipID.'">'.$seansTipAdi.'<
 }
   ?>
 </select>
- </div>
+</div>
 
 
              
                 <?php
                 
-                $formatteddate=$date.' '.$time.':00:00';
-
+                 $formatteddate=$date.' '.$time.':00:00';
 $sql='select IF(count(randevuID)>0,0,1) as ilkRandevuMu from tblrandevu 
 where randevuDanisanID='.$danisanID.'
 and randevuBaslangicTarihSaat<'."'".$formatteddate."'".' 
 and randevuDurumuID not in (3,5,6)';
+
 $ilkrandevular = $this->db->query($sql)->result();
 foreach ($ilkrandevular as $ilkrandevu) {
   $ilk=$ilkrandevu->ilkRandevuMu;
@@ -187,18 +188,39 @@ echo '</select>';
 
 echo '</div>';
 
-
  }
-
 
 else {
 
 
+  echo '
+<div class="form-group">
+<label>Randevu Yönlenme Durumu</label>';
+
+$sqlsekreter='SELECT * FROM `vwrandevu` WHERE danisanID='.$danisanID.' order by randevuBaslangicTarihSaat desc limit 1';
+$sekreteryon = $this->db->query($sqlsekreter)->result();
+foreach ($sekreteryon as $sekreter) {
+  $randevuYonlenmeDurumu=$sekreter->randevuYonlenmeDurumu;
+  $randevuYonlenmeDurumuAdi=$sekreter->randevuYonlenmeDurumuAdi;
+  }
+
+echo '<input class="form-control" type="text" value="'.$randevuYonlenmeDurumuAdi.'" readonly>';
+
+echo '</div>';
+
+
+
+
      echo '<div class="form-group"> ';
+
+
 $sql='select IF(count(randevuID)>0,0,1) as danismanilkRandevuMu from tblrandevu 
 where randevuDanisanID='.$danisanID.'
 and randevuDanismanUserID='.$danisman_id.'
 and randevuBaslangicTarihSaat<'."'".$formatteddate."'".' and randevuDurumuID not in (3,5,6)';
+
+
+
 $ilkrandevular = $this->db->query($sql)->result();
 foreach ($ilkrandevular as $ilkrandevu) {
   $danismanilk=$ilkrandevu->danismanilkRandevuMu;
@@ -206,7 +228,7 @@ foreach ($ilkrandevular as $ilkrandevu) {
   }
 if ($danismanilk=='1') {   echo '<label>Yönlendiren Danışman</label>';
 $ofisID=$this->ion_auth->user()->row()->company;
-echo '<select class="form-control" name="danismanyonlendirme">';
+echo '<select class="form-control" name="yonlendirendanismanID">';
 $results = $this->db->query('SELECT ID,DanismanAd,DanismanSoyad FROM vwdanisman where (ofisID='.$ofisID.' or ofisID=3) and ID<>'.$danisman_id)->result();
 echo '<option> -- </option>';
 foreach ($results as $result) {
@@ -228,10 +250,10 @@ foreach ($results as $result) {
  $yonlendirenDanismanUserID=$result->yonlendirenDanismanUserID;
  $yonlendirenDanismanAd=$result->yonlendirenDanismanAd;
  $yonlendirenDanismanSoyad=$result->yonlendirenDanismanSoyad;
-echo $yonlendirenDanismanUserID;
+// echo $yonlendirenDanismanUserID;
  if($yonlendirenDanismanUserID=='') {  $yonlendirenDanismanUserID=0; }
   }
-echo '<input class="form-control" type="text" value="'.$yonlendirenDanismanAd.' '.$yonlendirenDanismanSoyad.'" name="danismanyonlendirme" readonly>';
+echo '<input class="form-control" type="text" value="'.$yonlendirenDanismanAd.' '.$yonlendirenDanismanSoyad.'"  readonly>';
 
 echo '</div>';
 
@@ -239,15 +261,9 @@ echo '</div>';
 
 }
 
-
-
-
-
-
  }
 
              
-
 
                 ?>
          
@@ -342,8 +358,16 @@ echo '</div>';
                
              else { 
 
-        if (isset($yonlendirenDanismanUserID)) { } else {  $yonlendirenDanismanUserID=0; }
-            echo form_hidden('yonlendirendanismanID',$yonlendirenDanismanUserID);
+                     echo form_hidden('sekreteryonlendirme',$randevuYonlenmeDurumu);
+                     if($danismanilk=='1') {
+                      //yukardakidropdowndan gidicek
+                      
+                     }else {
+                       echo form_hidden('yonlendirendanismanID',$yonlendirenDanismanUserID); 
+                     }
+
+
+
 
             }
 
@@ -366,6 +390,7 @@ echo '</div>';
 
     </div>
 </div>
+
 <script type="text/javascript">
 (function($){$.fn.chained=function(parent_selector,options){return this.each(function(){var self=this;var backup=$(self).clone();$(parent_selector).each(function(){$(this).bind("change",function(){$(self).html(backup.html());var selected="";$(parent_selector).each(function(){selected+="\\"+$(":selected",this).val();});selected=selected.substr(1);var first=$(parent_selector).first();var selected_first=$(":selected",first).val();$("option",self).each(function(){if(!$(this).hasClass(selected)&&!$(this).hasClass(selected_first)&&$(this).val()!==""){$(this).remove();}});if(1==$("option",self).size()&&$(self).val()===""){$(self).attr("disabled","disabled");}else{$(self).removeAttr("disabled");}
 $(self).trigger("change");});if(!$("option:selected",this).length){$("option",this).first().attr("selected","selected");}

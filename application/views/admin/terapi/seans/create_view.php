@@ -6,14 +6,9 @@
         </div>
         <div class="col-lg-4 col-lg-offset-4">
             <h1>Paket Ekle</h1>        
-            <?php echo '<form id="form1" method="post" action="';echo site_url('admin/terapi/seans/paketkaydet');echo '">'; ?>
-            <div class="form-group">
-                <?php
-               /* echo form_label('Paket No','paketno');
-                echo form_error('paketno');
-                echo form_input('paketno',set_value('paketno'),'class="form-control"');*/
-                ?>
-            </div>
+            <?php //echo '<form id="form1" method="post" action="';echo site_url('admin/terapi/seans/paketkaydet');echo '">'; ?>
+
+            <?php echo form_open();?>
             <div class="form-group">
                 <?php
                 echo form_label('Paket Adı','paket_adi');

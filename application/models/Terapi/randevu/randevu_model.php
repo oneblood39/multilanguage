@@ -27,7 +27,7 @@ class Randevu_model extends MY_Model
 
 
 
-     public function createRandevuStep1 ($data) {
+public function createRandevuStep1 ($data) {
 $date= $this->uri->segment(5);
 $danisman_id= $this->uri->segment(6); 
 $time= $this->uri->segment(7); 
@@ -342,7 +342,7 @@ $datakayit = array(
 
 );
 
-//print_r($datakayit);
+ // print_r($datakayit);
 
 $this->db->insert("tblrandevu",$datakayit);   
 $this->postal->add('Randevu Ekleme Başarılı!','success');
@@ -389,12 +389,85 @@ $data =  array(
   'randevuiptalNedeniID' => $this->input->post('iptalneden')
 ); 
 
+
+$neden=$this->input->post('iptalneden');
+
+  $sql="Select * from tnmrandevuiptalnedeni where randevuiptalNedeniID=".$neden;
+  $results = $this->db->query($sql)->result();
+    foreach ($results as $result) {
+       $drop=$result->dropMu;    
+    }
+
+if ($drop=='1') { 
+
+$randevusql="Select * from vwrandevu where randevuID=".$randevu_id;
+$results=$this->db->query($randevusql)->result();
+foreach ($results as $result) {
+  $danisan_id=$result->danisanID;
+  $danisman_id=$result->DanismanUserID;
+}
+
+$this->postal->add('Seçtiğiniz randevu iptal nedeni aynı zamanda bir drop nedeni!
+<br><br> Hangisini yapmak istersiniz? <br> 
+<a href="'.site_url('admin/terapi/randevu/drop_ederek_iptal/'.$danisan_id.'/'.$danisman_id.'/'.$randevu_id.'/'.$neden).'">Drop Ederek İptal Et</a> -- 
+<a href="'.site_url('admin/terapi/randevu/drop_etmeden_iptal/'.$randevu_id.'/'.$date.'/'.$ofis).'">Drop Etmeden İptal Et</a> -- 
+<a href="'.site_url('admin/terapi/randevu').'">İptal Etme</a> 
+  ','error');
+
+redirect('admin/terapi/randevu/','refresh');
+
+
+} else {   
 $this->db->where('randevuID', $randevu_id);
 $this->db->update('tblrandevu',$data);
 $this->postal->add('Randevu İptal Edildi!','success');
 redirect('admin/terapi/randevu/','refresh');
+}
 
  
+    }
+
+
+ public function getdropnedenlerForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmdevametmemenedeni')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->devamEtmemeNedeniID] = $result->devamEtmemeNedeniAdi;
+    }
+
+    return $dropdown;
+  }
+
+
+
+    public function dropetmedeniptalet() {
+ $randevu_id= $this->uri->segment(5);
+ $date= $this->uri->segment(6);
+ $ofis= $this->uri->segment(7);
+
+$datasession = array(
+ 'date' => $date,
+ 'ofis' => $ofis
+);
+$this->load->library('session');
+$this->session->set_userdata($datasession);
+
+
+$durum='5';  ///randevu iptal durumu
+$data =  array(
+  'randevuDurumuID' => $durum,
+  'randevuiptalNedeniID' => $this->input->post('iptalneden')
+); 
+
+$this->db->where('randevuID', $randevu_id);
+$this->db->update('tblrandevu',$data);
+$this->postal->add('Randevu İptal Edildi!','success');
+redirect('admin/terapi/randevu/','refresh');
     }
 
 

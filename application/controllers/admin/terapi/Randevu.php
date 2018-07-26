@@ -426,13 +426,12 @@ public function randevuekle_step3 (){
        $danisman_id=$this->session->userdata('randevuDanismanID');
        $danisan_id= $this->uri->segment(5);
       // $company=$user->company;
-
         $this->data['ofisler'] = $this->Randevu_model->getOfficesForDropdown(array("0"," -- "));
         $this->data['terapiler'] = $this->Randevu_model->getTerapiForDropdown(array("0"," -- "),$danisman_id);
         $this->data['randevudurum'] = $this->Randevu_model->getRandevuDurumForDropdown(array());
         $this->data['odalar'] = $this->Randevu_model->getOdalarForDropdown(array("0"," -- "),$ofisID);
 
-         $this->data['page_title'] = 'Randevular';
+        $this->data['page_title'] = 'Randevular';
         $this->load->library('form_validation');
         $this->load->library('session');
         $this->data['before_head'] ='<script type="text/javascript">
@@ -442,7 +441,6 @@ public function randevuekle_step3 (){
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="../../../../../../assets/admin/js/selectchained.js" type="text/javascript"></script>
 ';
-
 
 
 $this->render('admin/terapi/randevu/create_view_2','admin_master',$this->data,$danisan_id);
@@ -507,8 +505,6 @@ public function pakettekirandevular (){
          });
         -->
         </script>
-
-
         ';
 
         $this->render('admin/terapi/randevu/randevulistele_view','admin_master',$this->data);
@@ -517,7 +513,7 @@ public function pakettekirandevular (){
 
   public function randevuertele (){
 
-$this->data['page_title'] = 'Randevular';
+        $this->data['page_title'] = 'Randevular';
         $this->load->library('form_validation');
         $this->data['before_head'] ='<script type="text/javascript">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -1162,6 +1158,19 @@ $(document).ready(function () {
 
 
     $this->render('admin/terapi/randevu/aylik_takvim_view','admin_master',$this->data); 
+}
+
+public function drop_etmeden_iptal () {
+  $this->Randevu_model->dropetmedeniptalet();
+}
+
+public function drop_ederek_iptal () {
+       $this->data['page_title'] = 'Drop Nedenleri';
+       $this->load->library('form_validation');
+
+       $this->data['nedenler'] = $this->Randevu_model->getdropnedenlerForDropdown(array("0"," -- "));
+
+ $this->render('admin/terapi/danisan/drop_nedeni_gir_view','admin_master',$this->data);
 }
 
 

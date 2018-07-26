@@ -61,7 +61,7 @@ class Cagri_model extends MY_Model
 }
 
   public function getcagrinedenForDropdown($firstElement=array()){
-    $results = $this->db->query('SELECT * FROM tnmcagrinedeni')->result();
+    $results = $this->db->query('SELECT * FROM tnmcagrinedeni where aktifMi=1 order by cagriNedeniAdi')->result();
     $dropdown = array();
 
     if($firstElement){
@@ -271,7 +271,8 @@ redirect('admin/terapi/cagri');
 //echo $cagri_id;
 
 $datakayit = array(
-  'cagriRandevuID' => NULL 
+  'cagriRandevuID' => NULL, 
+  'randevuyaDonusmeDurumu' => 2 
    );
 
  $this->db->where('cagriID', $cagri_id);

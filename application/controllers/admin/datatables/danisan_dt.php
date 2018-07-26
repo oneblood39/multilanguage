@@ -25,13 +25,30 @@ class Danisan_dt extends Admin_Controller
     // echo $group_id;
    }
 
-   if($group_id=='11' or $group_id=='9') {
+   if($group_id=='11' or $group_id=='9' or $group_id=='1') {
     $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
     $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
+    $icon3='<span title=\"danışana form ata\" class=\"glyphicon glyphicon-tasks\"></span>';
+   
    } else {
      $icon='';
      $icon2='';
+     $icon3='';
    }
+
+
+     if($group_id=='2') {
+    $icon='';
+    $icon2='';
+    $icon3='';
+   $icon5='';
+   } else {
+     $icon='';
+     $icon2='';
+     $icon3='<span title=\"danışana form ata\" class=\"glyphicon glyphicon-tasks\"></span>';
+     $icon5='<span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span>';
+   }
+
 
 
     $start = 0;
@@ -101,17 +118,46 @@ print_r($datasessionmevcut);
           $Soyad = $cat->danisanSoyad;
           $Eposta = $cat->danisanEposta;
           $Tel = $cat->danisanTel;
-      
+          $form_id='';
+   $danisanID=$cat->danisanID;
+   $sql='Select * FROM tblbasvuruatama where danisanID='.$danisanID;
+    //$sql = "SELECT * FROM ilsdanisanbasvuru WHERE  danisanID='".$danisanid."'";
+   $sayi2= $this->db->query($sql)->num_rows();  
+    $query=$this->db->query($sql);
+     foreach ($query->result() as $row){
+     $form_id=$row->basvuruAtamaID;
+  
+   }  
+    
+
+   if ($sayi2>0) {
+        $icon4='<span title=\"danışan formu başlat\" class=\"glyphicon glyphicon-play\"></span>';
+      }   else { $icon4=''; }
 
         }else{
           $Ad = $cat->danisanAd;
           $Soyad = $cat->danisanSoyad;
           $Eposta = $cat->danisanEposta;
           $Tel = $cat->danisanTel;
+
+          $danisanID=$cat->danisanID;
+          $form_id='';
+
+   $sql='Select * FROM tblbasvuruatama where danisanID='.$danisanID;
+   $sayi2= $this->db->query($sql)->num_rows(); 
+   $query=$this->db->query($sql)->result();
+     foreach ($query as $row){
+     $form_id=$row->basvuruAtamaID; 
+   }  
+   
+
+   if ($sayi2>0) {
+        $icon4='<span title=\"danışan formu başlat\" class=\"glyphicon glyphicon-play\"></span>';
+      }   else { $icon4=''; }
         
         }
         $data .= '["'.$Ad.'","'.$Soyad.'","'.$Eposta.'","'.$Tel.'",
-        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"><span title=\"danışan bilgileri\" class=\"glyphicon glyphicon-modal-window\"></span></a><a href=\"'.site_url('admin/terapi/danisan/danisanduzenle/').$cat->danisanID.'\"> '.$icon2.'</span></a>"],';
+        "  <a href=\"'.site_url('admin/terapi/danisan/danisandetay/').$cat->danisanID.'\"> '.$icon5.'</a><a href=\"'.site_url('admin/terapi/danisan/danisanduzenle/').$cat->danisanID.'\"> '.$icon2.'</span></a><a href=\"'.site_url('admin/terapi/danisan/formatama/').$cat->danisanID.'\"> '.$icon3.'</span></a><a href=\"'.site_url('admin/terapi/danisan/formagit/').$cat->danisanID.'/'.$form_id.'\"> '.$icon4.'</span></a><a href=\"'.site_url('admin/terapi/danisan/mizactestiata/').$cat->danisanID.'\"><span title=\"mizaç testi çöz\" class=\"glyphicon glyphicon-apple\"></span></a>"],';
   //print_r($data);
 
     }

@@ -225,8 +225,10 @@ echo'</td>';
 }
 echo '</tr>';
 $ortak=3;
+
+$userdanismanid=$this->ion_auth->user()->row()->id;
 //$sqlusers = "SELECT * FROM users WHERE company=".$ofis." or company=".$ortak;
-$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by first_name asc";
+$sqlusers = "SELECT * FROM vwusers WHERE (company=".$ofis." or company='3') and id in (select ID from vwdanisman) order by case when id=".$userdanismanid." then 0 else aktiflik end ";
 //print_r($sqlusers);
                   $users = $this->db->query($sqlusers)->result();
 foreach($users as $user)
@@ -444,6 +446,7 @@ $danisanid=$result->danisanID;
 
 ////////////////////////////////////////////burayı aldım/////////////////////////////////
 $sqlrandevuid = "SELECT * FROM vwrandevu WHERE (randevuBaslangicTarihSaat LIKE '%".$search."%') and (danisanID='".$danisanid."') and (DanismanUserID='".$user->id."') and (ofisID='".$ofis."') and (randevuDurumID!=5) order by randevuID desc limit 0,5";
+$sayiaynisaat= $this->db->query($sqlrandevuid)->num_rows();
 
         $resultsqlrandevuid = $this->db->query($sqlrandevuid)->result();
          foreach($resultsqlrandevuid as $resultrand){
@@ -514,7 +517,7 @@ echo '<table border="0" width="80px;" style="background-color:#FF8C00;"><tr>';
  </div></td>'; }
 /////////////////info işareti sonu///////////////////////////
 
- 
+
 
 echo '</tr>
 </table>';
@@ -529,12 +532,16 @@ echo '</tr>
  if($sayibitis>1) { echo '<hr style="vertical-align:middle; margin-top:40px;">'; }
 
                                 }
-                   // echo 'Hocanın IDsi='.$user->id;
+     
+     if($sayiaynisaat > 1)
+    break;                  // echo 'Hocanın IDsi='.$user->id;
                    // echo '<br>';
                    // echo 'Danışanın IDsi='.$result->randevuDanisanID;  
                    // echo '<br>';
                    // echo  $result->randevuDurumu;   
                          }
+
+                         
 
             }  
 //içerikkk

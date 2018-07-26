@@ -35,9 +35,16 @@ echo '
                 <?php
 echo '<label>Randevuya Dönüşme Durumu:</label>
 <select name="randevudurumu" id="mark" class="form-control">
-<option value="1">Randevuya Dönüştü</option>
-<option value="2">Randevuya Dönüşmedi</option>
-</select>';
+';
+$cagrikontrol="select * from vwcagri where cagriID=".$cagri_id." and cagriRandevuID>0";
+$query=$this->db->query($cagrikontrol);
+//$query->num_rows();
+if($query->num_rows()>0) { 
+echo '<option value="1">Randevuya Dönüştü</option>';
+ } else { 
+echo '<option value="2">Randevuya Dönüşmedi</option>';
+   }
+echo '</select>';
                 ?>
             </div>
 

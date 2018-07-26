@@ -122,24 +122,74 @@ echo $this->session->userdata('paket');*/
      
         $this->data['page_title'] = 'Paket Ekle';
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('paketno','Paket No','trim|required');
-        $this->form_validation->set_rules('paket_adi','Paket Adı','trim');
-        $this->form_validation->set_rules('ucret','Ücret','trim');
-        $this->form_validation->set_rules('seans_sayisi','Toplam Seans Sayısı','trim');
+        $this->form_validation->set_rules('paket_adi','Paket Adı','required');
+        $this->form_validation->set_rules('ucret','Ücret','trim|numeric|required');
+        $this->form_validation->set_rules('toplam_seans','Toplam Seans Sayısı','trim|numeric|required');
         $this->form_validation->set_rules('min_seans','1 Ay İçinde Bitirilmesi Gereken Min. Seans Sayısı','trim|numeric|required');
+        $this->form_validation->set_error_delimiters('<br><b><font color="#FF0000">', '</font></b>');
+        $this->form_validation->set_message('required', 'Bu alanı doldurmak zorundasınız!');
+        $this->form_validation->set_message('min_length', 'Bu alan minimum 10 karakter olmalı!');
+        $this->form_validation->set_message('max_length', 'Bu alan maximum 10 karakter olmalı!');
+        $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
+        $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
 
         $this->data['terapiler'] = $this->seans_model->getTerapiForDropdown(array("0"," -- "));
   
-            $this->data['groups'] = $this->ion_auth->groups()->result();
-            $this->load->helper('form');
-            $this->render('admin/terapi/seans/create_view');
-      
+          //  $this->data['groups'] = $this->ion_auth->groups()->result();
+          //    $this->load->helper('form');
+          //  $this->render('admin/terapi/seans/create_view');
+
+        if($this->form_validation->run()===FALSE)
+        { 
+            $this->load->helper('form');       
+        }
+        else
+        {
+        $this->seans_model->paketkaydet($this->input->post());
+   
+        }
+     //  $this->render('admin/terapi/danisan/create_view','admin_master',$this->data);
+        $this->render('admin/terapi/seans/create_view');
 
    }
 
-  public function paketkaydet() {
-  $this->seans_model->paketkaydet($this->input->post());
-  }
+     public function paketduzenle() ///paket ekleme
+    {
+  
+     
+        $this->data['page_title'] = 'Paket Ekle';
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('paket_adi','Paket Adı','required');
+        $this->form_validation->set_rules('ucret','Ücret','trim|numeric|required');
+        $this->form_validation->set_rules('toplam_seans','Toplam Seans Sayısı','trim|numeric|required');
+        $this->form_validation->set_rules('min_seans','1 Ay İçinde Bitirilmesi Gereken Min. Seans Sayısı','trim|numeric|required');
+        $this->form_validation->set_error_delimiters('<br><b><font color="#FF0000">', '</font></b>');
+        $this->form_validation->set_message('required', 'Bu alanı doldurmak zorundasınız!');
+        $this->form_validation->set_message('min_length', 'Bu alan minimum 10 karakter olmalı!');
+        $this->form_validation->set_message('max_length', 'Bu alan maximum 10 karakter olmalı!');
+        $this->form_validation->set_message('valid_email', 'Geçerli bir eposta adresi değil!');
+        $this->form_validation->set_message('numeric', 'Bu alan sayılardan oluşmalı!');
+
+        $this->data['terapiler'] = $this->seans_model->getTerapiForDropdown(array("0"," -- "));
+  
+          //  $this->data['groups'] = $this->ion_auth->groups()->result();
+          //    $this->load->helper('form');
+          //  $this->render('admin/terapi/seans/create_view');
+
+        if($this->form_validation->run()===FALSE)
+        { 
+            $this->load->helper('form');       
+        }
+        else
+        {
+        $this->seans_model->paketguncelle($this->input->post());
+   
+        }
+     //  $this->render('admin/terapi/danisan/create_view','admin_master',$this->data);
+        $this->render('admin/terapi/seans/edit_view');
+
+   }
+
 
   public function randevucikar () {
         $this->data['page_title'] = 'Paketteki Danışanlar';
@@ -203,5 +253,30 @@ echo $this->session->userdata('paket');*/
      $this->seans_model->paketrandevusil($this->input->post());
      }
 
+     public function paketdanisantakip()  {
+        $this->data['page_title'] = 'Paket Takip';
+        $this->data['users'] = $this->ion_auth->users(array())->result();
+
+              
+
+       $this->data['before_body'] ='<script type="text/javascript">
+        <!--
+         $(document).ready(function(){
+          $("#seansListTable").DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "ajax": "'.base_url().'/admin/datatables/paketdanisantakip_dt/getall/",
+            "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+            }
+          } );    
+         });
+        -->
+        </script>';
+
+        $this->render('admin/terapi/seans/paket_danisan_takip_view','admin_master',$this->data);
+   
+   }
 
 }

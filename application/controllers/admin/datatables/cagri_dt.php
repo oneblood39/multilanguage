@@ -29,16 +29,7 @@ class Cagri_dt extends Admin_Controller
 
 
 
-   if($group_id=='11' or $group_id=='10' or $group_id=='9') {
-    $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
-    $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
-    $icon4='<span title=\"Çağrıyı sonlandır\" class=\"glyphicon glyphicon-ok\"></span>';
 
-   } else {
-     $icon='';
-     $icon2='';
-     $icon4='';
-   }
 
 
     $start = 0;
@@ -128,6 +119,20 @@ class Cagri_dt extends Admin_Controller
          // $tarihson=$metin[2];
           $danismanAd=$cat->danismanAd;
           $danismanSoyad=$cat->danismanSoyad;
+          $cagridurumu=$cat->cagriDurumu;
+
+   if(($group_id=='11' or $group_id=='10' or $group_id=='9') and $cagridurumu=1) {
+
+    $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
+    $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
+    $icon4='<span title=\"Çağrıyı sonlandır\" class=\"glyphicon glyphicon-ok\"></span>';
+
+
+   } else {
+     $icon='';
+     $icon2='';
+     $icon4='';
+   }         
           if($tarih!='') {
           
                  if($group_id=='11' or $group_id=='10' or $group_id=='9') {
@@ -159,6 +164,23 @@ class Cagri_dt extends Admin_Controller
          // $tarihson=$metin[2];
           $danismanAd=$cat->danismanAd;
           $danismanSoyad=$cat->danismanSoyad;
+          $cagridurumu=$cat->cagriDurumu;
+  
+   if(($group_id=='11' or $group_id=='10' or $group_id=='9') and $cagridurumu=1) {
+
+    $icon='<span title=\"randevu ile eşleştir\" class=\"glyphicon glyphicon-random\"></span>';
+    $icon2='<span title=\"düzenle\" class=\"glyphicon glyphicon-pencil\"></span>';
+    $icon4='<span title=\"Çağrıyı sonlandır\" class=\"glyphicon glyphicon-ok\"></span>';
+
+
+   } else {
+     $icon='';
+     $icon2='';
+     $icon4='';
+   }
+
+
+
                    if($tarih!='') {
           
                  if($group_id=='11' or $group_id=='10' or $group_id=='9') {

@@ -2,7 +2,7 @@
 <div class="container" style="margin-top:60px;">
     <div class="row">
         <div class="col-lg-12"> 
-        <h2>Seans Bilgileri</h2> 
+        <h2>Paket Bilgileri</h2> 
                   <?php
      $this->data['users'] = $this->ion_auth->users(array())->result();
      $user_id=$this->ion_auth->user()->row()->id;
@@ -17,10 +17,9 @@
    } else {
      
    }
+   echo '&nbsp;<a href="'.site_url('admin/terapi/seans/paketdanisantakip').'" class="btn btn-primary">Paket Danışan Takip</a>';  
 ?>  
 
-            
-            <!--  <a href="<?php echo site_url('admin/terapi/cagri/kurumsalcagri');?>" class="btn btn-primary">Kurumsal Çağrılar</a> -->
         </div>
     </div>
     <div class="row">

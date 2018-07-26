@@ -345,4 +345,235 @@ public function tanikaydet () {
 
   }
 
+
+ public function getdropnedenlerForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmdevametmemenedeni')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->devamEtmemeNedeniID] = $result->devamEtmemeNedeniAdi;
+    }
+
+    return $dropdown;
+  }
+
+  public function dropkaydet () {
+    $datakayit=   array(
+    'danismanUserID' => $this->input->post('danismanid'),
+    'danisanID' => $this->input->post('danisanid'),
+    'devamEtmemeNedeniID' => $this->input->post('neden'),
+    'devamEtmemeAciklama' => $this->input->post('aciklama'),
+    'islemKullaniciID' => $this->input->post('userid')
+   );
+
+$randevu_id=$this->input->post('randevuid');
+$iptalneden=$this->input->post('iptalneden');
+
+echo $randevu_id;
+if($randevu_id>0) {
+
+$durum='5';  ///randevu iptal durumu
+$data =  array(
+  'randevuDurumuID' => $durum,
+  'randevuiptalNedeniID' => $iptalneden
+); 
+
+$this->db->where('randevuID', $randevu_id);
+$this->db->update('tblrandevu',$data);
+
+    $this->db->insert("tbldevametmeyen",$datakayit);
+    $this->postal->add('Randevu İptali ve Drop Atama Başarılı!','success');
+    redirect('admin/terapi/danisan/droplar/','refresh'); 
+
+
+} else {
+    $this->db->insert("tbldevametmeyen",$datakayit);
+    $this->postal->add('Drop Atama Başarılı!','success');
+    redirect('admin/terapi/danisan/droplar/','refresh'); 
+}
+
+
+//print_r($datakayit);
+
+
+
+  }
+
+
+
+   public function getformlarForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmbasvuruform')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->basvuruFormID] = $result->basvuruFormAdi;
+    }
+
+    return $dropdown;
+  }
+
+
+  public function formatakaydet () {
+
+    
+    $danisanid=$this->input->post('danisanid');
+    $sql = "SELECT * FROM tblbasvuruatama WHERE  danisanID='".$danisanid."'";
+    $sayi= $this->db->query($sql)->num_rows();
+    
+    if ($sayi>0) {
+    $this->postal->add('Bu danışanın mevcut bir formu bulunuyor!','error');
+    redirect('admin/terapi/danisan/','refresh'); 
+} else {
+   function randomPassword() {
+    $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+    $pass = array(); 
+    $alphaLength = strlen($alphabet) - 1; 
+    for ($i = 0; $i < 8; $i++) { 
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass);
+    }
+   $pass=randomPassword();
+
+   $data =  array(
+  'basvuruFormID' => $this->input->post('form'),
+  'basvuruDurum' => 1,
+  'danisanID' => $this->input->post('danisanid'),
+  'islemKullaniciID' => $this->input->post('userid'),
+  'pass' => $pass
+   ); 
+  // print_r($data);
+
+    $this->db->insert("tblbasvuruatama",$data);
+    $this->postal->add('Form Atama Başarılı!','success');
+    redirect('admin/terapi/danisan/','refresh'); 
+   }
+
+}
+
+ public function formagit () {
+
+  $this->session->sess_destroy();
+  $danisanid=$this->uri->segment(5);
+  $formid=$this->uri->segment(6);
+
+//echo $danisanid;
+//database
+define('DB_HOST', '217.116.197.83');
+define('DB_USERNAME', 'wu_mizmeryonetim');
+define('DB_PASSWORD', 'Ax5o#90xt5290');
+define('DB_NAME', 'mizmeryonetim');
+//get connection
+$mysqli = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$mysqli->set_charset("UTF8");
+if(!$mysqli){
+  die("Connection failed: " . $mysqli->error);
+}
+
+
+
+$sql="SELECT * from tblbasvuruatama where basvuruAtamaID=".$formid;
+
+  $results = $this->db->query($sql)->result();
+          foreach ($results as $result) {
+  $basvuruFormID=$result->basvuruFormID;
+                }
+
+
+if($basvuruFormID==1) {
+ redirect('yetiskinform1.php?danisanid='.$danisanid.'&formid='.$formid,'refresh');   
+} else if ($basvuruFormID==2) {
+   redirect('ergenform1.php?danisanid='.$danisanid.'&formid='.$formid,'refresh'); 
+} else if  ($basvuruFormID==3) {
+   redirect('cocukform1.php?danisanid='.$danisanid.'&formid='.$formid,'refresh'); 
+} else { }
+// $this->load->view('admin/formlar/form3_view');
+
+
+  }
+
+
+  public function getmizacForDropdown($firstElement=array()){
+    $results = $this->db->query('SELECT * FROM tnmmizactip')->result();
+    $dropdown = array();
+
+    if($firstElement){
+      $dropdown[$firstElement[0]] = $firstElement[1];
+    }
+
+    foreach ($results as $result) {
+      $dropdown[$result->mizacTipID] = $result->mizacTipAdi;
+    }
+
+    return $dropdown;
+  }
+
+    public function ilkgorusmekaydet () {
+    $datakayit=   array(
+    'gozeCarpanKisilikOruntusu' => $this->input->post('kisilik'),
+    'konuBasliklari' => $this->input->post('konu'),
+    'annemizacID' => $this->input->post('annemizac'),
+    'babamizacID' => $this->input->post('babamizac'),
+    'islemKullaniciID' => $this->input->post('userid'),
+    'danismanUserID' => $this->input->post('userid'),
+    'danisanID' => $this->input->post('danisanid')
+   );
+
+   $danisan_id=$this->input->post('danisanid');
+
+    $this->db->insert("tbldanisanilkgorusme",$datakayit);
+    $this->postal->add('İlk Görüşme notu ekleme başarılı!','success');
+    redirect('admin/terapi/danisan/danisandetay/'.$danisan_id,'refresh');
+
+
+  }
+
+
+    public function ilkgorusmeguncelle () {
+    $datakayit=   array(
+    'gozeCarpanKisilikOruntusu' => $this->input->post('kisilik'),
+    'konuBasliklari' => $this->input->post('konu'),
+    'annemizacID' => $this->input->post('annemizac'),
+    'babamizacID' => $this->input->post('babamizac'),
+    'islemKullaniciID' => $this->input->post('userid'),
+    'danismanUserID' => $this->input->post('userid'),
+    'danisanID' => $this->input->post('danisanid')
+   );
+
+  $gorusmeid=$this->input->post('gorusmeid');
+  $danisanid=$this->input->post('danisanid');
+
+ $this->db->where('danisanilkGorusmeID', $gorusmeid);
+ $this->db->update('tbldanisanilkgorusme',$datakayit);
+ $this->postal->add('Danışan Ön Görüşme Notu Güncelleme Başarılı!','success');
+ redirect('admin/terapi/danisan/danisandetay/'.$danisanid); ///
+
+  }
+
+
+  public function mizacgirkaydet () {
+   $datakayit=   array(
+    'danisanUzmanMizacTipID' => $this->input->post('mizac')
+   );
+     $danisanid=$this->input->post('danisanid');   
+     
+ $this->db->where('danisanID', $danisanid);
+ $this->db->update('tbldanisan',$datakayit);
+ $this->postal->add('Danışan Mizaç Güncelleme Başarılı!','success');
+ redirect('admin/terapi/danisan/danisandetay/'.$danisanid); /// 
+  }
+
+ 
+
+
+
 }

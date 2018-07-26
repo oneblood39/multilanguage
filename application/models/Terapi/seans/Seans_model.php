@@ -79,10 +79,42 @@ redirect('admin/terapi/seans/','refresh');
                     'islemKullaniciID' => $userid                       
                 );
 
-//print_r($data);
 
-$this->db->insert("tblpaket",$data);
+//print_r($data);
+$toplam_seans=$this->input->post('toplam_seans');
+$min_seans=$this->input->post('min_seans');
+$terapi=$this->input->post('terapi');
+$ucret=$this->input->post('ucret');
+
+
+$sqlkontrol="SELECT * from tblpaket where paketTerapiTip=".$terapi." and paketUcret=".$ucret." and paketSeansSayi=".$toplam_seans." and minimumSeansSayisi=".$min_seans."";
+$query = $this->db->query($sqlkontrol);
+$sayi = $query->num_rows();
+
+if ($sayi>0) { 
+  $this->postal->add('Zaten bu özellikleri kapsayan bir paket bulunmakta. Lütfen mevcut pakedi kullanınız!','error');
+  redirect('admin/terapi/seans/','refresh'); }
+
+else { $this->db->insert("tblpaket",$data);
 $this->postal->add('Yeni paket oluşturuldu!','success');
+redirect('admin/terapi/seans/','refresh'); }
+
+ }
+
+public function paketguncelle () {
+  $paketID=$this->input->post('paketID');
+                $data = array(                
+                 
+                    'paketAdi' => $this->input->post('paket_adi'),  
+                    'paketUcret' => $this->input->post('ucret'),  
+                    'paketSeansSayi' => $this->input->post('toplam_seans'),                  
+                    'minimumSeansSayisi' => $this->input->post('min_seans')
+                  //  'islemKullaniciID' => $userid                       
+                );
+
+$this->db->where('paketID', $paketID);
+$this->db->update("tblpaket",$data);
+$this->postal->add('Paket güncelleme başarılı!','success');
 redirect('admin/terapi/seans/','refresh');
  }
 
